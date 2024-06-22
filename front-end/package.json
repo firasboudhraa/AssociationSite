@@ -5,15 +5,23 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "concurrently  \"next dev -p 3000\" -n \" NEXT \" --prefix-colors \"cyan,magenta\"",
     "lint": "next lint"
   },
   "dependencies": {
+    "@lordicon/element": "^1.6.0",
+    "axios": "^1.7.2",
+    "bootstrap": "^5.3.3",
+    "concurrently": "^8.2.2",
     "icons": "^1.0.0",
+    "lottie-web": "^5.12.2",
     "next": "14.2.4",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.3",
     "react-dom": "^18",
-    "react-icons":"4.7.1"
+    "react-icons": "4.7.1",
+    "react-router-dom": "^6.23.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",

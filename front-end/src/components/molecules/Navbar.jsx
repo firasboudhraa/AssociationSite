@@ -2,10 +2,12 @@
 
 import Image from 'next/image'
 import React from 'react'
-import Logo from "../../public/assets/images/logo.png"
+import Logo from "../../../public/assets/images/logo.png"
 import Link from 'next/link'
 import {AiOutlineMenu} from "react-icons/ai"
 import { useState } from 'react'
+import AproposIcon from "@/components/molecules/icons/AproposIcon"
+
 
 const Navbar = () => {
   const {menuOpen , setMenuOpen } = useState(false)
@@ -21,19 +23,20 @@ const Navbar = () => {
          alt='Logo'
          width='100'
          height='50'
-         className='cursor-pointer'
+         className='cursor-pointer rounded-circle '
          priority
         />
        </Link>
         <div className='hidden sm:flex'> 
           <ul className='hidden sm:flex'>
             <Link href='/about'>
+            <AproposIcon/>
               <li className='ml-10 uppercase hover:border-b text-l'> Why Us</li>
             </Link>
             <Link href='/contact'>
               <li className='ml-10 uppercase hover:border-b text-l'> Contact Us</li>
             </Link>
-            <Link href='//services'>
+            <Link href='/services'>
               <li className='ml-10 uppercase hover:border-b text-l'> Our Services</li>
             </Link>
           </ul>
