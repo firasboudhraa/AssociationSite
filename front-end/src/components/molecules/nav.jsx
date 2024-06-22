@@ -43,7 +43,7 @@ function Navb() {
             
           </Nav>
           <Nav>
-            <Nav.Link eventKey={2} href="#conn">
+            <Nav.Link  href="/Connexion">
               se connecter
             </Nav.Link>
           </Nav>

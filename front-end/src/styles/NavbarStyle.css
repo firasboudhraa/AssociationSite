@@ -1,5 +1,5 @@
 .navbar-blur {
-    background-color: rgba(117, 115, 115, 0.871); /* Couleur de fond semi-transparente */
+    background-color: transparent; 
     backdrop-filter: blur(3px); /* Flou de l'arrière-plan */
 
   }

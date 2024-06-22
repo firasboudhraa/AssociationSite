@@ -1,11 +1,16 @@
-import Navbar from "../components/molecules/Navbar";
 import Navb from "../components/molecules/nav";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import SignForm from '@/components/organisims/signUpIn/SignForm';
 
 
 export default function Home() {
   return (
     <>
-      <Navb/>
+        <Navb />
+        <br /><br /><br /><br /><br /><br /><br />
+        <SignForm/>
     </>
+
+
   );
 }
