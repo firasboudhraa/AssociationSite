@@ -1,13 +1,13 @@
 import React from 'react'
-import Navb from '../components/molecules/nav'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "@/styles/globals.css";
+import Navb from '@/components/molecules/nav';
+
 
 const Home = () => {
   return (
     <div>
-      <Navb/>
-      
+            <Navb />
+      <h1>Home Page</h1>
+      <p>Welcome to the home page!</p>
     </div>
   )
 }
