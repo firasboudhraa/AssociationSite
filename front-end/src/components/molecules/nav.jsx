@@ -8,10 +8,11 @@ import Logo from "../../../public/assets/images/logo.png"
 import HomeIcon from "@/components/molecules/icons/HomeIcon"
 import AproposIcon from "@/components/molecules/icons/AproposIcon"
 import ServiceIcon from "@/components/molecules/icons/ServiceIcon"
+import ConnexionIcon from "@/components/molecules/icons/ConnexionIcon"
 
 function Navb() {
   return (
-    <Navbar collapseOnSelect expand="lg" className="navbar-dark navbar-blur fixed-top">
+    <Navbar collapseOnSelect expand="lg" className="navbar-dark navbar-blur fixed-top space-between">
       <Container>
       <Navbar.Brand href="#home">
       <img
@@ -42,10 +43,13 @@ function Navb() {
             </div>
             
           </Nav>
-          <Nav>
-            <Nav.Link  href="/Connexion">
-              se connecter
-            </Nav.Link>
+          <Nav className="ms-auto align-items-center">
+            <div className="button-container d-flex align-items-center">
+              <ConnexionIcon/>
+              <Nav.Link href="/Connexion" className='label-container flex'>
+                Login
+              </Nav.Link>
+            </div>
           </Nav>
 
         </Navbar.Collapse>

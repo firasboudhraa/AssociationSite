@@ -1,9 +1,20 @@
 import "@/styles/globals.css";
-import type { AppProps } from "next/app";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ConnexionPage from "@/pages/Connexion";
+import Navb from '../components/molecules/nav'
+import Home from '@/pages/Home'
 
-export default function App ({ Component , pageProps } : AppProps) {
-    return (
-        <Component {...pageProps} />
-    )
-} 
+export default function App() {
+  return (
+    <div>
+        <Navb/>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/Connexion" element={<ConnexionPage />} />
+          <Route path="/home" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+}

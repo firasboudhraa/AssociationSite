@@ -1,6 +1,6 @@
 import Navb from "../components/molecules/nav";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SignForm from '@/components/organisims/signUpIn/SignForm';
+import "@/styles/globals.css";
 
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
     <>
         <Navb />
         <br /><br /><br /><br /><br /><br /><br />
-        <SignForm/>
+        
     </>
 
 
