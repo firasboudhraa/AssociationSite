@@ -1,38 +1,59 @@
 .navbar-blur {
-    background-color: rgb(39, 27, 67); 
-    backdrop-filter: blur(3px); 
-
-  }
+  background-color: rgb(235, 233, 226);
+  backdrop-filter: blur(3px);
+}
 .button-container {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .label-container {
-    margin-left: -5px;
-    width: 100px;
-    color: black; 
-  }
-  
-  .me-auto {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center; 
-    width: 300px;
-  }
-  
-  .navbar-dark {
-    box-shadow: 0px 0px 20px 10px;
-  }
-  .navbar-dark .nav-link {
-    color: rgb(235, 224, 224); 
-    font-family: "Permanent Marker", cursive;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 1.1em;
-  }
-  
-  .navbar-dark .nav-link:hover {
-    color: rgb(82, 81, 81); 
-  }
+  display: flex;
+  flex-direction: row;
+}
+
+.label-container {
+  margin-left: -5px;
+  width: 100px;
+  color: black;
+}
+
+.me-auto {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 300px;
+}
+
+.navbar-dark {
+  box-shadow: 0px 0px 20px 10px;
+}
+.navbar-dark .nav-link {
+  color: rgb(18, 16, 16);
+  font-family: "Permanent Marker", cursive;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 1.1em;
+}
+
+.navbar-dark .nav-link:hover {
+  color: rgb(82, 81, 81);
+}
+
+.form-inline {
+  display: flex;
+  align-items: center;
+}
+
+.form-inline .form-control {
+  margin-right: 10px;
+}
+
+.input-group {
+  width: 100%;
+}
+
+.input-group .input-group-text {
+  background-color: #fff;
+  border-right: 0;
+}
+
+.input-group .form-control {
+  border-left: 0;
+}

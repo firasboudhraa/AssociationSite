@@ -3,20 +3,21 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Link from "next/link";
 import Image from "next/image";
+import Form from "react-bootstrap/Form";
+import FormControl from "react-bootstrap/FormControl";
+import Button from "react-bootstrap/Button";
+import InputGroup from "react-bootstrap/InputGroup";
 import { motion } from 'framer-motion';
 import "../../styles/NavbarStyle.css";
 import Navbar from "react-bootstrap/Navbar";
 import Logo from "../../../public/logo.png";
+import { FaSearch } from "react-icons/fa";
 import HomeIcon from "@/components/molecules/icons/HomeIcon";
 import AproposIcon from "@/components/molecules/icons/AproposIcon";
 import ServiceIcon from "@/components/molecules/icons/ServiceIcon";
 import ConnexionIcon from "@/components/molecules/icons/ConnexionIcon";
 
 function Navb() {
-  const navbarVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
 
   return (
     <Navbar
@@ -26,7 +27,7 @@ function Navb() {
     >
       <Container>
         <Link href="/">
-        <motion.div whileHover={{ scale: 1.1 }} className="mr-20" >
+        <motion.div whileHover={{ scale: 1.1 }} className="mr-10" >
           <Image
             src={Logo}
             alt="Logo"
@@ -60,6 +61,19 @@ function Navb() {
               </Nav.Link>
             </motion.div>
           </Nav>
+          <Form className="d-flex">
+          <InputGroup>
+                <InputGroup.Text id="basic-addon1">
+                  <FaSearch />
+                </InputGroup.Text>
+                <FormControl
+                  placeholder="Search"
+                  aria-label="Search"
+                  aria-describedby="basic-addon1"
+                />
+              </InputGroup>
+              <Button variant="outline-success"><FaSearch /></Button>
+            </Form>
           <Nav className="ms-auto align-items-center">
             <motion.div className="button-container d-flex align-items-center" whileHover={{ scale: 1.1}}>
               <ConnexionIcon />
