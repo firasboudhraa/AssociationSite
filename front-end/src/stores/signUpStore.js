@@ -5,7 +5,7 @@ const REGISTER_URL = "/api/create";
 
 const useSignUpStore = create((set, get) => ({
   formData: {
-    userName: "",
+    name: "",
     email: "",
     password: "",
   },
@@ -28,7 +28,7 @@ const useSignUpStore = create((set, get) => ({
       
       const response = await axios.post(
         REGISTER_URL,
-        JSON.stringify(formData),
+        formData,
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,

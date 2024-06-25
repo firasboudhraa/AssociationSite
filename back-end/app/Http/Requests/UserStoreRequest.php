@@ -24,14 +24,14 @@ class UserStoreRequest extends FormRequest
         if (request()->isMethod('post')) {
         return [
             "name"=> "required|string|max:258",
-            "email"=> "required|string",
-            "password"=> "required|string"
+            "email"=> "required|string|email|max:255|unique:users",
+            "password"=> "required|string|min:8"
             ];
         }else {
             return [
             "name"=> "required|string|max:258",
-            "email"=> "required|string",
-            "password"=> "required|string"
+            "email"=> "required|string|email|max:255|unique:users",
+            "password"=> "required|string|min:8"
             ];
         }
     }
