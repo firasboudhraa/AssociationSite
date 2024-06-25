@@ -1,11 +1,15 @@
 import React from 'react';
 import { FaFacebookF, FaLinkedinIn, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
+import CircularProgress from "@mui/material/CircularProgress"; // Ensure correct import path
+import useSignUpStore from "@/stores/signUpStore"; // Adjust as per your project structure
 
 const SignUpForm = ({ setIsSignIn }) => {
+  const { handleChange, handleClickSignUp, loading } = useSignUpStore();
+
   return (
     <div className='bg-gray-100'>
-      <div className='bg-white rounded-2xl shadow-2xl flex w-3/3 max-w-4xl justify-center'>
+      <div className='bg-white rounded-2xl shadow-2xl flex w-full max-w-4xl justify-center'>
         <div className='w-2/5 bg-green-500 text-white rounded-tl-2xl rounded-bl-2xl py-36 px-12'>
           <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
           <div className="border-2 w-10 border-white inline-block mb-2"></div>
@@ -36,22 +40,26 @@ const SignUpForm = ({ setIsSignIn }) => {
             <div className="flex flex-col items-center">
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-2">
                 <MdPersonOutline className="text-gray-400 m-2" />
-                <input type="text" name="name" placeholder="Name" className="bg-gray-100 outline-none text-sm flex-1" />
+                <input type="text" name="name" placeholder="Name" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChange("userName", e.target.value)} />
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-2">
                 <FaRegEnvelope className="text-gray-400 m-2" />
-                <input type="email" name="email" placeholder="Email" className="bg-gray-100 outline-none text-sm flex-1" />
+                <input type="email" name="email" placeholder="Email" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChange("email", e.target.value)} />
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-2">
                 <MdLockOutline className="text-gray-400 m-2" />
-                <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" />
+                <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChange("password", e.target.value)} />
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
                 <MdLockOutline className="text-gray-400 m-2" />
                 <input type="password" name="Confirmpassword" placeholder="ConfirmPassword" className="bg-gray-100 outline-none text-sm flex-1" />
               </div>
-              <a href="#" className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white">
-                Sign Up
+              <a href="#" className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white" onClick={handleClickSignUp} disabled={loading}>
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Sign Up"
+                )}
               </a>
             </div>
           </div>

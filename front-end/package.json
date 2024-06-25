@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "concurrently  \"next dev -p 3000\" -n \" NEXT \" --prefix-colors \"cyan,magenta\"",
+    "start": "concurrently --prefix-colors \"cyan,magenta\" \"next dev -p 3000\" \"php -S localhost:8000 -t ../back-end/public\" -n \"NEXT, PHP\"",
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@lordicon/element": "^1.6.0",
+    "@mui/material": "^5.15.20",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "concurrently": "^8.2.2",
