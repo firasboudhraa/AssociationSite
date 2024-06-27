@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\UserStoreRequest;
-use Illuminate\Support\Facades\Hash;
+use App\Services\MailService;
 use Illuminate\Support\Facades\Auth;
 
 
 
 class UserController extends Controller
 {
+    protected $mailService;
+
+    public function __construct(MailService $mailService)
+    {
+        $this->mailService = $mailService;
+    }
     public function index()
     {
         $users = User::all();
@@ -19,24 +25,26 @@ class UserController extends Controller
     }
     public function store(UserStoreRequest $request)
     {
-        try {
-             $user= User::create([
-                "name" => $request->name,
-                "email" => $request->email,
-                "password" => bcrypt($request->password)
-            ]);
+    try {
+         $user= User::create([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => bcrypt($request->password)
+        ]);
 
-            $token= $user->createToken("auth_token")->plainTextToken;
-            return response()->json([
-                'message' => 'User successfully created.' ,
-                'token'=> $token
-            ], 200);
+        $this->sendWelcomeEmail($user);
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => "Something went really wrong !"
-            ], 500);
-        }
+        $token= $user->createToken("auth_token")->plainTextToken;
+        return response()->json([
+            'message' => 'User successfully created.' ,
+            'token'=> $token
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => "Something went really wrong !"
+        ], 500);
+    }
     }
     public function show( $id){
         $user = User::find($id);
@@ -110,6 +118,22 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Invalid credentials',
             ], 401);
+        }
+
+        protected function sendWelcomeEmail(User $user)
+        {
+            $toEmail = $user->email;
+            $toName = $user->name;
+            $subject = 'Welcome to Our Website!';
+            $htmlBody = '<p>Hello ' . $user->name . ',</p><p>Welcome to our website!</p>';
+        
+            $result = $this->mailService->sendEmail($toEmail, $toName, $subject, $htmlBody);
+        
+            if ($result) {
+                return true;
+            } else {
+                return false;
+            }
         }
         
 }
