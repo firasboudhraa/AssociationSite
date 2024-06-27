@@ -1,0 +1,14 @@
+.footer {
+    position: fixed; 
+    bottom: 0; 
+    width: 100%;  
+    color: #fff; 
+    padding: 10px; 
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1); 
+  }
+
+  .bg-footer-color {
+    background-color: rgb(235, 233, 226);
+  }
+  
+  
