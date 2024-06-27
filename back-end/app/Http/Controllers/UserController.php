@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\UserStoreRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class UserController extends Controller
 {
@@ -85,4 +89,27 @@ class UserController extends Controller
                 "message"=> "User Successfully Deleted."
                 ],200);
         }
+
+        public function login(Request $request)
+        {
+            $credentials = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required', 'min:8'],
+            ]);
+    
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $token = $user->createToken('auth_token')->plainTextToken;
+    
+                return response()->json([
+                    'user' => $user,
+                    'token' => $token,
+                ], 200);
+            }
+    
+            return response()->json([
+                'message' => 'Invalid credentials',
+            ], 401);
+        }
+        
 }

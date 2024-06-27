@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaFacebookF, FaLinkedinIn, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
-import CircularProgress from "@mui/material/CircularProgress"; // Ensure correct import path
-import useSignUpStore from "@/stores/signUpStore"; // Adjust as per your project structure
+import CircularProgress from "@mui/material/CircularProgress"; 
+import useSignUpStore from "@/stores/signUpStore"; 
 
 const SignUpForm = ({ setIsSignIn }) => {
   const { handleChange, handleClickSignUp, loading } = useSignUpStore();

@@ -1,8 +1,13 @@
+
 import React from 'react';
-import { FaFacebookF, FaLinkedinIn, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
-import { MdLockOutline } from 'react-icons/md';
+import { FaRegEnvelope } from 'react-icons/fa';
+import { MdLockOutline} from 'react-icons/md';
+import CircularProgress from "@mui/material/CircularProgress";
+import useSignInStore from "@/stores/signInStore";
 
 const SignInForm = ({ setIsSignIn }) => {
+  const { handleChangeEmail, handleChangePassword, handleClickSignIn, loading } = useSignInStore();
+
   return (
     <div className='bg-gray-100'>
       <div className='bg-white rounded-2xl shadow-2xl flex w-3/3 max-w-4xl justify-center'>
@@ -14,25 +19,17 @@ const SignInForm = ({ setIsSignIn }) => {
             <h2 className="text-3xl font-bold text-green-500 mb-2">Sign in to Account</h2>
             <div className="border-2 w-10 border-green-500 inline-block mb-2"></div>
             <div className="flex justify-center my-2">
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
-                <FaFacebookF className="text-sm" />
-              </a>
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
-                <FaLinkedinIn className="text-sm" />
-              </a>
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
-                <FaGoogle className="text-sm" />
-              </a>
+              {/* Social media icons */}
             </div>
             <p className="text-gray-400 my-3">or use your email account</p>
             <div className="flex flex-col items-center">
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-2">
                 <FaRegEnvelope className="text-gray-400 m-2" />
-                <input type="email" name="email" placeholder="Email" className="bg-gray-100 outline-none text-sm flex-1" />
+                <input type="email" name="email" placeholder="Email" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChangeEmail(e.target.value)} />
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
                 <MdLockOutline className="text-gray-400 m-2" />
-                <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" />
+                <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChangePassword(e.target.value)} />
               </div>
               <div className="flex justify-between w-64 mb-5">
                 <label className="flex items-center text-xs">
@@ -40,9 +37,13 @@ const SignInForm = ({ setIsSignIn }) => {
                 </label>
                 <a href="#" className="text-xs hover:to-blue-500 hover:text-blue-500">Forgot Password?</a>
               </div>
-              <a href="#" className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white">
-                Sign In
-              </a>
+              <button className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white" onClick={handleClickSignIn} disabled={loading}>
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Sign In"
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -50,9 +51,9 @@ const SignInForm = ({ setIsSignIn }) => {
           <h2 className="text-3xl font-bold mb-2">Hello, Friend!</h2>
           <div className="border-2 w-10 border-white inline-block mb-2"></div>
           <p className="mb-10">Fill up personal information and start journey with us.</p>
-          <a href="#" className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-green-500" onClick={() => setIsSignIn(false)}>
+          <button className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold hover:bg-white hover:text-green-500" onClick={() => setIsSignIn(false)}>
             Sign Up
-          </a>
+          </button>
         </div>
       </div>
     </div>
