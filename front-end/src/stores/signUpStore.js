@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import axios from "../api/axios";
+import {  useRouter } from "next/router"; 
+
 
 const REGISTER_URL = "/api/create";
 
@@ -20,7 +22,7 @@ const useSignUpStore = create((set, get) => ({
     }));
   },
 
-  handleClickSignUp: async () => {
+  handleClickSignUp: async (router) => {
     const { formData } = get();
     
     try {
@@ -37,6 +39,7 @@ const useSignUpStore = create((set, get) => ({
       
       console.log(response.data);
       set({ loading: false });
+      router.push('/Profile');
     } catch (error) {
       console.error("Error signing up:", error);
       set({ loading: false });

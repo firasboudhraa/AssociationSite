@@ -1,17 +1,21 @@
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+// pages/Profile.jsx
+
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@/styles/globals.css";
 
 const Profile = () => {
   const [image, setImage] = useState(null);
-  const [userData, setUserData] = useState(null); // State to hold user data
-  const router = useRouter(); // useRouter hook for navigation
+  const [userData, setUserData] = useState(null); 
+  const router = useRouter(); 
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('user');
     if (storedUserData) {
       setUserData(JSON.parse(storedUserData));
+    } else {
+      router.push('/Connexion'); 
     }
   }, []);
 
@@ -27,11 +31,14 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    // Clear user data from local storage
     localStorage.removeItem('user');
-    // Redirect to login page after logout
-    router.push('/Connexion'); // Replace with your login route
+    localStorage.removeItem('token');
+    router.push('/Connexion'); 
   };
+
+  if (!userData) {
+    return null; 
+  }
 
   return (
     <div className="container">
@@ -61,9 +68,9 @@ const Profile = () => {
           {/* User Details */}
           <div className="card">
             <div className="card-body">
-              <h5 className="card-title">Name: {userData?.name}</h5>
-              <p className="card-text">Email: {userData?.email}</p>
-              <p className="card-text">Location: {userData?.location}</p>
+              <h5 className="card-title">Name: {userData.name}</h5>
+              <p className="card-text">Email: {userData.email}</p>
+              {/* Add more user details here */}
               <button className="btn btn-primary" onClick={handleLogout}>Logout</button>
             </div>
           </div>

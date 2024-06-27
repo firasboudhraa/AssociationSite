@@ -7,6 +7,9 @@ import useSignUpStore from "@/stores/signUpStore";
 const SignUpForm = ({ setIsSignIn }) => {
   const { handleChange, handleClickSignUp, loading } = useSignUpStore();
 
+  const handleSignUp = () => {
+    handleClickSignUp(router);
+  };
   return (
     <div className='bg-gray-100'>
       <div className='bg-white rounded-2xl shadow-2xl flex w-full max-w-4xl justify-center'>
@@ -54,7 +57,7 @@ const SignUpForm = ({ setIsSignIn }) => {
                 <MdLockOutline className="text-gray-400 m-2" />
                 <input type="password" name="Confirmpassword" placeholder="ConfirmPassword" className="bg-gray-100 outline-none text-sm flex-1" />
               </div>
-              <a href="#" className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white" onClick={handleClickSignUp} disabled={loading}>
+              <a href="#" className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white" onClick={handleSignUp} disabled={loading}>
                 {loading ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (

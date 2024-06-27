@@ -2,11 +2,17 @@
 import React from 'react';
 import { FaRegEnvelope } from 'react-icons/fa';
 import { MdLockOutline} from 'react-icons/md';
+import { useRouter } from 'next/router';
 import CircularProgress from "@mui/material/CircularProgress";
 import useSignInStore from "@/stores/signInStore";
 
 const SignInForm = ({ setIsSignIn }) => {
+  const router = useRouter();
   const { handleChangeEmail, handleChangePassword, handleClickSignIn, loading } = useSignInStore();
+
+  const handleSignIn = () => {
+    handleClickSignIn(router);
+  };
 
   return (
     <div className='bg-gray-100'>
@@ -37,7 +43,7 @@ const SignInForm = ({ setIsSignIn }) => {
                 </label>
                 <a href="#" className="text-xs hover:to-blue-500 hover:text-blue-500">Forgot Password?</a>
               </div>
-              <button className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white" onClick={handleClickSignIn} disabled={loading}>
+              <button className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white" onClick={handleSignIn} disabled={loading}>
                 {loading ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
