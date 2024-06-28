@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "concurrently --prefix-colors \"cyan,magenta\" \"next dev -p 3000\" \"php -S localhost:8000 -t ../back-end/public\" -n \"NEXT, PHP\"",
+    "start": "concurrently --prefix-colors \"cyan,magenta\" \"next dev -p 3000\" \"php -S localhost:8000 -t ../back-end/public\" -n \"NEXT,PHP\"",
     "lint": "next lint"
   },
   "dependencies": {

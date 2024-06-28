@@ -7,7 +7,8 @@ use App\Models\User;
 use App\Http\Requests\UserStoreRequest;
 use App\Services\MailService;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
 
 
 class UserController extends Controller
@@ -124,18 +125,42 @@ class UserController extends Controller
         {
             $request->validate(['email' => 'required|email']);
             $user = User::where('email', $request->email)->first();
-    
-            if (!$user) {
-                return response()->json(['message' => 'User not found'], 404);
-            }
-    
-            $token= $user->createToken("password_reset_token")->plainTextToken;
-            $user->save();
+
+            // Generate a password reset token
+            $token = Password::createToken($user);    
+            // Save the token to your custom table `password_reset_tokens`
+            DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $request->email],
+                ['token' => $token, 'created_at' => now()]
+            );
     
             $this->sendForgotPasswordEmail($user, $token);
     
             return response()->json(['message' => 'Password reset email sent'], 200);
         }
+
+        public function reset(Request $request)
+        {
+            $request->validate([
+                'token' => 'required',
+                'password' => 'required|min:8',
+            ]);
+
+            $tokenRow = DB::table('password_reset_tokens')->where('token', $request->token)->first();
+            if (!$tokenRow) {
+                return response()->json(['message' => 'Invalid or expired token.'], 400);
+            }
+
+            $user = User::where('email', $tokenRow->email)->first();
+            $user->password = bcrypt($request->password);
+            $user->save();
+
+            DB::table('password_reset_tokens')->where('token', $request->token)->delete();
+
+
+            return response()->json(['message' => 'Password successfully reset'], 200);
+        }
+
 
         protected function sendWelcomeEmail(User $user)
         {
@@ -157,7 +182,7 @@ class UserController extends Controller
         {
             $toEmail = $user->email;
             $toName = $user->name;
-            $subject = 'Réinitialisation du Mot de passe';
+            $subject = 'Reinitialisation du Mot de passe';
             $htmlBody = '
                 <p>Bonjour ' . $user->name . ',</p>
                 <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>

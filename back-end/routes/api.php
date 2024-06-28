@@ -20,3 +20,4 @@ Route::post('create', [UserController::class,'store']);
 
 // Password reset route
 Route::post('forgetPass', [UserController::class,'forgotPassword']);
+Route::post('resetPass', [UserController::class,'reset']);
