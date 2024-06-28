@@ -8,9 +8,15 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// User routes
 Route::get('users', [UserController::class,'index']);
 Route::get('users/{id}', [UserController::class,'show']);
 Route::put('usersupdate/{id}', [UserController::class,'update']);
-Route::post('create', [UserController::class,'store']);
 Route::delete('usersdelete/{id}', [UserController::class,'destroy']);
+
+// Authentication routes
 Route::post('login', [UserController::class,'login']);
+Route::post('create', [UserController::class,'store']);
+
+// Password reset route
+Route::post('forgetPass', [UserController::class,'forgotPassword']);

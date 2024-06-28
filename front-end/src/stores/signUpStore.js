@@ -1,7 +1,5 @@
 import { create } from "zustand";
 import axios from "../api/axios";
-import {  useRouter } from "next/router"; 
-
 
 const REGISTER_URL = "/api/create";
 

@@ -120,12 +120,52 @@ class UserController extends Controller
             ], 401);
         }
 
+        public function forgotPassword(Request $request)
+        {
+            $request->validate(['email' => 'required|email']);
+            $user = User::where('email', $request->email)->first();
+    
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+    
+            $token= $user->createToken("password_reset_token")->plainTextToken;
+            $user->save();
+    
+            $this->sendForgotPasswordEmail($user, $token);
+    
+            return response()->json(['message' => 'Password reset email sent'], 200);
+        }
+
         protected function sendWelcomeEmail(User $user)
         {
             $toEmail = $user->email;
             $toName = $user->name;
             $subject = 'Welcome to Our Website!';
             $htmlBody = '<p>Hello ' . $user->name . ',</p><p>Welcome to our website!</p>';
+        
+            $result = $this->mailService->sendEmail($toEmail, $toName, $subject, $htmlBody);
+        
+            if ($result) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        protected function sendForgotPasswordEmail(User $user, $token)
+        {
+            $toEmail = $user->email;
+            $toName = $user->name;
+            $subject = 'Réinitialisation du Mot de passe';
+            $htmlBody = '
+                <p>Bonjour ' . $user->name . ',</p>
+                <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>
+                <a href="' . env('FRONTEND_URL') . '/reset-password?token=' . $token . '" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: blue; text-decoration: none; border-radius: 5px;">
+                    Réinitialiser mot de passe
+                </a>
+                <p>Si vous n\'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
+            ';
         
             $result = $this->mailService->sendEmail($toEmail, $toName, $subject, $htmlBody);
         

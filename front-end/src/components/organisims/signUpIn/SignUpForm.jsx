@@ -3,8 +3,11 @@ import { FaFacebookF, FaLinkedinIn, FaGoogle, FaRegEnvelope } from 'react-icons/
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
 import CircularProgress from "@mui/material/CircularProgress"; 
 import useSignUpStore from "@/stores/signUpStore"; 
+import { useRouter } from "next/router";
+
 
 const SignUpForm = ({ setIsSignIn }) => {
+  const router = useRouter();
   const { handleChange, handleClickSignUp, loading } = useSignUpStore();
 
   const handleSignUp = () => {
