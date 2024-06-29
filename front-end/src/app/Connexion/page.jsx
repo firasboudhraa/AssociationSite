@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "@/styles/globals.css";
 
 
-const ConnexionPage = () => {
+const Connexion = () => {
   return (
     <div>
       <Navb/>
@@ -15,4 +15,4 @@ const ConnexionPage = () => {
   );
 };
 
-export default ConnexionPage;
+export default Connexion;
