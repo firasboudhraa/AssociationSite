@@ -1,5 +1,5 @@
-import Navbar from "@/components/molecules/dashbord/navbar/navbar"
-import Sidebar from "@/components/molecules/dashbord/sidebar/sidebar"
+import Navbar from "@/components/molecules/dashboard/navbar/navbar"
+import Sidebar from "@/components/molecules/dashboard/sidebar/sidebar"
 import styles from "../../styles/dashbord.module.css"
 
 

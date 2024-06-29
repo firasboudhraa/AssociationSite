@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '@/styles/sidebar.module.css'
 import Image from 'next/image';
-import MenuLink from '@/components/molecules/dashbord/sidebar/menuLink/menuLink'
+import MenuLink from '@/components/molecules/dashboard/sidebar/menuLink/menuLink'
 import {
   MdDashboard,
   MdSupervisedUserCircle,
@@ -21,23 +21,18 @@ const menuItems = [
     list: [
       {
         title: "Dashboard",
-        path: "/dashboard",
+        path: "/Dashboard",
         icon: <MdDashboard />,
       },
       {
         title: "Users",
-        path: "/dashboard/users",
+        path: "/Dashboard/users",
         icon: <MdSupervisedUserCircle />,
       },
       {
         title: "Evenements",
-        path: "/dashboard/events",
+        path: "/Dashboard/events",
         icon: <MdShoppingBag />,
-      },
-      {
-        title: "Transactions",
-        path: "/dashboard/transactions",
-        icon: <MdAttachMoney />,
       },
     ],
   },
@@ -46,17 +41,17 @@ const menuItems = [
     list: [
       {
         title: "Revenue",
-        path: "/dashboard/revenue",
+        path: "/Dashboard/revenue",
         icon: <MdWork />,
       },
       {
         title: "Reports",
-        path: "/dashboard/reports",
+        path: "/Dashboard/reports",
         icon: <MdAnalytics />,
       },
       {
         title: "Teams",
-        path: "/dashboard/teams",
+        path: "/Dashboard/teams",
         icon: <MdPeople />,
       },
     ],
@@ -66,12 +61,12 @@ const menuItems = [
     list: [
       {
         title: "Settings",
-        path: "/dashboard/settings",
+        path: "/Dashboard/settings",
         icon: <MdOutlineSettings />,
       },
       {
         title: "Help",
-        path: "/dashboard/help",
+        path: "/Dashboard/help",
         icon: <MdHelpCenter />,
       },
     ],
