@@ -18,6 +18,7 @@ const Donation = () => {
         <tbody>
           <tr>
             <td>
+                <div className={styles.user}>
               <Image
                 src="/noavatar.png"
                 alt=""
@@ -26,6 +27,7 @@ const Donation = () => {
                 className={styles.userImage}
               />
               Ilyes Boudhraa
+              </div>
             </td>
             <td>
                 <span className={`${styles.status} ${styles.done}`}>Done</span>
@@ -35,6 +37,7 @@ const Donation = () => {
           </tr>
           <tr>
             <td>
+            <div className={styles.user}>
               <Image
                 src="/noavatar.png"
                 alt=""
@@ -43,6 +46,7 @@ const Donation = () => {
                 className={styles.userImage}
               />
               Ilyes Boudhraa
+              </div>
             </td>
             <td>
                 <span className={`${styles.status} ${styles.pending}`}>Pending</span>
@@ -52,6 +56,7 @@ const Donation = () => {
           </tr>
           <tr>
             <td>
+                <div className={styles.user}>
               <Image
                 src="/noavatar.png"
                 alt=""
@@ -60,6 +65,7 @@ const Donation = () => {
                 className={styles.userImage}
               />
               Ilyes Boudhraa
+              </div>
             </td>
             <td>
                 <span className={`${styles.status} ${styles.cancelled}`}>Cancelled</span>
