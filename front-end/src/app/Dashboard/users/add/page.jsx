@@ -14,16 +14,10 @@ const AddUserPage = () => {
         required
       />
       <input type="phone" placeholder="phone" name="phone" />
+      <input type="file" name="profilePicture" accept="image/*" />
       <select name="isAdmin" id="isAdmin">
         <option value={false}>
           Is Admin?
-        </option>
-        <option value={true}>Yes</option>
-        <option value={false}>No</option>
-      </select>
-      <select name="isActive" id="isActive">
-        <option value={true}>
-          Is Active?
         </option>
         <option value={true}>Yes</option>
         <option value={false}>No</option>
