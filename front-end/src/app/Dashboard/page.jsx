@@ -1,5 +1,7 @@
 import React from 'react'
-import Card from '@/components/molecules/dashboard/card/card'
+import ToatlTotalUsersCard from '@/components/molecules/dashboard/card/TotalUserCard'
+import UsersThisMonthCard from '@/components/molecules/dashboard/card/UsersThisMonthCard'
+import UsersThisWeekCard from '@/components/molecules/dashboard/card/UsersThisWeekCard'
 import styles from '@/styles/dashbord.module.css'
 import Chart from '@/components/molecules/dashboard/chart/chart'
 import Righbar from '@/components/molecules/dashboard/rightbar/rightbar'
@@ -10,9 +12,9 @@ const Dashboard = () => {
     <div className={styles.wrapper}>
       <div className={styles.main}>
         <div className={styles.cards}>
-          <Card/>
-          <Card/>
-          <Card />
+          <ToatlTotalUsersCard/>
+          <UsersThisMonthCard/>
+          <UsersThisWeekCard />
         </div>
         <Donation/>
         <Chart/>

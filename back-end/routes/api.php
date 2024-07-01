@@ -10,9 +10,13 @@ Route::get('/user', function (Request $request) {
 
 // User routes
 Route::get('users', [UserController::class,'index']);
+Route::get('/users/counts', [UserController::class, 'counts']);
 Route::get('users/{id}', [UserController::class,'show']);
 Route::put('usersupdate/{id}', [UserController::class,'update']);
 Route::delete('usersdelete/{id}', [UserController::class,'destroy']);
+Route::get('/users/count', [UserController::class, 'count']);
+Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
+
 
 // Authentication routes
 Route::post('login', [UserController::class,'login']);
