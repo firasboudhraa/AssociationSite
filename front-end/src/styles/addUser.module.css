@@ -39,3 +39,43 @@
     border-radius: 5px;
     cursor: pointer;
   }
+  .alert {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .alert-success {
+    color: #d4edda;
+    background-color: green;
+    border-color: #c3e6cb;
+  }
+  
+  .alert-error {
+    color: #f8d7da;
+    background-color: red;
+    border-color: #f5c6cb;
+  }
+  
+  .alert svg {
+    margin-right: 10px;
+  }
+  
+  .h-6 {
+    height: 1.5rem;
+  }
+  
+  .w-6 {
+    width: 1.5rem;
+  }
+  
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+  
+  .stroke-current {
+    stroke: currentColor;
+  }

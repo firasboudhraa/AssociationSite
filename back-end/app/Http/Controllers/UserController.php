@@ -9,9 +9,7 @@ use App\Services\MailService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
-
-
-
+use Illuminate\Support\Facades\File;
 
 class UserController extends Controller
 {
@@ -21,6 +19,7 @@ class UserController extends Controller
     {
         $this->mailService = $mailService;
     }
+
     public function index()
     {
         try {
@@ -31,10 +30,12 @@ class UserController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'photo' => asset('uploads/' . $user->photo), 
+                    'photo' => asset('uploads/' . $user->photo),
                     'phone' => $user->phone,
                     'password' => $user->password,
+                    'is_admin' => $user->is_admin ,
                     'address' => $user->address,
+                    'created_at' => $user->created_at,
                 ];
             });
     
@@ -46,20 +47,18 @@ class UserController extends Controller
     }
 
     public function store(Request $request)
-{
+    {
+        try {
+            // Create user record
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = bcrypt($request->input('password'));
+            $user->phone = $request->input('phone');
+            $user->address = $request->input('address');
+            $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
 
-
-    try {
-                // Create user record
-                $user = new User();
-                $user->name = $request->input('name');
-                $user->email = $request->input('email');
-                $user->password = bcrypt($request->input('password'));
-                $user->phone = $request->input('phone');
-                $user->address = $request->input('address');
-                $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN); 
-
-        // Handle file upload
+            // Handle file upload
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $fileName = time() . '_' . $photo->getClientOriginalName();
@@ -67,14 +66,18 @@ class UserController extends Controller
                 $user->photo = $fileName;
             }
 
+            $user->save();
+            $token = $user->createToken("auth_token")->plainTextToken;
 
-        $user->save();
+            // Send welcome email
+            $this->sendWelcomeEmail($user);
 
-        return response()->json(['message' => 'User created successfully', 'user' => $user], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Error creating user: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'User created successfully', 'user' => $user, 'token' => $token], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error creating user: ' . $e->getMessage()], 500);
+        }
     }
-}
+
     public function show($id)
     {
         $user = User::find($id);
@@ -99,9 +102,19 @@ class UserController extends Controller
                 ], 404);
             }
             $data = $request->all();
-            if ($request->hasFile('photo')) {
-                $filePath = $request->file('photo')->store('profile_photos', 'public');
-                $data['photo'] = $filePath;
+            if ($request->hasfile('photo')) {
+                $filePath = public_path('uploads');
+                $file = $request->file('photo');
+                $file_name = time() . $file->getClientOriginalName();
+                $file->move($filePath, $file_name);
+                // delete old photo
+                if (!is_null($user->photo)) {
+                    $oldImage = public_path('uploads/' . $user->photo);
+                    if (File::exists($oldImage)) {
+                        unlink($oldImage);
+                    }
+                }
+                $user->photo = $file_name;
             }
 
             $user->update([
@@ -109,11 +122,10 @@ class UserController extends Controller
                 "email" => $data['email'],
                 "password" => bcrypt($data['password']),
                 "phone" => $data['phone'],
-                "photo" => $data['photo'] ?? $user->photo,
                 "is_admin" => $data['is_admin'] ?? $user->is_admin,
                 "address" => $data['address'],
             ]);
-
+            
             return response()->json([
                 "message" => "User Successfully Updated."
             ], 200);
@@ -124,6 +136,7 @@ class UserController extends Controller
             ], 500);
         }
     }
+
     public function destroy($id)
     {
         $user = User::find($id);
@@ -133,6 +146,12 @@ class UserController extends Controller
             ], 404);
         }
         $user->delete();
+        if (!is_null($user->photo)) {
+            $photo = public_path('uploads/' . $user->photo);
+            if (File::exists($photo)) {
+                unlink($photo);
+            }
+        }
 
         return response()->json([
             "message" => "User Successfully Deleted."
@@ -224,10 +243,8 @@ class UserController extends Controller
 
         DB::table('password_reset_tokens')->where('token', $request->token)->delete();
 
-
         return response()->json(['message' => 'Password successfully reset'], 200);
     }
-
 
     protected function sendWelcomeEmail(User $user)
     {
@@ -251,13 +268,13 @@ class UserController extends Controller
         $toName = $user->name;
         $subject = 'Reinitialisation du Mot de passe';
         $htmlBody = '
-                <p>Bonjour ' . $user->name . ',</p>
-                <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>
-                <a href="' . env('FRONTEND_URL') . '/reset-password?token=' . $token . '" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: blue; text-decoration: none; border-radius: 5px;">
-                    Réinitialiser mot de passe
-                </a>
-                <p>Si vous n\'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
-            ';
+            <p>Bonjour ' . $user->name . ',</p>
+            <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe:</p>
+            <a href="' . env('FRONTEND_URL') . '/reset-password?token=' . $token . '" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: white; background-color: blue; text-decoration: none; border-radius: 5px;">
+                Réinitialiser mot de passe
+            </a>
+            <p>Si vous n\'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
+        ';
 
         $result = $this->mailService->sendEmail($toEmail, $toName, $subject, $htmlBody);
 
@@ -267,5 +284,4 @@ class UserController extends Controller
             return false;
         }
     }
-
 }

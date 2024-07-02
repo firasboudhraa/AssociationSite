@@ -21,7 +21,13 @@ const UsersPage = () => {
   const fetchData = async () => {
     try {
       const result = await axios.get("http://localhost:8000/api/users");
-      setUsers(Array.isArray(result.data.results) ? result.data.results : []);
+      const usersData = Array.isArray(result.data.results) ? result.data.results : [];
+      const parsedUsers = usersData.map(user => ({
+        ...user,
+        is_admin: Boolean(user.is_admin)
+      }));
+      setUsers(parsedUsers);
+
     } catch (err) {
       setError("Something went wrong");
     } finally {
@@ -77,7 +83,7 @@ const UsersPage = () => {
               </td>
               <td>{user.email}</td>
               <td>{new Date(user.created_at).toLocaleDateString()}</td>
-              <td>{user.role}</td>
+              <td>{user.is_admin ? 'Admin' : 'Client'}</td>
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/Dashboard/users/${user.id}`}>
