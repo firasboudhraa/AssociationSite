@@ -21,33 +21,26 @@ class UserStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (request()->isMethod('post')) {
         return [
-            "name"=> "required|string|max:258",
-            "email"=> "required|string|email|max:255|unique:users",
-            "password"=> "required|string|min:8"
-            ];
-        }else {
-            return [
-            "name"=> "required|string|max:258",
-            "email"=> "required|string|email|max:255|unique:users",
-            "password"=> "required|string|min:8"
-            ];
-        }
+            'name' => 'required|string|max:258',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'is_admin' => 'nullable|boolean',
+            'photo' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
     }
     public function messages() {
-        if (request()->isMethod('post')) {
-            return [
-                "name"=> "Name is required",
-                "email"=> "Email is required",
-                "password"=> "Password is required"
-                ];
-            }else {
-                return [
-                "name"=> "Name is required",
-                "email"=> "Email is required",
-                "password"=> "Password is required"
-                ];
-            }
+        return [
+            'name.required' => 'Name is required.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Email must be a valid email address.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least :min characters.',
+            'photo.required' => 'Photo is required.',
+            'photo.mimes' => 'Photo must be a valid image format (jpeg, png, jpg, gif).',
+            'photo.max' => 'Photo size must not exceed :max KB.',
+        ];
     }
 }

@@ -15,6 +15,7 @@ const SingleUserPage = () => {
     phone: "",
     address: "",
     isAdmin: false,
+    photo: "/noavatar.png" ,
   });
 
   useEffect(() => {
@@ -24,17 +25,19 @@ const SingleUserPage = () => {
   const fetchUser = async () => {
     try {
       const result = await axios.get(`http://localhost:8000/api/users/${id}`);
-      console.log(result.data.user); // Log the fetched user data
+      const user = result.data.user;
+    
       setUserField({
-        username: result.data.user.name,
-        email: result.data.user.email,
-        password: "", // It's generally not a good idea to pre-fill passwords
-        phone: result.data.user.phone || "", // Adjust according to your user data structure
-        address: result.data.user.address || "", // Adjust according to your user data structure
-        isAdmin: result.data.user.isAdmin,
+        username: user.name,
+        email: user.email,
+        password: "", // Avoid pre-filling passwords
+        phone: user.phone || "", // Adjust according to your user data structure
+        address: user.address || "", // Adjust according to your user data structure
+        isAdmin: user.isAdmin,
+        photo: user.photo,
       });
     } catch (err) {
-      console.log("Something went wrong", err);
+      console.log("Error fetching user:", err);
     }
   };
 
@@ -59,7 +62,7 @@ const SingleUserPage = () => {
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image src={"/noavatar.png"} alt="" fill />
+          <Image src={userField.photo} alt="" fill />
         </div>
       </div>
       <div className={styles.formContainer}>

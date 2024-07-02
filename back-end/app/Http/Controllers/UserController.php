@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 
 
+
+
 class UserController extends Controller
 {
     protected $mailService;
@@ -21,32 +23,58 @@ class UserController extends Controller
     }
     public function index()
     {
-        $users = User::all();
-        return response()->json(['results' => $users], 200);
-    }
-    public function store(UserStoreRequest $request)
-    {
         try {
-            $user = User::create([
-                "name" => $request->name,
-                "email" => $request->email,
-                "password" => bcrypt($request->password)
-            ]);
-
-            $this->sendWelcomeEmail($user);
-
-            $token = $user->createToken("auth_token")->plainTextToken;
-            return response()->json([
-                'message' => 'User successfully created.',
-                'token' => $token
-            ], 200);
-
+            $users = User::all();
+    
+            $usersWithPhotoUrl = $users->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'photo' => asset('uploads/' . $user->photo), 
+                    'phone' => $user->phone,
+                    'password' => $user->password,
+                    'address' => $user->address,
+                ];
+            });
+    
+            return response()->json(['results' => $usersWithPhotoUrl], 200);
+    
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => "Something went really wrong !"
-            ], 500);
+            return response()->json(['error' => 'Failed to fetch users.'], 500);
         }
     }
+
+    public function store(Request $request)
+{
+
+
+    try {
+                // Create user record
+                $user = new User();
+                $user->name = $request->input('name');
+                $user->email = $request->input('email');
+                $user->password = bcrypt($request->input('password'));
+                $user->phone = $request->input('phone');
+                $user->address = $request->input('address');
+                $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN); 
+
+        // Handle file upload
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $fileName = time() . '_' . $photo->getClientOriginalName();
+                $photo->move(public_path('uploads'), $fileName);
+                $user->photo = $fileName;
+            }
+
+
+        $user->save();
+
+        return response()->json(['message' => 'User created successfully', 'user' => $user], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error creating user: ' . $e->getMessage()], 500);
+    }
+}
     public function show($id)
     {
         $user = User::find($id);
@@ -55,6 +83,7 @@ class UserController extends Controller
                 "message" => "User Not Found."
             ], 404);
         }
+        $user->photo = asset('uploads/' . $user->photo);
         return response()->json([
             "user" => $user
         ], 200);
@@ -69,11 +98,21 @@ class UserController extends Controller
                     "message" => "User Not Found."
                 ], 404);
             }
+            $data = $request->all();
+            if ($request->hasFile('photo')) {
+                $filePath = $request->file('photo')->store('profile_photos', 'public');
+                $data['photo'] = $filePath;
+            }
 
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = bcrypt($request->password);
-            $user->save();
+            $user->update([
+                "name" => $data['name'],
+                "email" => $data['email'],
+                "password" => bcrypt($data['password']),
+                "phone" => $data['phone'],
+                "photo" => $data['photo'] ?? $user->photo,
+                "is_admin" => $data['is_admin'] ?? $user->is_admin,
+                "address" => $data['address'],
+            ]);
 
             return response()->json([
                 "message" => "User Successfully Updated."

@@ -66,7 +66,7 @@ const UsersPage = () => {
               <td>
                 <div className={styles.user}>
                   <Image
-                    src={user.avatar || "/noavatar.png"}
+                    src={user.photo || "/noavatar.png"}
                     alt={user.name}
                     width={40}
                     height={40}
