@@ -7,27 +7,34 @@ import Search from "@/components/molecules/dashboard/search/Search";
 import Pagination from "@/components/molecules/dashboard/pagination/Pagination";
 import Link from "next/link";
 import Image from "next/image";
-import Spinner from '@/components/molecules/spinner/Spinner'
+import Spinner from '@/components/molecules/spinner/Spinner';
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    per_page: 2, // Default to 2 items per page
+    total: 0,
+    last_page: 0,
+  });
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(pagination.current_page);
+  }, [pagination.current_page]);
 
-  const fetchData = async () => {
+  const fetchData = async (page) => {
+    setLoading(true);
     try {
-      const result = await axios.get("http://localhost:8000/api/users");
+      const result = await axios.get(`http://localhost:8000/api/users?page=${page}&perPage=${pagination.per_page}`);
       const usersData = Array.isArray(result.data.results) ? result.data.results : [];
       const parsedUsers = usersData.map(user => ({
         ...user,
         is_admin: Boolean(user.is_admin)
       }));
       setUsers(parsedUsers);
-
+      setPagination(result.data.pagination);
     } catch (err) {
       setError("Something went wrong");
     } finally {
@@ -103,7 +110,7 @@ const UsersPage = () => {
           ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination pagination={pagination} setPagination={setPagination} />
     </div>
   );
 };

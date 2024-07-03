@@ -20,10 +20,12 @@ class UserController extends Controller
         $this->mailService = $mailService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $users = User::all();
+            $perPage = $request->query('perPage', 10); 
+            $page = $request->query('page', 1); // Default to page 1
+            $users = User::paginate($perPage, ['*'], 'page', $page);
     
             $usersWithPhotoUrl = $users->map(function ($user) {
                 return [
@@ -39,17 +41,27 @@ class UserController extends Controller
                 ];
             });
     
-            return response()->json(['results' => $usersWithPhotoUrl], 200);
+            return response()->json([
+                'results' => $usersWithPhotoUrl,
+                'pagination' => [
+                    'total' => $users->total(),
+                    'per_page' => $users->perPage(),
+                    'current_page' => $users->currentPage(),
+                    'last_page' => $users->lastPage(),
+                    'from' => $users->firstItem(),
+                    'to' => $users->lastItem(),
+                ]
+            ], 200);
     
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to fetch users.'], 500);
         }
+       
     }
 
     public function store(Request $request)
     {
         try {
-            // Create user record
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -58,7 +70,6 @@ class UserController extends Controller
             $user->address = $request->input('address');
             $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
 
-            // Handle file upload
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $fileName = time() . '_' . $photo->getClientOriginalName();
@@ -69,7 +80,6 @@ class UserController extends Controller
             $user->save();
             $token = $user->createToken("auth_token")->plainTextToken;
 
-            // Send welcome email
             $this->sendWelcomeEmail($user);
 
             return response()->json(['message' => 'User created successfully', 'user' => $user, 'token' => $token], 200);
