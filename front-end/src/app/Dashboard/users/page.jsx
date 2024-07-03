@@ -8,6 +8,7 @@ import Pagination from "@/components/molecules/dashboard/pagination/Pagination";
 import Link from "next/link";
 import Image from "next/image";
 import Spinner from '@/components/molecules/spinner/Spinner';
+import { useSearchParams, useRouter } from "next/navigation";
 
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
@@ -20,19 +21,28 @@ const UsersPage = () => {
     last_page: 0,
   });
 
-  useEffect(() => {
-    fetchData(pagination.current_page);
-  }, [pagination.current_page]);
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
 
-  const fetchData = async (page) => {
+  useEffect(() => {
+    fetchData();
+  }, [pagination.current_page, searchParams]);
+
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const result = await axios.get(`http://localhost:8000/api/users?page=${page}&perPage=${pagination.per_page}`);
+      const page = searchParams.get('page') || 1;
+      const searchQuery = searchParams.get('q') || '';
+      const result = await axios.get(`http://localhost:8000/api/users`, {
+        params: { page, perPage: pagination.per_page, q: searchQuery }
+      });
+
       const usersData = Array.isArray(result.data.results) ? result.data.results : [];
       const parsedUsers = usersData.map(user => ({
         ...user,
         is_admin: Boolean(user.is_admin)
       }));
+
       setUsers(parsedUsers);
       setPagination(result.data.pagination);
     } catch (err) {
@@ -52,7 +62,7 @@ const UsersPage = () => {
     }
   };
 
-  if (loading) return <Spinner/>;
+  if (loading) return <Spinner />;
   if (error) return <p>{error}</p>;
 
   return (

@@ -23,9 +23,21 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $perPage = $request->query('perPage', 10); 
+            $perPage = $request->query('perPage', 2); // Default to 2 items per page
             $page = $request->query('page', 1); // Default to page 1
-            $users = User::paginate($perPage, ['*'], 'page', $page);
+            $search = $request->query('q', ''); // Search query
+    
+            $query = User::query();
+    
+            if (!empty($search)) {
+                $query->where('name', 'LIKE', "%$search%")
+                      ->orWhere('email', 'LIKE', "%$search%")
+                      ->orWhere('address', 'LIKE', "%$search%")
+                      ->orWhere('phone', 'LIKE', "%$search%")
+                      ->orWhereRaw("CAST(is_admin AS CHAR) LIKE ?", ["%$search%"]);
+            }
+    
+            $users = $query->paginate($perPage, ['*'], 'page', $page);
     
             $usersWithPhotoUrl = $users->map(function ($user) {
                 return [
@@ -35,7 +47,7 @@ class UserController extends Controller
                     'photo' => asset('uploads/' . $user->photo),
                     'phone' => $user->phone,
                     'password' => $user->password,
-                    'is_admin' => $user->is_admin ,
+                    'is_admin' => $user->is_admin,
                     'address' => $user->address,
                     'created_at' => $user->created_at,
                 ];
@@ -56,8 +68,8 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to fetch users.'], 500);
         }
-       
     }
+    
 
     public function store(Request $request)
     {
