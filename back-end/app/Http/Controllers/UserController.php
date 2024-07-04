@@ -23,9 +23,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $perPage = $request->query('perPage', 2); // Default to 2 items per page
-            $page = $request->query('page', 1); // Default to page 1
-            $search = $request->query('q', ''); // Search query
+            $perPage = $request->query('perPage', 2); 
+            $page = $request->query('page', 1); 
+            $search = $request->query('q', ''); 
     
             $query = User::query();
     

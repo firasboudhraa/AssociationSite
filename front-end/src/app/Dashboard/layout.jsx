@@ -1,24 +1,24 @@
-import Navbar from "@/components/molecules/dashboard/navbar/navbar"
-import Sidebar from "@/components/molecules/dashboard/sidebar/sidebar"
-import styles from "../../styles/dashbord.module.css"
-import Footer from "@/components/molecules/dashboard/footer/Footer"
+import React from 'react';
+import Navbar from "@/components/molecules/dashboard/navbar/navbar";
+import Sidebar from "@/components/molecules/dashboard/sidebar/sidebar";
+import Footer from "@/components/molecules/dashboard/footer/Footer";
+import styles from "../../styles/dashbord.module.css";
 
-
-
-const layout = ({children}) => {
+const Layout = ({ children }) => {
   return (
     <div className={styles.container}>
-        <div className={styles.menu}>
-            <Sidebar/>
+      <div className={styles.menu}>
+        <Sidebar />
+      </div>
+      <div className={styles.content}>
+        <Navbar />
+        <div className={styles.childrenWrapper}>
+          {children}
         </div>
-        <div className={styles.content}>
-            <Navbar/>
-            {children}
-            <Footer/>
-        </div>
-      
+        <Footer />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default layout
+export default Layout;
