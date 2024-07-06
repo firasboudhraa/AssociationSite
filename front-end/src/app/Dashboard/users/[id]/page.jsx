@@ -15,8 +15,10 @@ const SingleUserPage = () => {
     phone: "",
     address: "",
     isAdmin: false,
-    photo: "/noavatar.png" ,
+    photo: "/noavatar.png",
   });
+
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   useEffect(() => {
     fetchUser();
@@ -42,17 +44,41 @@ const SingleUserPage = () => {
   };
 
   const changeUserFieldHandler = (e) => {
-    setUserField({
-      ...userField,
-      [e.target.name]: e.target.value
-    });
+    const { name, value, files } = e.target;
+    if (name === 'photo' && files.length > 0) {
+      setSelectedPhoto(files[0]);
+      setUserField({
+        ...userField,
+        [name]: URL.createObjectURL(files[0]),
+      });
+    } else {
+      setUserField({
+        ...userField,
+        [name]: value,
+      });
+    }
   };
 
   const onSubmitChange = async (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', userField.username);
+    formData.append('email', userField.email);
+    formData.append('password', userField.password);
+    formData.append('phone', userField.phone);
+    formData.append('address', userField.address);
+    formData.append('is_admin', userField.isAdmin);
+    if (selectedPhoto) {
+      formData.append('photo', selectedPhoto);
+    }
+
     try {
-      await axios.put(`http://localhost:8000/api/usersupdate/${id}`, userField);
-      window.location.href = '/';
+      await axios.put(`http://localhost:8000/api/usersupdate/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
     } catch (err) {
       console.log("Something went wrong", err);
     }
@@ -115,6 +141,13 @@ const SingleUserPage = () => {
             <option value={true}>Yes</option>
             <option value={false}>No</option>
           </select>
+          <label>Photo</label>
+          <input
+            type="file"
+            name="photo"
+            accept="image/*"
+            onChange={changeUserFieldHandler}
+          />
           <button type="submit">Update</button>
         </form>
       </div>

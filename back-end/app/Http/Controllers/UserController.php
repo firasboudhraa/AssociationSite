@@ -71,7 +71,7 @@ class UserController extends Controller
     }
     
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
         try {
             $user = new User();
@@ -114,7 +114,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function update(UserStoreRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $user = User::find($id);
@@ -123,42 +123,58 @@ class UserController extends Controller
                     "message" => "User Not Found."
                 ], 404);
             }
-            $data = $request->all();
-            if ($request->hasfile('photo')) {
-                $filePath = public_path('uploads');
-                $file = $request->file('photo');
-                $file_name = time() . $file->getClientOriginalName();
-                $file->move($filePath, $file_name);
-                // delete old photo
+    
+            // Prepare an array to store the attributes to be updated
+            $updateData = [];
+    
+            if ($request->has('name')) {
+                $updateData['name'] = $request->input('name');
+            }
+            if ($request->has('email')) {
+                $updateData['email'] = $request->input('email');
+            }
+            if ($request->has('password')) {
+                $updateData['password'] = bcrypt($request->input('password'));
+            }
+            if ($request->has('phone')) {
+                $updateData['phone'] = $request->input('phone');
+            }
+            if ($request->has('address')) {
+                $updateData['address'] = $request->input('address');
+            }
+            if ($request->has('is_admin')) {
+                $updateData['is_admin'] = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
+            }
+            if ($request->hasFile('photo')) {
+                $photo = $request->file('photo');
+                $fileName = time() . '_' . $photo->getClientOriginalName();
+                $photo->move(public_path('uploads'), $fileName);
+    
+                // Delete old photo if exists
                 if (!is_null($user->photo)) {
                     $oldImage = public_path('uploads/' . $user->photo);
                     if (File::exists($oldImage)) {
                         unlink($oldImage);
                     }
                 }
-                $user->photo = $file_name;
+                $updateData['photo'] = $fileName;
             }
-
-            $user->update([
-                "name" => $data['name'],
-                "email" => $data['email'],
-                "password" => bcrypt($data['password']),
-                "phone" => $data['phone'],
-                "is_admin" => $data['is_admin'] ?? $user->is_admin,
-                "address" => $data['address'],
-            ]);
-            
+    
+            // Use the update method with the $updateData array
+            $user->update($updateData);
+    
             return response()->json([
-                "message" => "User Successfully Updated."
+                "message" => "User Successfully Updated.",
+                "user" => $user // Optionally return the updated user data
             ], 200);
-
+    
         } catch (\Exception $e) {
             return response()->json([
-                "message" => "Something Went really wrong!"
+                "error" => "Something Went Wrong: " . $e->getMessage()
             ], 500);
         }
     }
-
+    
     public function destroy($id)
     {
         $user = User::find($id);
