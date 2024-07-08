@@ -17,8 +17,17 @@ module.exports = {
           DEFAULT: '1rem' ,
           sm: '3rem' ,
         }
-      }
+      },
+      colors: {
+        bg: '#151c2c',
+        bgSoft: '#182237',
+        text: 'white',
+        textSoft: '#b7bac1',
+      },
     },
+  },
+  variants: {
+    extend: {},
   },
   plugins: [],
 }
