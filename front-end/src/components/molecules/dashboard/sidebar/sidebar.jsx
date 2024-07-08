@@ -6,7 +6,7 @@ import {
   MdDashboard,
   MdSupervisedUserCircle,
   MdShoppingBag,
-  MdAttachMoney,
+  MdAccountCircle,
   MdWork,
   MdAnalytics,
   MdPeople,
@@ -60,9 +60,9 @@ const menuItems = [
     title: "User",
     list: [
       {
-        title: "Settings",
-        path: "/Dashboard/settings",
-        icon: <MdOutlineSettings />,
+        title: "Account",
+        path: "/Dashboard/account",
+        icon: <MdAccountCircle/>,
       },
       {
         title: "Help",

@@ -60,7 +60,6 @@ const EventsPage = () => {
             </tr>
         </tbody>
       </table>
-      <Pagination  />
     </div>
   )
 }

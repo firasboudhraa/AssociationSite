@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log; // Add this at the top of your file
+
 
 class UserController extends Controller
 {
@@ -113,7 +115,7 @@ class UserController extends Controller
             "user" => $user
         ], 200);
     }
-
+    
     public function update(Request $request, $id)
     {
         try {
@@ -124,26 +126,23 @@ class UserController extends Controller
                 ], 404);
             }
     
-            // Prepare an array to store the attributes to be updated
-            $updateData = [];
-    
             if ($request->has('name')) {
-                $updateData['name'] = $request->input('name');
+                $user->name = $request->input('name');
             }
             if ($request->has('email')) {
-                $updateData['email'] = $request->input('email');
+                $user->email = $request->input('email');
             }
             if ($request->has('password')) {
-                $updateData['password'] = bcrypt($request->input('password'));
+                $user->password = bcrypt($request->input('password'));
             }
             if ($request->has('phone')) {
-                $updateData['phone'] = $request->input('phone');
+                $user->phone = $request->input('phone');
             }
             if ($request->has('address')) {
-                $updateData['address'] = $request->input('address');
+                $user->address = $request->input('address');
             }
             if ($request->has('is_admin')) {
-                $updateData['is_admin'] = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
+                $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
             }
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
@@ -157,11 +156,11 @@ class UserController extends Controller
                         unlink($oldImage);
                     }
                 }
-                $updateData['photo'] = $fileName;
+                $user->photo = $fileName;
             }
     
-            // Use the update method with the $updateData array
-            $user->update($updateData);
+            // Save the user after updating each field
+            $user->save();
     
             return response()->json([
                 "message" => "User Successfully Updated.",
@@ -173,7 +172,7 @@ class UserController extends Controller
                 "error" => "Something Went Wrong: " . $e->getMessage()
             ], 500);
         }
-    }
+    }    
     
     public function destroy($id)
     {
