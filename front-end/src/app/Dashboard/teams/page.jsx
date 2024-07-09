@@ -58,7 +58,6 @@ const TeamPage = () => {
           </tr>
       </tbody>
     </table>
-
   </div>
   )
 }

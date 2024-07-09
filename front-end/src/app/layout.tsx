@@ -18,9 +18,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <Script src="https://cdn.lordicon.com/ritcuqlt.js" strategy="beforeInteractive" />
-      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
