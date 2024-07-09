@@ -10,7 +10,6 @@ import {
   MdWork,
   MdAnalytics,
   MdPeople,
-  MdOutlineSettings,
   MdHelpCenter,
   MdLogout,
 } from "react-icons/md";
