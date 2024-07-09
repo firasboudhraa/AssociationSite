@@ -1,7 +1,7 @@
 import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import BlogIcon from "@mui/icons-material/Article";
-import AboutIcon from "@mui/icons-material/Info";
+import EventIcon from '@mui/icons-material/Event';
 import ContactIcon from "@mui/icons-material/ContactSupport";
 import LoginIcon from "@mui/icons-material/AccountCircle";
 import PeopleIcon from '@mui/icons-material/People';
@@ -44,18 +44,18 @@ const Navbar = () => {
                   Membres
                 </Link>
                 <Link
+                  href="/Event"
+                  className="flex items-center px-3 py-2 text-white"
+                >
+                  <EventIcon className="mr-2" />
+                  Events
+                </Link>
+                <Link
                   href="/blog"
                   className="flex items-center px-3 py-2 text-white"
                 >
                   <BlogIcon className="mr-2" />
                   Blog
-                </Link>
-                <Link
-                  href="/about"
-                  className="flex items-center px-3 py-2 text-white"
-                >
-                  <AboutIcon className="mr-2" />
-                  About Us
                 </Link>
                 <Link
                   href="/Contact"
