@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CardController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,3 +26,12 @@ Route::post('create', [UserController::class,'store']);
 // Password reset route
 Route::post('forgetPass', [UserController::class,'forgotPassword']);
 Route::post('resetPass', [UserController::class,'reset']);
+
+// card routes
+Route::get('/cards', [CardController::class, 'index']);
+Route::post('/createCard', [CardController::class, 'store']);
+Route::get('/cards/{id}', [CardController::class, 'show']);
+Route::put('/cards/{id}', [CardController::class, 'update']);
+Route::delete('/cards/{id}', [CardController::class, 'destroy']);
+
+

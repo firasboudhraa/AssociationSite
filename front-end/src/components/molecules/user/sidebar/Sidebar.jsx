@@ -36,14 +36,9 @@ const menuItems = [
     icon: <MdAccountBalance className={styles.icon} />,
   },
   {
-    title: 'Mes virements',
-    path: '/User/mes-virements',
-    icon: <MdAttachMoney className={styles.icon} />,
-  },
-  {
     title: 'Mes participations',
     path: '/User/mes-participations',
-    icon: <MdGroup className={styles.icon} />,
+    icon: <MdAttachMoney className={styles.icon} />,
   },
   {
     title: 'Mot de passe',
