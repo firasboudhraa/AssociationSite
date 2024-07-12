@@ -24,16 +24,21 @@ class CardController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'card_number' => 'required',
-            'card_holder' => 'required',
-            'expiry_month' => 'required',
-            'expiry_year' => 'required',
-            'cvv' => 'required',
+        // Validate the request data
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'card_number' => 'required|string|max:20',
+            'card_holder' => 'required|string|max:255',
+            'expiry_month' => 'required|integer|min:1|max:12',
+            'expiry_year' => 'required|integer|min:2024|max:2100',
+            'cvv' => 'required|string|max:4',
         ]);
 
-        $card = Card::create($request->all());
-        return response()->json(['message' => 'Card created successfully', 'card' => $card], 201);
+        // Create a new card using the validated data
+        $card = Card::create($validatedData);
+
+        // Return a response with the created card
+        return response()->json(['card' => $card], 201);
     }
 
     public function update(Request $request, $id)

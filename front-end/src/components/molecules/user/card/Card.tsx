@@ -19,6 +19,7 @@ const cardBackgroundName = () => {
 };
 
 const BACKGROUND_IMG = cardBackgroundName();
+
 interface CardProp {
   cardHolder: any;
   cardNumber: any;
@@ -27,13 +28,14 @@ interface CardProp {
   cardCvv: any;
   isCardFlipped: any;
 }
+
 function Card(props: CardProp) {
   const {
-    cardHolder,
-    cardNumber,
-    cardMonth,
-    cardYear,
-    cardCvv,
+    cardHolder = 'FULL NAME', // Default value
+    cardNumber = '',           // Default value
+    cardMonth = '',            // Default value
+    cardYear = '',             // Default value
+    cardCvv = '',              // Default value
     isCardFlipped,
   } = props;
 
@@ -46,7 +48,6 @@ function Card(props: CardProp) {
         return card;
       }
     }
-
     return 'visa'; 
   };
 
@@ -63,7 +64,6 @@ function Card(props: CardProp) {
         }
       }
     });
-
     return cardNumberArr;
   };
 
@@ -82,7 +82,7 @@ function Card(props: CardProp) {
         <div className="card-item__wrapper">
           <div className="card-item__top">
             <img
-              src={'/card-asserts/chip.png'}
+              src={'/card-assets/chip.png'}
               alt=""
               className="card-item__chip"
             />
@@ -147,7 +147,7 @@ function Card(props: CardProp) {
             <div className="card-item__date">
               <label className="card-item__dateTitle">Expires</label>
               <label className="card-item__dateItem">
-                <SwitchTransition in-out>
+                <SwitchTransition>
                   <CSSTransition
                     classNames="slide-fade-up"
                     timeout={200}
@@ -159,7 +159,7 @@ function Card(props: CardProp) {
               </label>
               /
               <label htmlFor="cardYear" className="card-item__dateItem">
-                <SwitchTransition out-in>
+                <SwitchTransition>
                   <CSSTransition
                     classNames="slide-fade-up"
                     timeout={250}

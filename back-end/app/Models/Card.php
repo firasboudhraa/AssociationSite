@@ -14,6 +14,7 @@ class Card extends Model
 
     // Define mass assignable attributes (fields that can be filled via mass assignment)
     protected $fillable = [
+        'user_id',
         'card_number',
         'card_holder',
         'expiry_month',
@@ -26,8 +27,8 @@ class Card extends Model
 
     // Relationships (if any)
     // Example:
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
+     public function user()
+    {
+         return $this->belongsTo(User::class);
+     }
 }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import Row from 'react-bootstrap/Row';
 import { Button, Col, Container } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
+import Card from '@/components/molecules/user/card/Card'; 
 
 interface CreditCard {
   id: number;
@@ -65,15 +65,17 @@ export default function Cards() {
           {cardsData.map(card => (
             <Col md={4} key={card.id} className="mb-3">
               <Link href={`/cards/${card.id}/edit`} className="col-md-3 credit-card">
-                <Card>
-                  <Card.Body>
-                    <Card.Title>{card.card_number}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">{card.card_holder}</Card.Subtitle>
-                    <Card.Text>Expires: {card.expiry_month}/{card.expiry_year}</Card.Text>
-                    <Button variant="danger" onClick={() => deleteCard(card.id)}>Delete</Button>
-                  </Card.Body>
-                </Card>
-              </Link>
+                <Card
+                  cardHolder={card.card_holder}
+                  cardNumber={card.card_number}
+                  cardMonth={card.expiry_month}
+                  cardYear={card.expiry_year}
+                  cardCvv={card.cvv}
+                  isCardFlipped={false}
+                />
+                 </Link>
+                <Button variant="success" className="mr-2" onClick={() => router.push(`/cards/${card.id}/edit`)}>Edit</Button>
+                <Button variant="danger" onClick={() => deleteCard(card.id)}>Delete</Button>
             </Col>
           ))}
         </Row>
