@@ -34,10 +34,8 @@ class CardController extends Controller
             'cvv' => 'required|string|max:4',
         ]);
 
-        // Create a new card using the validated data
         $card = Card::create($validatedData);
 
-        // Return a response with the created card
         return response()->json(['card' => $card], 201);
     }
 

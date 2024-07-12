@@ -31,11 +31,11 @@ interface CardProp {
 
 function Card(props: CardProp) {
   const {
-    cardHolder = 'FULL NAME', // Default value
-    cardNumber = '',           // Default value
-    cardMonth = '',            // Default value
-    cardYear = '',             // Default value
-    cardCvv = '',              // Default value
+    cardHolder = 'FULL NAME', 
+    cardNumber = '',
+    cardMonth = '',
+    cardYear = '', 
+    cardCvv = '', 
     isCardFlipped,
   } = props;
 
@@ -82,7 +82,7 @@ function Card(props: CardProp) {
         <div className="card-item__wrapper">
           <div className="card-item__top">
             <img
-              src={'/card-assets/chip.png'}
+              src={'/card-asserts/chip.png'}
               alt=""
               className="card-item__chip"
             />

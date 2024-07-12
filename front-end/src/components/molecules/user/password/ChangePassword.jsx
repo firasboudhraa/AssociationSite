@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import styles from '@/styles/ChangePassword.module.css';
+import styles from '@/styles//changePassword.module.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const ChangePasswordForm = () => {

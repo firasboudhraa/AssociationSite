@@ -44,7 +44,7 @@ export default function Cards() {
 
   return (
     <>
-      <h1 className="home-page-heading">Your Cards</h1>
+      <h1 className="home-page-heading"></h1>
       <Container>
         <Row className="justify-content-center">
           {cardsData.length === 0 && (
@@ -74,18 +74,16 @@ export default function Cards() {
                   isCardFlipped={false}
                 />
                  </Link>
-                <Button variant="success" className="mr-2" onClick={() => router.push(`/cards/${card.id}/edit`)}>Edit</Button>
+                <Button variant="success" className="mr-2" onClick={() => router.push(`/User/coordonnees-bancaires/${card.id}`)}>Edit</Button>
                 <Button variant="danger" onClick={() => deleteCard(card.id)}>Delete</Button>
             </Col>
           ))}
         </Row>
 
         <Row className="justify-content-center">
-          <Col md={4} className="mt-3">
+          <Col md={4} className="mt-3 justify-center ml-20">
             <Button
-              className="add-new-card"
-              variant="primary"
-              size="lg"
+              className="border-2 border-blue-600   text-blue-200 rounded-full px-8 py-3 inline-block font-semibold hover:bg-blue-800 hover:text-white mt-4"
               onClick={() => router.push('/User/coordonnees-bancaires/add')}
             >
               Add New Card
