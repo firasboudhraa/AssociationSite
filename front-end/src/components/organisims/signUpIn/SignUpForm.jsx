@@ -3,7 +3,7 @@ import { FaFacebookF, FaLinkedinIn, FaGoogle, FaRegEnvelope } from 'react-icons/
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
 import CircularProgress from "@mui/material/CircularProgress"; 
 import useSignUpStore from "@/stores/signUpStore"; 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 const SignUpForm = ({ setIsSignIn }) => {
@@ -15,7 +15,7 @@ const SignUpForm = ({ setIsSignIn }) => {
   };
   return (
     <div className='bg-gray-100'>
-      <div className='bg-white rounded-2xl shadow-2xl flex w-full max-w-4xl justify-center'>
+      <div className='bg-[var(--bgSoft)] rounded-2xl shadow-2xl flex w-full max-w-4xl justify-center'>
         <div className='w-2/5 bg-green-500 text-white rounded-tl-2xl rounded-bl-2xl py-36 px-12'>
           <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
           <div className="border-2 w-10 border-white inline-block mb-2"></div>
@@ -25,9 +25,6 @@ const SignUpForm = ({ setIsSignIn }) => {
           </a>
         </div>
         <div className='w-3/5 p-5'>
-          <div className="text-left font-bold">
-            <span className="text-green-500">Grow</span>Up
-          </div>
           <div className="py-10">
             <h2 className="text-3xl font-bold text-green-500 mb-2">Create Account</h2>
             <div className="border-2 w-10 border-green-500 inline-block mb-2"></div>

@@ -1,3 +1,5 @@
+"use client"
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
 import BlogIcon from "@mui/icons-material/Article";
@@ -8,6 +10,26 @@ import PeopleIcon from '@mui/icons-material/People';
 import Image from "next/image";
 
 const Navbar = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState(null); 
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setAuthenticated(true);
+    } else {
+      setUser(null);
+      setAuthenticated(false);
+    }
+  }, []); 
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    setUser(null);
+    setAuthenticated(false);
+  };
+
   return (
     <nav className="bg-gray-800 text-white">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -17,12 +39,12 @@ const Navbar = () => {
             <div className="flex-shrink-0 w-10 mr-5">
               <Link href="/">
                 <Image
-                  src={"/noavatar.png"}
-                  alt="Logo"
-                  width="100"
-                  height="50"
-                  className="cursor-pointer rounded-circle "
-                  priority
+                    src={"/noavatar.png"}
+                    alt="User Photo"
+                    width="40"
+                    height="40"
+                    className="rounded-full cursor-pointer"
+                    priority
                 />
               </Link>
             </div>
@@ -68,11 +90,43 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Login Button */}
+          {/* Conditional Render for Login or User Dropdown */}
           <div className="absolute inset-y-0 right-0 flex items-center sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button className="bg-transparent hover:bg-blue-700 text-white px-4 py-2 rounded-md ml-20">
-              <LoginIcon className="mr-2" /> Login
-            </button>
+            {authenticated ? (
+              <div className="relative">
+                <button className="bg-transparent text-white px-4 py-2 rounded-md ml-20">
+                  <Image
+                    src={ "/noavatar.png"}
+                    alt="User Photo"
+                    width="40"
+                    height="40"
+                    className="rounded-full cursor-pointer"
+                    priority
+                  />
+                </button>
+                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                  {/* Dropdown content */}
+                  <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                    <Link href="/Profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                        Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                      role="menuitem"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link href="/Connexion">
+                <button className="bg-transparent hover:bg-blue-700 text-white px-4 py-2 rounded-md ml-20">
+                  <LoginIcon className="mr-2" /> Login
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

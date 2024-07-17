@@ -35,8 +35,8 @@ export default function Cards() {
 
   async function deleteCard(id: number) {
     try {
-      await axios.delete(`http://localhost:8000/api/cards/${id}`); // Delete card via backend API
-      setCardsData(cardsData.filter(card => card.id !== id)); // Update state after deletion
+      await axios.delete(`http://localhost:8000/api/cards/${id}`); 
+      setCardsData(cardsData.filter(card => card.id !== id)); 
     } catch (error) {
       console.error('Error deleting card:', error);
     }

@@ -8,13 +8,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      
-      <div className="flex-1">
-        {/* Your main content goes here */}
-        <h1>Welcome to My Website</h1>
-        <p>This is the main content area.</p>
-      </div>
-      
+
       <Footer />
     </div>
   );

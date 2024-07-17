@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 
 class UserController extends Controller
@@ -40,7 +41,7 @@ class UserController extends Controller
     
             $users = $query->paginate($perPage, ['*'], 'page', $page);
     
-            $usersWithPhotoUrl = $users->map(function ($user) {
+            $usersWithPhotoUrl = $users->getCollection()->map(function ($user) {
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -118,60 +119,35 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $user = User::find($id);
-            if (!$user) {
-                return response()->json([
-                    "message" => "User Not Found."
-                ], 404);
-            }
+            $user = User::findOrFail($id);
     
-            if ($request->has('name')) {
-                $user->name = $request->input('name');
-            }
-            if ($request->has('email')) {
-                $user->email = $request->input('email');
-            }
-            if ($request->has('password')) {
-                $user->password = bcrypt($request->input('password'));
-            }
-            if ($request->has('phone')) {
-                $user->phone = $request->input('phone');
-            }
-            if ($request->has('address')) {
-                $user->address = $request->input('address');
-            }
-            if ($request->has('is_admin')) {
-                $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
-            }
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->phone = $request->input('phone');
+            $user->address = $request->input('address');
+            $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
+    
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $fileName = time() . '_' . $photo->getClientOriginalName();
                 $photo->move(public_path('uploads'), $fileName);
     
-                // Delete old photo if exists
-                if (!is_null($user->photo)) {
-                    $oldImage = public_path('uploads/' . $user->photo);
-                    if (File::exists($oldImage)) {
-                        unlink($oldImage);
-                    }
+                if ($user->photo && File::exists(public_path('uploads/' . $user->photo))) {
+                    File::delete(public_path('uploads/' . $user->photo));
                 }
+    
                 $user->photo = $fileName;
             }
     
-            // Save the user after updating each field
             $user->save();
     
-            return response()->json([
-                "message" => "User Successfully Updated.",
-                "user" => $user // Optionally return the updated user data
-            ], 200);
-    
+            return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                "error" => "Something Went Wrong: " . $e->getMessage()
-            ], 500);
+            return response()->json(['error' => 'Error updating user: ' . $e->getMessage()], 500);
         }
-    }    
+    }
+    
+
     
     public function destroy($id)
     {
@@ -225,14 +201,14 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'min:8'],
-        ]);
+           $credentials = $request->validate([
+                    'email' => ['required', 'email'],
+                    'password' => ['required', 'min:8'],
+            ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
+            if (Auth::attempt($credentials)) {
+                       $user = Auth::user();
+                  $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'user' => $user,

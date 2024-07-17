@@ -36,8 +36,14 @@ const useSignUpStore = create((set, get) => ({
       );
       
       console.log(response.data);
+            // Assuming your response includes 'token' and 'user'
+            const { token, user } = response.data;
+
+            // Store token and user in localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(user));
       set({ loading: false });
-      router.push('/Profile');
+      router.push('/');
     } catch (error) {
       console.error("Error signing up:", error);
       set({ loading: false });

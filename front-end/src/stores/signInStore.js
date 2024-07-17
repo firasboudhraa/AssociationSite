@@ -38,7 +38,7 @@ const useSignInStore = create((set, get) => ({
 
       set({ loading: false });
 
-      router.push('/Profile'); 
+      router.push('/'); 
     } catch (error) {
       console.error('Error signing in:', error);
       set({ loading: false });
