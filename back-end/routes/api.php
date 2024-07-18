@@ -40,5 +40,9 @@ Route::delete('/cards/{id}', [CardController::class, 'destroy']);
 // team routes
 Route::get('/teams',[TeamController::class,'index']);
 Route::post('/createTeam', [TeamController::class,'store']);
+Route::delete('/teamsdelete/{id}', [TeamController::class,'destroy']);
+Route::get('/teams/{id}', [TeamController::class,'show']);
+
+
 
 

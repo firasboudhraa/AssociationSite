@@ -8,6 +8,7 @@ import Pagination from '@/components/molecules/dashboard/pagination/Pagination';
 import Link from 'next/link';
 import Image from 'next/image';
 import Spinner from '@/components/molecules/spinner/Spinner';
+import { useSearchParams, useRouter } from 'next/navigation'; // Correct import
 
 const TeamPage = () => {
   const [members, setMembers] = useState([]);
@@ -20,9 +21,12 @@ const TeamPage = () => {
     last_page: 0,
   });
 
+  const searchParams = useSearchParams();
+  const router = useRouter(); 
+
   useEffect(() => {
     fetchData();
-  }, [pagination.current_page]); 
+  }, [pagination.current_page, searchParams]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -36,7 +40,7 @@ const TeamPage = () => {
 
       const { results, pagination: fetchedPagination } = result.data;
 
-      setMembers(results); // Assuming 'results' contains the array of members
+      setMembers(results);
       setPagination({
         current_page: fetchedPagination.current_page,
         per_page: fetchedPagination.per_page,
@@ -48,6 +52,16 @@ const TeamPage = () => {
       console.error('Error fetching members:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteMember = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/teams/${id}`); // Adjust API endpoint
+      setMembers(members.filter((member) => member.id !== id));
+    } catch (err) {
+      setError('Failed to delete the member');
+      console.error(err);
     }
   };
 
@@ -89,13 +103,18 @@ const TeamPage = () => {
               </td>
               <td>{member.email}</td>
               <td>{new Date(member.created_at).toLocaleDateString()}</td>
-              <td>{member.role}</td>
+              <td>{member.function}</td>
               <td>
                 <div className={styles.buttons}>
                   <Link href={`/Dashboard/teams/${member.id}`}>
                     <button className={`${styles.button} ${styles.view}`}>View</button>
                   </Link>
-                  <button className={`${styles.button} ${styles.delete}`}>Delete</button>
+                  <button
+                    className={`${styles.button} ${styles.delete}`}
+                    onClick={() => handleDeleteMember(member.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </td>
             </tr>

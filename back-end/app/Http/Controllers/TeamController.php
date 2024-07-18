@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Team;
+use Illuminate\Support\Facades\File;
+
 
 class TeamController extends Controller
 {
@@ -75,5 +77,40 @@ class TeamController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error creating team: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function show($id)
+    {
+        $member = Team::find($id);
+        if (!$member) {
+            return response()->json([
+                "message" => "Member Not Found."
+            ], 404);
+        }
+        $member->photo = asset('uploads/' . $member->photo);
+        return response()->json([
+            "member" => $member
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $member = Team::find($id);
+        if (!$member) {
+            return response()->json([
+                "message" => "User Not Found."
+            ], 404);
+        }
+        $member->delete();
+        if (!is_null($member->photo)) {
+            $photo = public_path('uploads/' . $member->photo);
+            if (File::exists($photo)) {
+                unlink($photo);
+            }
+        }
+
+        return response()->json([
+            "message" => "User Successfully Deleted."
+        ], 200);
     }
 }
