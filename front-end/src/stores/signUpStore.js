@@ -26,22 +26,19 @@ const useSignUpStore = create((set, get) => ({
     try {
       set({ loading: true });
       
-      const response = await axios.post(
-        REGISTER_URL,
-        formData,
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(REGISTER_URL, formData);
       
       console.log(response.data);
-            // Assuming your response includes 'token' and 'user'
-            const { token, user } = response.data;
 
-            // Store token and user in localStorage
-            localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user));
+      const { user, token } = response.data; 
+
+      if (user && token) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user)); 
+      }else {
+        console.error("User or token is undefined");
+      }
+
       set({ loading: false });
       router.push('/');
     } catch (error) {

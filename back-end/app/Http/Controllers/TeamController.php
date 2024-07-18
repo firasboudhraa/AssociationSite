@@ -10,7 +10,7 @@ class TeamController extends Controller
     public function index(Request $request)
     {
         try {
-            $perPage = $request->query('perPage', 2);
+            $perPage = $request->query('perPage', 5);
             $page = $request->query('page', 1);
             $search = $request->query('q', '');
 
@@ -24,7 +24,6 @@ class TeamController extends Controller
 
             $teams = $query->paginate($perPage, ['*'], 'page', $page);
 
-            // Transform the collection
             $teams->getCollection()->transform(function ($team) {
                 return [
                     'id' => $team->id,
@@ -56,24 +55,25 @@ class TeamController extends Controller
     public function store(Request $request)
     {
         try {
-            $user = new Team();
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->function = $request->input('function');
+            $team = new Team();
+            $team->name = $request->input('name');
+            $team->email = $request->input('email');
+            $team->function = $request->input('function');
+            $team->phone = $request->input('phone'); 
+            $team->address = $request->input('address');
             
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $fileName = time() . '_' . $photo->getClientOriginalName();
                 $photo->move(public_path('uploads'), $fileName);
-                $user->photo = $fileName;
+                $team->photo = $fileName;
             }
 
-            $user->save();
-            $token = $user->createToken("auth_token")->plainTextToken;
+            $team->save();
 
-            return response()->json(['message' => 'Team created successfully', 'user' => $user, 'token' => $token], 200);
+            return response()->json(['message' => 'Team created successfully', 'team' => $team], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error creating user: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Error creating team: ' . $e->getMessage()], 500);
         }
     }
 }

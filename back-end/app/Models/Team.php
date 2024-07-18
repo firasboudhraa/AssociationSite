@@ -13,6 +13,8 @@ class Team extends Model
         'email',
         'function',
         'photo',
+        'address',
+        'phone',
     ];
     
 }

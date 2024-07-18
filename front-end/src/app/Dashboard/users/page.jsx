@@ -16,7 +16,7 @@ const UsersPage = () => {
   const [error, setError] = useState(null);
   const [pagination, setPagination] = useState({
     current_page: 1,
-    per_page: 2, // Default to 2 items per page
+    per_page: 2, 
     total: 0,
     last_page: 0,
   });

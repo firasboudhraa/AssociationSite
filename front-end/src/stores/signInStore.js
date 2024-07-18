@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "../api/axios";
 
 const LOGIN_URL = "/api/login";
-const FORGOT_Pass_URL = "/api/forgetPass";
+const FORGOT_PASS_URL = "/api/forgetPass";
 
 const useSignInStore = create((set, get) => ({
   loginEmail: typeof window !== 'undefined' ? localStorage.getItem('loginEmail') || '' : '',
@@ -15,7 +15,7 @@ const useSignInStore = create((set, get) => ({
 
   handleChangeEmail: (value) => {
     set({ loginEmail: value });
-    localStorage.setItem('loginEmail', value); 
+    localStorage.setItem('loginEmail', value);
   },
 
   handleClickSignIn: async (router) => {
@@ -23,10 +23,13 @@ const useSignInStore = create((set, get) => ({
 
     try {
       set({ loading: true });
-      
-      const response = await axios.post(LOGIN_URL, {
-        email: loginEmail,
-        password: loginPassword,
+
+      const formData = new FormData();
+      formData.append('email', loginEmail);
+      formData.append('password', loginPassword);
+
+      const response = await axios.post(LOGIN_URL, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       console.log(response.data);
@@ -38,31 +41,33 @@ const useSignInStore = create((set, get) => ({
 
       set({ loading: false });
 
-      router.push('/'); 
+      router.push('/');
     } catch (error) {
       console.error('Error signing in:', error);
       set({ loading: false });
     }
   },
-  handleClickForgetPass: async() => {
+
+  handleClickForgetPass: async () => {
     const { loginEmail } = get();
 
     try {
-        set ({ loading : true });
-        const response = await axios.post (FORGOT_Pass_URL , JSON.stringify({
-        email: loginEmail,
-    }),
-    {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
-    });
-    console.log(response.data);
-    set({ loading : false});
-}catch(error) {
-    console.error('Error sending  reset link to email',error);
-    set({ loading: false});
-}
-}
+      set({ loading: true });
+
+      const formData = new FormData();
+      formData.append('email', loginEmail);
+
+      const response = await axios.post(FORGOT_PASS_URL, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      console.log(response.data);
+      set({ loading: false });
+    } catch (error) {
+      console.error('Error sending reset link to email:', error);
+      set({ loading: false });
+    }
+  },
 }));
 
 export default useSignInStore;

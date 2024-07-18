@@ -59,7 +59,7 @@ const Navbar = () => {
                   Home
                 </Link>
                 <Link
-                  href="/membres"
+                  href="/Membres"
                   className="flex items-center px-3 py-2 text-white"
                 >
                   <PeopleIcon className="mr-2" />
