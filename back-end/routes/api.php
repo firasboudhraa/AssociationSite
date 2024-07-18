@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/users', [UserController::class,'index']);
 Route::get('/users/counts', [UserController::class, 'counts']);
 Route::get('/users/{id}', [UserController::class,'show']);
-Route::put('/usersupdate/{id}', [UserController::class,'update']);
+Route::patch('/usersupdate/{id}', [UserController::class,'update']);
 Route::delete('/usersdelete/{id}', [UserController::class,'destroy']);
 Route::get('/users/count', [UserController::class, 'count']);
 Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
@@ -25,6 +25,7 @@ Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
 // Authentication routes
 Route::post('/login', [UserController::class,'login']);
 Route::post('/create', [UserController::class,'store']);
+Route::post('/change-password', [UserController::class, 'changePassword'])->middleware('auth:sanctum');
 
 // Password reset route
 Route::post('/forgetPass', [UserController::class,'forgotPassword']);

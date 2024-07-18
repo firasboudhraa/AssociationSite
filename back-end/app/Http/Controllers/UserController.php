@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
@@ -121,11 +121,26 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
     
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->phone = $request->input('phone');
-            $user->address = $request->input('address');
-            $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
+            if ($request->has('name')) {
+                $user->name = $request->input('name');
+            }
+    
+            if ($request->has('email')) {
+                $user->email = $request->input('email');
+            }
+    
+            if ($request->has('phone')) {
+                $user->phone = $request->input('phone');
+            }
+    
+            if ($request->has('address')) {
+                $user->address = $request->input('address');
+            }
+    
+            if ($request->has('is_admin')) {
+                $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
+            }
+    
     
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
@@ -207,7 +222,7 @@ class UserController extends Controller
             ]);
 
             if (Auth::attempt($credentials)) {
-                       $user = Auth::user();
+                  $user = Auth::user();
                   $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
@@ -296,4 +311,24 @@ class UserController extends Controller
             return false;
         }
     }
+
+    public function changePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required|min:8',
+        'new_password' => 'required|min:8|confirmed',
+    ]);
+
+    $user = Auth::user();
+
+    if (!Hash::check($request->current_password, $user->password)) {
+        return response()->json(['error' => 'Current password is incorrect'], 400);
+    }
+
+    $user->password = bcrypt($request->new_password);
+    $user->save();
+
+    return response()->json(['message' => 'Password successfully changed'], 200);
+}
+
 }
