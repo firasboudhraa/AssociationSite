@@ -91,7 +91,7 @@ const AddMemberPage = () => {
         <input type="password" placeholder="Password" name="password" value={formData.password} onChange={handleInputChange} required />
         <input type="phone" placeholder="Phone" name="phone" value={formData.phone} onChange={handleInputChange} />
         <textarea name="address" placeholder="Address" value={formData.address} onChange={handleInputChange} rows="6" required></textarea>
-        <select name="is_admin" id="is_admin" value={formData.is_admin} onChange={handleInputChange}>
+        <select name="function" id="function" value={formData.function} onChange={handleInputChange}>
           <option value="">Function</option>
           <option value="Designer">Designer</option>
           <option value="Developer">Developer</option>

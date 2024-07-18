@@ -9,15 +9,17 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Grid from "@mui/material/Grid";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Image from "next/image";
 
 const AccountDetailsForm = () => {
   return (
     <form>
-      <Card className="bg-bgSoft rounded-lg shadow-md">
+      <Card className="bg-[var(--bgSoft)] rounded-lg shadow-md">
         <CardHeader
           subheader="The information can be edited"
-          title="Profile"
+          title=""
           subheaderTypographyProps={{ className: "text-white" }}
           titleTypographyProps={{ className: "text-white" }}
         />
@@ -98,11 +100,16 @@ const AccountDetailsForm = () => {
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel className="text-white">Function</InputLabel>
-                <OutlinedInput
+                <Select
                   label="Function"
                   name="function"
                   className="bg-bg text-white p-4 rounded border border-bgSoft"
-                />
+                >
+                  <MenuItem value="Designer">Designer</MenuItem>
+                  <MenuItem value="Developer">Developer</MenuItem>
+                  <MenuItem value="Devops">Devops</MenuItem>
+                  <MenuItem value="Manager">Manager</MenuItem>
+                </Select>
               </FormControl>
             </Grid>
           </Grid>
