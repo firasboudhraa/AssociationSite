@@ -57,7 +57,7 @@ const TeamPage = () => {
 
   const handleDeleteMember = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/teamsdelete/${id}`); // Adjust API endpoint
+      await axios.delete(`http://localhost:8000/api/teamsdelete/${id}`); 
       setMembers(members.filter((member) => member.id !== id));
     } catch (err) {
       setError('Failed to delete the member');

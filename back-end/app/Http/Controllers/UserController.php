@@ -216,25 +216,34 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-           $credentials = $request->validate([
-                    'email' => ['required', 'email'],
-                    'password' => ['required', 'min:8'],
-            ]);
-
-            if (Auth::attempt($credentials)) {
-                  $user = Auth::user();
-                  $token = $user->createToken('auth_token')->plainTextToken;
-
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+    
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+    
+            // Determine user role based on the integer `is_admin` field
+            $userRole = $user->is_admin ? 'admin' : 'user';
+    
             return response()->json([
-                'user' => $user,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $userRole,
+                ],
                 'token' => $token,
             ], 200);
         }
-
+    
         return response()->json([
             'message' => 'Invalid credentials',
         ], 401);
     }
+    
 
     public function forgotPassword(Request $request)
     {
