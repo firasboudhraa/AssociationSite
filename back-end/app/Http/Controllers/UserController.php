@@ -228,12 +228,19 @@ class UserController extends Controller
             // Determine user role based on the integer `is_admin` field
             $userRole = $user->is_admin ? 'admin' : 'user';
     
+            // Include additional user fields in the response
             return response()->json([
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'role' => $userRole,
+                    'photo' => $user->photo ? asset('uploads/' . $user->photo) : null,
+                    'phone' => $user->phone,
+                    'address' => $user->address,
+                    'is_admin' => $user->is_admin,
+                    'created_at' => $user->created_at,
+                    'updated_at' => $user->updated_at,
+                    'role' => $userRole, // Include role information
                 ],
                 'token' => $token,
             ], 200);
@@ -242,7 +249,7 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Invalid credentials',
         ], 401);
-    }
+    }    
     
 
     public function forgotPassword(Request $request)
