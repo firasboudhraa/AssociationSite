@@ -21,6 +21,10 @@ const SignInForm = ({ setIsSignIn }) => {
     handleClickSignIn(router);
   };
 
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/" });
+  };
+
   return (
     <div className="bg-gray-100">
       <div className="bg-[var(--bgSoft)] rounded-2xl shadow-2xl flex w-3/3 max-w-4xl justify-center">
@@ -40,7 +44,7 @@ const SignInForm = ({ setIsSignIn }) => {
               </a>
               <button
                 className="border-2 border-gray-300 rounded-full p-3 mx-1"
-                onClick={() => signIn('google')}
+                onClick={handleGoogleSignIn}
               >
                 <FaGoogle className="text-sm" />
               </button>
