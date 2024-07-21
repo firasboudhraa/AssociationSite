@@ -11,39 +11,40 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
+
 // User routes
-Route::get('/users', [UserController::class, 'index']);
+Route::get('/users', [UserController::class,'index']);
 Route::get('/users/counts', [UserController::class, 'counts']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-Route::patch('/usersupdate/{id}', [UserController::class, 'update']);
-Route::delete('/usersdelete/{id}', [UserController::class, 'destroy']);
+Route::get('/users/{id}', [UserController::class,'show']);
+Route::patch('/usersupdate/{id}', [UserController::class,'update']);
+Route::delete('/usersdelete/{id}', [UserController::class,'destroy']);
 Route::get('/users/count', [UserController::class, 'count']);
 Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
 
+
 // Authentication routes
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/create', [UserController::class, 'store']);
+Route::post('/login', [UserController::class,'login']);
+Route::post('/create', [UserController::class,'store']);
 Route::post('/change-password', [UserController::class, 'changePassword'])->middleware('auth:sanctum');
 
 // Password reset route
-Route::post('/forgetPass', [UserController::class, 'forgotPassword']);
-Route::post('/resetPass', [UserController::class, 'reset']);
+Route::post('/forgetPass', [UserController::class,'forgotPassword']);
+Route::post('/resetPass', [UserController::class,'reset']);
 
-// Card routes
+// card routes
 Route::get('/cards', [CardController::class, 'index']);
 Route::post('/createCard', [CardController::class, 'store']);
 Route::get('/cards/{id}', [CardController::class, 'show']);
 Route::put('/cards/{id}', [CardController::class, 'update']);
 Route::delete('/cards/{id}', [CardController::class, 'destroy']);
 
-// Team routes
-Route::get('/teams', [TeamController::class, 'index']);
-Route::post('/createTeam', [TeamController::class, 'store']);
-Route::delete('/teamsdelete/{id}', [TeamController::class, 'destroy']);
-Route::get('/teams/{id}', [TeamController::class, 'show']);
+// team routes
+Route::get('/teams',[TeamController::class,'index']);
+Route::post('/createTeam', [TeamController::class,'store']);
+Route::delete('/teamsdelete/{id}', [TeamController::class,'destroy']);
+Route::get('/teams/{id}', [TeamController::class,'show']);
 
-// Google Auth route
-// routes/api.php
 
 Route::post('/auth/google', function (Request $request) {
     $input = $request->json()->all();
@@ -53,6 +54,7 @@ Route::post('/auth/google', function (Request $request) {
     $image = $input['image'];
     $googleId = $input['googleId'];
 
+    // Validate input
     if (!$email || !$name || !$googleId) {
         return response()->json([
             'status' => 'error',
@@ -60,13 +62,15 @@ Route::post('/auth/google', function (Request $request) {
         ], 400);
     }
 
+    // Check if user exists
     $user = User::where('email', $email)->first();
 
     if ($user) {
+        // Update existing user
         $user->update([
             'name' => $name,
             'photo' => $image,
-            'password' => bcrypt($googleId),
+            'password' => bcrypt($googleId), // Just an example, adjust as necessary
         ]);
 
         $response = [
@@ -74,11 +78,12 @@ Route::post('/auth/google', function (Request $request) {
             'message' => 'User updated',
         ];
     } else {
+        // Create new user
         User::create([
             'email' => $email,
             'name' => $name,
             'photo' => $image,
-            'password' => bcrypt($googleId), 
+            'password' => bcrypt($googleId), // Just an example, adjust as necessary
         ]);
 
         $response = [
@@ -89,3 +94,5 @@ Route::post('/auth/google', function (Request $request) {
 
     return response()->json($response);
 });
+
+

@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { MdLockOutline } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -20,10 +21,6 @@ const SignInForm = ({ setIsSignIn }) => {
     handleClickSignIn(router);
   };
 
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
-  };
-
   return (
     <div className="bg-gray-100">
       <div className="bg-[var(--bgSoft)] rounded-2xl shadow-2xl flex w-3/3 max-w-4xl justify-center">
@@ -41,13 +38,12 @@ const SignInForm = ({ setIsSignIn }) => {
               <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
                 <FaLinkedinIn className="text-sm" />
               </a>
-              <a 
-                href="#"
+              <button
                 className="border-2 border-gray-300 rounded-full p-3 mx-1"
-                onClick={handleGoogleSignIn}
+                onClick={() => signIn('google')}
               >
                 <FaGoogle className="text-sm" />
-              </a>
+              </button>
             </div>
             <p className="text-gray-400 my-3">or use your email account</p>
             <div className="flex flex-col items-center">

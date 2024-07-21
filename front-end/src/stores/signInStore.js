@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "../app/api/axios";
+import axios from "../api/axios";
 
 const LOGIN_URL = "/api/login";
 const FORGOT_PASS_URL = "/api/forgetPass";

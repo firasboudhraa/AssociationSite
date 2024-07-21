@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import axios from "../app/api/axios";
+import axios from "../api/axios";
 
 const REGISTER_URL = "/api/create";
 
