@@ -1,0 +1,65 @@
+.reviewsContainer {
+    display: flex;
+    background-color: var(--bgSoft);
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  
+  .reviewItem {
+    flex: 1 1 300px; 
+    background-color: var(--bgSoft); 
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .reviewImg {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .reviewContent {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .reviewText {
+    color: white;
+    margin-bottom: 0.5rem;
+  }
+  
+  .reviewRating {
+    display: flex;
+    gap: 0.25rem;
+  }
+  
+  .star {
+    color: #ff6f59;
+    font-size: 1.1rem;
+  }
+  
+  .reviewUser {
+    font-weight: 600;
+  }
+
+  .deleteButton {
+    background-color: #ff6f59;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    margin-left: auto; 
+  }
+  
+  .deleteButton:hover {
+    background-color: #e55a50;
+  }
+  

@@ -7,7 +7,7 @@ import {
   MdSupervisedUserCircle,
   MdShoppingBag,
   MdAccountCircle,
-  MdWork,
+  MdStar,
   MdAnalytics,
   MdPeople,
   MdHelpCenter,
@@ -39,9 +39,9 @@ const menuItems = [
     title: "Analytics",
     list: [
       {
-        title: "Revenue",
-        path: "/Dashboard/revenue",
-        icon: <MdWork />,
+        title: "Reviews",
+        path: "/Dashboard/reviews",
+        icon: <MdStar />,
       },
       {
         title: "Reports",

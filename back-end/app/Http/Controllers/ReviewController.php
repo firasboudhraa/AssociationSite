@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Review;
+use Illuminate\Support\Facades\File;
 
 
 class ReviewController extends Controller
@@ -48,6 +49,23 @@ class ReviewController extends Controller
         ]);
     
         return response()->json($review, 201);
+    }
+
+    public function destroy($id)
+    {
+        $review = Review::find($id);
+        if (!$review) {
+            return response()->json([
+                "message" => "Review Not Found."
+            ], 404);
+        }
+        $review->delete();
+        if (!is_null($review->image)) {
+            $image = public_path('uploads/reviews' . $review->image);
+            if (File::exists($image)) {
+                unlink($image);
+            }
+        }
     }
     
 }

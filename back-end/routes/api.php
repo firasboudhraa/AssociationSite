@@ -50,6 +50,7 @@ Route::get('/teams/{id}', [TeamController::class,'show']);
 // Review routes
 Route::get('/reviews', [ReviewController::class, 'index']);
 Route::post('/createReview', [ReviewController::class, 'store']);
+Route::delete('/deleteReview/{id}' , [ReviewController::class , 'destroy']);
 
 
 
