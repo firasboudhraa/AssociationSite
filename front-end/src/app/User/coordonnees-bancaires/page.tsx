@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import { Button, Col, Container } from 'react-bootstrap';
 import Card from '@/components/molecules/user/card/Card'; 
 
+
 interface CreditCard {
   id: number;
   card_number: string;
@@ -26,7 +27,7 @@ export default function Cards() {
 
   async function fetchData() {
     try {
-      const response = await axios.get<CreditCard[]>('http://localhost:8000/api/cards'); // Fetch cards from backend API
+      const response = await axios.get<CreditCard[]>('http://localhost:8000/api/cards'); 
       setCardsData(response.data);
     } catch (error) {
       console.error('Error fetching cards:', error);

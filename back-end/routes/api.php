@@ -2,11 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\ReviewController;
 use App\Models\User;
 
 Route::get('/user', function (Request $request) {
@@ -46,6 +46,11 @@ Route::get('/teams',[TeamController::class,'index']);
 Route::post('/createTeam', [TeamController::class,'store']);
 Route::delete('/teamsdelete/{id}', [TeamController::class,'destroy']);
 Route::get('/teams/{id}', [TeamController::class,'show']);
+
+// Review routes
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::post('/createReview', [ReviewController::class, 'store']);
+
 
 
 

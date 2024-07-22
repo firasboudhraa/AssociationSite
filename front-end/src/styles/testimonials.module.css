@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700');
+
+.testimonial-container {
+  max-width: 800px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title h2 {
+  text-transform: capitalize;
+  font-weight: bold;
+  font-size: 1.7rem;
+  line-height: 1.1;
+}
+
+/* Slider container */
+.slider-container {
+  position: relative;
+  user-select: none;
+  padding-inline: 1rem;
+}
+
+.slider-container .quote {
+  position: absolute;
+  z-index: -1;
+}
+
+.slider-container .top-quote {
+  position: absolute;
+  top: -1rem;
+  left: -1rem;
+}
+
+.slider-container .bottom-quote {
+  position: absolute;
+  bottom: -3rem;
+  right: -0.5rem;
+  transform: rotate(180deg);
+}
+
+.slider-container .review-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  margin-inline: auto;
+}
+
+/* Splide customization */
+.splide__track {
+  border-radius: 1rem;
+}
+
+.splide__slide {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 3rem 1.875rem;
+  border-radius: 1rem;
+  gap: 1rem;
+}
+
+.slider-container .content .text {
+  color: #484646;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.slider-container .content .rating {
+  display: inline-block;
+  line-height: 1;
+}
+
+.slider-container .content .star {
+  color: #ff6f59;
+  font-size: 1.1rem;
+}
+
+.slider-container .content .user {
+  font-weight: 600;
+}
+
+.splide__pagination__page.is-active {
+  background-color: #ff6f59;
+}
+
+.splide__arrow {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #505050;
+  font-weight: 300;
+}
+
+.splide__arrow--prev {
+  top: 50%;
+  left: -3.5rem;
+}
+
+.splide__arrow--next {
+  top: 50%;
+  right: -3.5rem;
+}
+
+.splide__pagination__page {
+  height: 10px;
+  width: 10px;
+  opacity: 1;
+}
+
+/* Media Query */
+@media (max-width: 576px) {
+  .splide__slide {
+    display: block;
+    text-align: center;
+  }
+
+  .splide__arrow {
+    font-size: 1.5rem;
+  }
+
+  .splide__arrow--prev {
+    left: 0.5rem;
+  }
+
+  .splide__arrow--next {
+    right: 0.5rem;
+  }
+
+  .slider-container .bottom-quote {
+    right: 0;
+  }
+}
