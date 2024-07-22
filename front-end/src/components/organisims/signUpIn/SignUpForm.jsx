@@ -55,19 +55,19 @@ const SignUpForm = ({ setIsSignIn }) => {
             <div className="flex flex-col items-center">
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-2">
                 <MdPersonOutline className="text-gray-400 m-2" />
-                <input type="text" name="name" placeholder="Name" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChange("name", e.target.value)} />
+                <input type="text" name="name" placeholder="Name" className="bg-gray-100 outline-none text-sm flex-1 text-black" onChange={(e) => handleChange("name", e.target.value)} />
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-2">
                 <FaRegEnvelope className="text-gray-400 m-2" />
-                <input type="email" name="email" placeholder="Email" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChange("email", e.target.value)} />
+                <input type="email" name="email" placeholder="Email" className="bg-gray-100 outline-none text-sm flex-1 text-black" onChange={(e) => handleChange("email", e.target.value)} />
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-2">
                 <MdLockOutline className="text-gray-400 m-2" />
-                <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1" onChange={(e) => handleChange("password", e.target.value)} />
+                <input type="password" name="password" placeholder="Password" className="bg-gray-100 outline-none text-sm flex-1 text-black" onChange={(e) => handleChange("password", e.target.value)} />
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
                 <MdLockOutline className="text-gray-400 m-2" />
-                <input type="password" name="Confirmpassword" placeholder="Confirm Password" className="bg-gray-100 outline-none text-sm flex-1" />
+                <input type="password" name="Confirmpassword" placeholder="Confirm Password" className="bg-gray-100 outline-none text-sm flex-1 text-black" />
               </div>
               <button
                 className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white"

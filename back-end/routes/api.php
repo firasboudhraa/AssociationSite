@@ -19,7 +19,7 @@ Route::get('/user', function (Request $request) {
 Route::get('/users', [UserController::class,'index']);
 Route::get('/users/counts', [UserController::class, 'counts']);
 Route::get('/users/{id}', [UserController::class,'show']);
-Route::patch('/usersupdate/{id}', [UserController::class,'update']);
+Route::put('/usersupdate/{id}', [UserController::class,'update']);
 Route::delete('/usersdelete/{id}', [UserController::class,'destroy']);
 Route::get('/users/count', [UserController::class, 'count']);
 Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
@@ -48,55 +48,6 @@ Route::delete('/teamsdelete/{id}', [TeamController::class,'destroy']);
 Route::get('/teams/{id}', [TeamController::class,'show']);
 
 
-/*Route::post('/auth/google', function (Request $request) {
-    $input = $request->json()->all();
-
-    $email = $input['email'];
-    $name = $input['name'];
-    $image = $input['image'];
-    $googleId = $input['googleId'];
-
-    // Validate input
-    if (!$email || !$name || !$googleId) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Invalid input',
-        ], 400);
-    }
-
-    // Check if user exists
-    $user = User::where('email', $email)->first();
-
-    if ($user) {
-        // Update existing user
-        $user->update([
-            'name' => $name,
-            'photo' => $image,
-            'password' => bcrypt($googleId), // Just an example, adjust as necessary
-        ]);
-
-        $response = [
-            'status' => 'success',
-            'message' => 'User updated',
-        ];
-    } else {
-        // Create new user
-        User::create([
-            'email' => $email,
-            'name' => $name,
-            'photo' => $image,
-            'password' => bcrypt($googleId), // Just an example, adjust as necessary
-        ]);
-
-        $response = [
-            'status' => 'success',
-            'message' => 'User created',
-        ];
-    }
-
-    return response()->json($response);
-});*/
-
 
 Route::post('/auth/{provider}', function (Request $request, $provider) {
     $input = $request->json()->all();
@@ -105,13 +56,13 @@ Route::post('/auth/{provider}', function (Request $request, $provider) {
     $providerId = $input['providerId'] ?? null;
     $imageUrl = $input['image'] ?? null;
 
-    // Validate input
     if (!$email || !$name || !$providerId) {
         return response()->json([
             'status' => 'error',
             'message' => 'Invalid input',
         ], 400);
     }
+
     $photoPath = null;
     if ($imageUrl) {
         try {
@@ -128,29 +79,30 @@ Route::post('/auth/{provider}', function (Request $request, $provider) {
         }
     }
 
+    // Create or update user
     $user = User::where('email', $email)->first();
     if ($user) {
         $user->update([
             'name' => $name,
             'photo' => $photoPath,
-            'password' => bcrypt($providerId),
+            'password' => bcrypt($providerId), // Consider a more secure method for password
         ]);
-        $response = [
-            'status' => 'success',
-            'message' => 'User updated',
-        ];
     } else {
-        User::create([
+        $user = User::create([
             'email' => $email,
             'name' => $name,
             'photo' => $photoPath,
-            'password' => bcrypt($providerId),
+            'password' => bcrypt($providerId), // Consider a more secure method for password
         ]);
-        $response = [
-            'status' => 'success',
-            'message' => 'User created',
-        ];
     }
 
-    return response()->json($response);
+    // Generate token
+    $token = $user->createToken('AuthToken')->plainTextToken;
+
+    return response()->json([
+        'status' => 'success',
+        'token' => $token,
+        'user' => $user
+    ]);
 });
+

@@ -61,7 +61,7 @@ const SignInForm = ({ setIsSignIn }) => {
                   type="email"
                   name="email"
                   placeholder="Email"
-                  className="bg-gray-100 outline-none text-sm flex-1"
+                  className="bg-gray-100 outline-none text-sm flex-1 text-black"
                   onChange={(e) => handleChangeEmail(e.target.value)}
                 />
               </div>
@@ -71,7 +71,7 @@ const SignInForm = ({ setIsSignIn }) => {
                   type="password"
                   name="password"
                   placeholder="Password"
-                  className="bg-gray-100 outline-none text-sm flex-1"
+                  className="bg-gray-100 outline-none text-sm flex-1 text-black"
                   onChange={(e) => handleChangePassword(e.target.value)}
                 />
               </div>
