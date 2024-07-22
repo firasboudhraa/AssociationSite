@@ -10,10 +10,15 @@ class ReviewController extends Controller
 {
     public function index()
     {
-        $reviews = Review::all();
-        
+        $reviews = Review::all()->map(function($review) {
+            if ($review->image) {
+                $review->image = url('uploads/reviews/' . $review->image);
+            }
+            return $review;
+        });
+
         return response()->json($reviews);
-    }   
+    } 
 
     public function store(Request $request)
     {
@@ -32,7 +37,7 @@ class ReviewController extends Controller
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('uploads/reviews'), $imageName);
-            $imagePath = 'uploads/' . $imageName;
+            $imagePath =  $imageName;
         }
     
         $review = Review::create([
