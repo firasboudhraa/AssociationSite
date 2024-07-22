@@ -2,7 +2,7 @@
 import React from "react";
 import { MdLockOutline } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { FaFacebookF, FaLinkedinIn, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
+import { FaFacebookF, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
 import CircularProgress from "@mui/material/CircularProgress";
 import useSignInStore from "@/stores/signInStore";
 import { signIn } from "next-auth/react";
@@ -45,9 +45,7 @@ const SignInForm = ({ setIsSignIn }) => {
               >
                 <FaFacebookF className="text-sm" />
               </a>
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
-                <FaLinkedinIn className="text-sm" />
-              </a>
+
               <button
                 className="border-2 border-gray-300 rounded-full p-3 mx-1"
                 onClick={handleGoogleSignIn}

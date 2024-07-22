@@ -1,10 +1,10 @@
 import React from 'react';
-import { FaFacebookF, FaLinkedinIn, FaGoogle, FaRegEnvelope } from 'react-icons/fa';
+import { FaFacebookF, FaGoogle , FaRegEnvelope  } from 'react-icons/fa';
 import { MdLockOutline, MdPersonOutline } from 'react-icons/md';
 import CircularProgress from "@mui/material/CircularProgress"; 
 import useSignUpStore from "@/stores/signUpStore"; 
 import { useRouter } from "next/navigation";
-
+import { signIn } from "next-auth/react";
 
 const SignUpForm = ({ setIsSignIn }) => {
   const router = useRouter();
@@ -13,6 +13,15 @@ const SignUpForm = ({ setIsSignIn }) => {
   const handleSignUp = () => {
     handleClickSignUp(router);
   };
+
+  const handleGoogleSignUp = () => {
+    signIn("google", { callbackUrl: "/" });
+  };
+
+  const handleFacebookSignUp = () => {
+    signIn("facebook", { callbackUrl: "/" });
+  };
+
   return (
     <div className='bg-gray-100'>
       <div className='bg-[var(--bgSoft)] rounded-2xl shadow-2xl flex w-full max-w-4xl justify-center'>
@@ -29,15 +38,18 @@ const SignUpForm = ({ setIsSignIn }) => {
             <h2 className="text-3xl font-bold text-green-500 mb-2">Create Account</h2>
             <div className="border-2 w-10 border-green-500 inline-block mb-2"></div>
             <div className="flex justify-center my-2">
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
+              <button
+                className="border-2 border-gray-300 rounded-full p-3 mx-1"
+                onClick={handleFacebookSignUp}
+              >
                 <FaFacebookF className="text-sm" />
-              </a>
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
-                <FaLinkedinIn className="text-sm" />
-              </a>
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
+              </button>
+              <button
+                className="border-2 border-gray-300 rounded-full p-3 mx-1"
+                onClick={handleGoogleSignUp}
+              >
                 <FaGoogle className="text-sm" />
-              </a>
+              </button>
             </div>
             <p className="text-gray-400 my-3">or use your email for registration</p>
             <div className="flex flex-col items-center">
@@ -55,21 +67,25 @@ const SignUpForm = ({ setIsSignIn }) => {
               </div>
               <div className="bg-gray-100 w-64 p-2 flex items-center mb-3">
                 <MdLockOutline className="text-gray-400 m-2" />
-                <input type="password" name="Confirmpassword" placeholder="ConfirmPassword" className="bg-gray-100 outline-none text-sm flex-1" />
+                <input type="password" name="Confirmpassword" placeholder="Confirm Password" className="bg-gray-100 outline-none text-sm flex-1" />
               </div>
-              <a href="#" className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white" onClick={handleSignUp} disabled={loading}>
+              <button
+                className="border-2 border-green-500 text-green-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-green-500 hover:text-white"
+                onClick={handleSignUp}
+                disabled={loading}
+              >
                 {loading ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
                   "Sign Up"
                 )}
-              </a>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default SignUpForm;

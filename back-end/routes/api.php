@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
@@ -111,8 +112,6 @@ Route::post('/auth/{provider}', function (Request $request, $provider) {
             'message' => 'Invalid input',
         ], 400);
     }
-
-    // Download and save the image directly to public/uploads
     $photoPath = null;
     if ($imageUrl) {
         try {
@@ -120,7 +119,7 @@ Route::post('/auth/{provider}', function (Request $request, $provider) {
             $fileName = time() . '_' . $providerId . '.jpg';
             $filePath = public_path('uploads/' . $fileName);
             file_put_contents($filePath, $imageContent);
-            $photoPath = 'uploads/' . $fileName;
+            $photoPath = $fileName;
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -129,7 +128,6 @@ Route::post('/auth/{provider}', function (Request $request, $provider) {
         }
     }
 
-    // Handle user creation or update
     $user = User::where('email', $email)->first();
     if ($user) {
         $user->update([

@@ -89,7 +89,7 @@ const UsersPage = () => {
               <td>
                 <div className={styles.user}>
                   <Image
-                    src={user.photo ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/${user.photo}` : "/noavatar.png"}
+                    src={user.photo || "/noavatar.png"}
                     alt={user.name}
                     width={40}
                     height={40}
