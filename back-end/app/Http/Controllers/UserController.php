@@ -240,7 +240,7 @@ class UserController extends Controller
                     'is_admin' => $user->is_admin,
                     'created_at' => $user->created_at,
                     'updated_at' => $user->updated_at,
-                    'role' => $userRole, // Include role information
+                    'role' => $userRole, 
                 ],
                 'token' => $token,
             ], 200);

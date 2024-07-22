@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
@@ -46,7 +47,7 @@ Route::delete('/teamsdelete/{id}', [TeamController::class,'destroy']);
 Route::get('/teams/{id}', [TeamController::class,'show']);
 
 
-Route::post('/auth/google', function (Request $request) {
+/*Route::post('/auth/google', function (Request $request) {
     $input = $request->json()->all();
 
     $email = $input['email'];
@@ -93,6 +94,65 @@ Route::post('/auth/google', function (Request $request) {
     }
 
     return response()->json($response);
+});*/
+
+
+Route::post('/auth/{provider}', function (Request $request, $provider) {
+    $input = $request->json()->all();
+    $email = $input['email'] ?? null;
+    $name = $input['name'] ?? null;
+    $providerId = $input['providerId'] ?? null;
+    $imageUrl = $input['image'] ?? null;
+
+    // Validate input
+    if (!$email || !$name || !$providerId) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Invalid input',
+        ], 400);
+    }
+
+    // Download and save the image directly to public/uploads
+    $photoPath = null;
+    if ($imageUrl) {
+        try {
+            $imageContent = Http::get($imageUrl)->body();
+            $fileName = time() . '_' . $providerId . '.jpg';
+            $filePath = public_path('uploads/' . $fileName);
+            file_put_contents($filePath, $imageContent);
+            $photoPath = 'uploads/' . $fileName;
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to download image',
+            ], 500);
+        }
+    }
+
+    // Handle user creation or update
+    $user = User::where('email', $email)->first();
+    if ($user) {
+        $user->update([
+            'name' => $name,
+            'photo' => $photoPath,
+            'password' => bcrypt($providerId),
+        ]);
+        $response = [
+            'status' => 'success',
+            'message' => 'User updated',
+        ];
+    } else {
+        User::create([
+            'email' => $email,
+            'name' => $name,
+            'photo' => $photoPath,
+            'password' => bcrypt($providerId),
+        ]);
+        $response = [
+            'status' => 'success',
+            'message' => 'User created',
+        ];
+    }
+
+    return response()->json($response);
 });
-
-

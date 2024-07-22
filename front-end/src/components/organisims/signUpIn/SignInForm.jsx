@@ -25,6 +25,10 @@ const SignInForm = ({ setIsSignIn }) => {
     signIn("google", { callbackUrl: "/" });
   };
 
+  const handleFacebookSignIn = () => {
+    signIn("facebook", { callbackUrl: "/" });
+  };
+
   return (
     <div className="bg-gray-100">
       <div className="bg-[var(--bgSoft)] rounded-2xl shadow-2xl flex w-3/3 max-w-4xl justify-center">
@@ -36,7 +40,9 @@ const SignInForm = ({ setIsSignIn }) => {
             <div className="border-2 w-10 border-green-500 inline-block mb-2"></div>
             <div className="flex justify-center my-2">
               {/* Social media icons */}
-              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
+              <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1"
+                onClick={handleFacebookSignIn}
+              >
                 <FaFacebookF className="text-sm" />
               </a>
               <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1">
