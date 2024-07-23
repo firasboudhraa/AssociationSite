@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/splide/dist/css/splide.min.css';
 import axios from 'axios';
-import styles from '../../../styles/testimonials.module.css'; 
+import styles from '../../../styles/testimonials.module.css';
 
-const QuoteTop = '/blockquote.svg'; 
-const QuoteBottom = '/blockquote.svg'; 
+const QuoteTop = '/blockquote.svg';
+const QuoteBottom = '/blockquote.svg';
 
 const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
@@ -14,8 +14,10 @@ const Testimonials = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/reviews'); 
-        setReviews(response.data);
+        const response = await axios.get('http://localhost:8000/api/reviews');
+        // Filter out unpublished reviews
+        const publishedReviews = response.data.filter(review => review.published);
+        setReviews(publishedReviews);
       } catch (error) {
         console.error('Error fetching reviews:', error);
       }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->text('text');
             $table->integer('review_rating')->default(0);
+            $table->boolean('published')->default(false);
             $table->timestamps();
         });
     }

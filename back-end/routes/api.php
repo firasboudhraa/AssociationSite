@@ -51,6 +51,7 @@ Route::get('/teams/{id}', [TeamController::class,'show']);
 Route::get('/reviews', [ReviewController::class, 'index']);
 Route::post('/createReview', [ReviewController::class, 'store']);
 Route::delete('/deleteReview/{id}' , [ReviewController::class , 'destroy']);
+Route::post('/acceptReview/{id}', [ReviewController::class, 'accept']);
 
 
 

@@ -46,6 +46,7 @@ class ReviewController extends Controller
             'image' => $imagePath,
             'text' => $request->input('text'),
             'review_rating' => $request->input('review_rating'),
+            'published' => false, 
         ]);
     
         return response()->json($review, 201);
@@ -67,5 +68,23 @@ class ReviewController extends Controller
             }
         }
     }
+
+    public function accept($id)
+{
+    $review = Review::find($id);
+    if (!$review) {
+        return response()->json([
+            "message" => "Review Not Found."
+        ], 404);
+    }
+
+    $review->published = true; 
+    $review->save();
+
+    return response()->json([
+        "message" => "Review accepted and published successfully."
+    ], 200);
+}
+
     
 }

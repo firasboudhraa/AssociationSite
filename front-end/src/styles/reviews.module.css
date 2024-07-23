@@ -60,6 +60,19 @@
   }
   
   .deleteButton:hover {
-    background-color: #e55a50;
+    background-color: #e4190a;
   }
   
+  .AcceptButton {
+    background-color: rgb(47, 150, 47);
+    color: #fff;
+    font-size: 0.875rem;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+
+  .AcceptButton:hover {
+    background-color: rgb(75, 195, 75);
+  }
