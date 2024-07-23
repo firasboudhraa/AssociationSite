@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import styles from "@/styles/navbar.module.css";
 import { MdNotifications, MdOutlineChat, MdPublic, MdSearch } from "react-icons/md";
 import axios from 'axios';
+import { formatDistanceToNow } from 'date-fns';
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
@@ -27,7 +28,40 @@ const Navbar = () => {
     fetchNotifications();
   }, []);
 
+  const handleNotificationClick = async (id) => {
+    try {
+      await axios.patch(`http://localhost:8000/api/notifications/${id}/read`);
+
+      setNotifications(prevNotifications =>
+        prevNotifications.map(notification =>
+          notification.id === id ? { ...notification, is_read: true } : notification
+        )
+      );
+
+      setUnreadCount(prevCount => prevCount - 1);
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      await axios.patch('http://localhost:8000/api/notifications/mark-all-as-read');
+
+      setNotifications(prevNotifications =>
+        prevNotifications.map(notification => ({ ...notification, is_read: true }))
+      );
+
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
   const toggleDropdown = () => {
+    if (!dropdownVisible) {
+      markAllAsRead();
+    }
     setDropdownVisible(!dropdownVisible);
   };
 
@@ -49,11 +83,13 @@ const Navbar = () => {
             {dropdownVisible && (
               <div className={styles.dropdown}>
                 {notifications.map(notification => (
-                  <div key={notification.id} className={styles.notificationItem}>
+                  <div key={notification.id} className={styles.notificationItem} nClick={() => handleNotificationClick(notification.id)} >
                     <img src={notification.image || '/noavatar.png'} alt="Notification Icon" className={styles.notificationIcon} />
                     <div className={styles.notificationText}>
-                      <p className={styles.notificationTitle}>{notification.type}</p>
                       <p className={styles.notificationBody}>{notification.message}</p>
+                      <p className={styles.notificationTime}>
+                        {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
+                      </p>
                     </div>
                   </div>
                 ))}

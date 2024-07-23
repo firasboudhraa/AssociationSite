@@ -58,6 +58,7 @@ Route::post('/acceptReview/{id}', [ReviewController::class, 'accept']);
 Route::get('/notifications', [NotificationController::class, 'index']);
 Route::delete('/deleteNotification/{id}' , [NotificationController::class , 'destroy']);
 Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+Route::patch('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
 
 
 

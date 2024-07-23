@@ -30,7 +30,7 @@ const EventsPage = () => {
               <td>
                 <div className={styles.event}>
                   <Image
-                    src={""}
+                    src={"/noavatar.png"}
                     alt=""
                     width={40}
                     height={40}

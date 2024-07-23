@@ -28,12 +28,18 @@ class NotificationController extends Controller
         if (!$notification) {
             return response()->json(['message' => 'Notification not found.'], 404);
         }
-
+    
         $notification->is_read = true;
         $notification->save();
-
+    
         return response()->json($notification);
     }
+    public function markAllAsRead()
+    {
+    Notification::where('is_read', false)->update(['is_read' => true]);
+
+    return response()->json(['message' => 'All notifications marked as read.']);
+    } 
 
     public function destroy($id)
     {
