@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\NotificationController;
 use App\Models\User;
 
 Route::get('/user', function (Request $request) {
@@ -53,6 +54,10 @@ Route::post('/createReview', [ReviewController::class, 'store']);
 Route::delete('/deleteReview/{id}' , [ReviewController::class , 'destroy']);
 Route::post('/acceptReview/{id}', [ReviewController::class, 'accept']);
 
+// Notification routes
+Route::get('/notifications', [NotificationController::class, 'index']);
+Route::delete('/deleteNotification/{id}' , [NotificationController::class , 'destroy']);
+Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
 
 
 
