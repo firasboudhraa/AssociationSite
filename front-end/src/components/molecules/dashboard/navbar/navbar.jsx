@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname , useRouter} from "next/navigation";
 import styles from "@/styles/navbar.module.css";
 import { MdNotifications, MdOutlineChat, MdPublic, MdSearch } from "react-icons/md";
 import axios from 'axios';
@@ -11,6 +11,8 @@ const Navbar = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -65,6 +67,10 @@ const Navbar = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
+  const navigateHome = () => {
+    router.push('/');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.title}>{pathname.split("/").pop()}</div>
@@ -96,8 +102,10 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          <MdPublic size={20} />
-        </div>
+          <div className={styles.iconWrapper} onClick={navigateHome}>
+            <MdPublic size={20} style={{ cursor: 'pointer' }} />
+            <div className={styles.tooltip}>Home</div>
+          </div>        </div>
       </div>
     </div>
   );
