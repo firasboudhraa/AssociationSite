@@ -2,60 +2,66 @@
 
 namespace App\Observers;
 
-use App\Models\User;
+use App\Models\Review;
 use App\Models\Notification;
 use Illuminate\Support\Facades\File;
 
-class UserObserver
+class ReviewObserver
 {
     /**
-     * Handle the User "created" event.
+     * Handle the Review "created" event.
      */
-    public function created(User $user): void
+    public function created(Review $review): void
     {
-        $imagePath = $this->handleImage($user->photo);
+        $imagePath = $this->handleImage($review->image);
 
         Notification::create([
-            'type' => 'user_created',
-            'message' => 'A new user has been created: ' . $user->name,
+            'type' => 'review_created',
+            'message' => 'A new review has been created: ' . $review->name,
             'is_read' => false,
             'image' => $imagePath,
         ]);
     }
 
     /**
-     * Handle the User "updated" event.
+     * Handle the Review "updated" event.
      */
-    public function updated(User $user): void
+    public function updated(Review $review): void
     {
-        $imagePath = $this->handleImage($user->photo);
+        //
+    }
+
+    /**
+     * Handle the Review "deleted" event.
+     */
+    public function deleted(Review $review): void
+    {
+        $imagePath = $this->handleImage($review->image);
 
         Notification::create([
-            'type' => 'user_updated',
-            'message' => 'User information has been updated: ' . $user->name,
+            'type' => 'review_deleted',
+            'message' => 'A new review has been deleted: ' . $review->name,
             'is_read' => false,
             'image' => $imagePath,
         ]);
     }
 
     /**
-     * Handle the User "deleted" event.
+     * Handle the Review "restored" event.
      */
-    public function deleted(User $user): void
+    public function restored(Review $review): void
     {
-        $imagePath = $this->handleImage($user->photo);
-
-        Notification::create([
-            'type' => 'user_deleted',
-            'message' => 'A user has been deleted: ' . $user->name,
-            'is_read' => false,
-            'image' => $imagePath,
-        ]);
+        //
     }
 
     /**
-     * Handle the image by copying it to the notifications directory and returning the path.
+     * Handle the Review "force deleted" event.
      */
+    public function forceDeleted(Review $review): void
+    {
+        //
+    }
+
     private function handleImage($photo)
     {
         if (!$photo) {
@@ -70,6 +76,7 @@ class UserObserver
         }
 
         if (File::exists($sourcePath)) {
+            // Copy the file
             File::copy($sourcePath, $destinationPath);
 
             return 'uploads/notifications/' . $photo;
