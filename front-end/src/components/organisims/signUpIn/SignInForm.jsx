@@ -39,7 +39,6 @@ const SignInForm = ({ setIsSignIn }) => {
             </h2>
             <div className="border-2 w-10 border-green-500 inline-block mb-2"></div>
             <div className="flex justify-center my-2">
-              {/* Social media icons */}
               <a href="#" className="border-2 border-gray-300 rounded-full p-3 mx-1"
                 onClick={handleFacebookSignIn}
               >

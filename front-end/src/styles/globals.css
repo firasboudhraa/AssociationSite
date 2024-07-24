@@ -8,6 +8,9 @@
     --text: white;
     --textSoft: #b7bac1;
 }
+.animateBtn {
+    @apply transition-all duration-150 ease-linear;
+  }
 
 * {
     margin: 0;

@@ -8,6 +8,13 @@ const useSignUpStore = create((set, get) => ({
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
+  },
+  errors: {
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   },
   loading: false,
 
@@ -20,9 +27,42 @@ const useSignUpStore = create((set, get) => ({
     }));
   },
 
+  validateForm: () => {
+    const { formData } = get();
+    const errors = {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    // Email regex for validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      errors.email = "Invalid email format.";
+    }
+
+    // Password validation (minimum 8 characters, 1 uppercase, 1 number)
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      errors.password = "Password must be at least 8 characters long, include an uppercase letter and a number.";
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = "Passwords do not match.";
+    }
+
+    set({ errors });
+    return Object.values(errors).every((error) => error === "");
+  },
+
   handleClickSignUp: async (router) => {
     const { formData } = get();
-    
+
+    if (!get().validateForm()) {
+      return; // Stop execution if validation fails
+    }
+
     try {
       set({ loading: true });
       
@@ -35,7 +75,7 @@ const useSignUpStore = create((set, get) => ({
       if (user && token) {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user)); 
-      }else {
+      } else {
         console.error("User or token is undefined");
       }
 
