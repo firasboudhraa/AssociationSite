@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import Footer from "@/components/molecules/Footer";
 import Hero from '@/components/organisims/hero/Hero'
 import Testimonials from '@/components/organisims/testimonials/Testimonials'
+import Review from '@/components/organisims/review/Review'
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Navbar/>
       <Hero/>
       <Testimonials />
+      <Review />
       <Footer />
     </div>
   );

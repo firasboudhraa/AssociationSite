@@ -12,18 +12,17 @@
     @apply transition-all duration-150 ease-linear;
   }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     background-color: var(--bg);
     color: var(--text);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
 a {
     color: inherit;
     text-decoration: none;
 }
+

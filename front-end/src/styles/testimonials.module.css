@@ -18,8 +18,39 @@
 .title h2 {
   text-transform: capitalize;
   font-weight: bold;
-  font-size: 1.7rem;
-  line-height: 1.1;
+  font-size: 2.5rem; /* Increased font size for better visibility */
+  line-height: 1.2; /* Adjusted line height for readability */
+  color: #e11010; /* Darker color for better contrast */
+}
+
+.title p {
+  font-size: 1.25rem; /* Slightly larger font size for emphasis */
+  color: #666; /* Slightly lighter color for secondary text */
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.no-reviews h2 {
+  font-size: 2rem; /* Increased font size for emphasis */
+  color: #007bff; /* Blue color for a more engaging appearance */
+  font-weight: 600; /* Bold for emphasis */
+  margin-bottom: 1rem; /* Spacing below the heading */
+}
+
+.no-reviews p {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.no-reviews p:first-of-type {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 .slider-container {
