@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import styles from '../../../../styles/addUser.module.css';
 import axios from '@/api/axios';
+import {useRouter} from 'next/navigation'
 
 const AddUserPage = () => {
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -46,6 +48,8 @@ const AddUserPage = () => {
       });
       setAlert({ message: 'User created successfully!', type: 'success' });
       console.log('User created successfully:', response.data);
+
+      router.push('/Dashboard/users');
     } catch (error) {
       setAlert({ message: 'Error creating user. Please try again.', type: 'error' });
       console.error('Error creating user:', error);

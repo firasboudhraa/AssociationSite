@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import react-toastify styles
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -36,6 +38,17 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </motion.div>
       </AnimatePresence>
+      <ToastContainer 
+        position="top-right" 
+        autoClose={5000} 
+        hideProgressBar={false} 
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+      />
     </AuthProvider>
   );
 }

@@ -23,7 +23,6 @@ class ReviewController extends Controller
 
     public function store(Request $request)
     {
-        // Validate request
         $request->validate([
             'name' => 'required|string|max:255',
             'text' => 'required|string',
@@ -32,7 +31,6 @@ class ReviewController extends Controller
 
         ]);
 
-        // Handle image upload
         $imagePath = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
