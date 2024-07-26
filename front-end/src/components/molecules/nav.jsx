@@ -6,6 +6,7 @@ import BlogIcon from "@mui/icons-material/Article";
 import EventIcon from '@mui/icons-material/Event';
 import ContactIcon from "@mui/icons-material/ContactSupport";
 import PeopleIcon from '@mui/icons-material/People';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import Image from "next/image";
 import MyBtn from '@/components/molecules/button/MyButton';
 
@@ -79,6 +80,17 @@ const Navbar = () => {
             >
               <EventIcon className="mr-2" />
               Events
+            </Link>
+            <div className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></div>
+          </div>
+
+          <div className="relative group">
+            <Link
+              href="/Gallery"
+              className="flex items-center px-3 py-2 text-white hover:text-yellow-400 relative"
+            >
+              <PhotoLibraryIcon className="mr-2" />
+              Gallery
             </Link>
             <div className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></div>
           </div>

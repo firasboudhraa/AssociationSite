@@ -10,7 +10,7 @@ const ContactForm = () => {
             type="text"
             id="fullname"
             placeholder="John Doe"
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded text-black"
           />
         </div>
 
@@ -20,7 +20,7 @@ const ContactForm = () => {
             type="email"
             id="email"
             placeholder="john@gmail.com"
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded text-black"
           />
         </div>
 
@@ -30,7 +30,7 @@ const ContactForm = () => {
             type="text"
             id="phone"
             placeholder="Votre Téléphone"
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded text-black"
           />
         </div>
 
@@ -48,7 +48,7 @@ const ContactForm = () => {
         <div>
           <label htmlFor="message">Votre message</label>
           <textarea
-            className="h-32 w-full p-2 border rounded"
+            className="h-32 w-full p-2 border rounded text-black"
             id="message"
             placeholder="Type your message here..."
           ></textarea>
