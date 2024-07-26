@@ -46,7 +46,7 @@ class UserController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'photo' => asset('uploads/' . $user->photo),
+                    'photo' => asset('uploads/users' . $user->photo),
                     'phone' => $user->phone,
                     'password' => $user->password,
                     'is_admin' => $user->is_admin,
@@ -87,7 +87,7 @@ class UserController extends Controller
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $fileName = time() . '_' . $photo->getClientOriginalName();
-                $photo->move(public_path('uploads'), $fileName);
+                $photo->move(public_path('uploads/users'), $fileName);
                 $user->photo = $fileName;
             }
 
@@ -110,7 +110,7 @@ class UserController extends Controller
                 "message" => "User Not Found."
             ], 404);
         }
-        $user->photo = asset('uploads/' . $user->photo);
+        $user->photo = asset('uploads/users' . $user->photo);
         return response()->json([
             "user" => $user
         ], 200);
@@ -145,10 +145,10 @@ class UserController extends Controller
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $fileName = time() . '_' . $photo->getClientOriginalName();
-                $photo->move(public_path('uploads'), $fileName);
+                $photo->move(public_path('uploads/users'), $fileName);
     
-                if ($user->photo && File::exists(public_path('uploads/' . $user->photo))) {
-                    File::delete(public_path('uploads/' . $user->photo));
+                if ($user->photo && File::exists(public_path('uploads/users' . $user->photo))) {
+                    File::delete(public_path('uploads/users' . $user->photo));
                 }
     
                 $user->photo = $fileName;
@@ -174,7 +174,7 @@ class UserController extends Controller
         }
         $user->delete();
         if (!is_null($user->photo)) {
-            $photo = public_path('uploads/' . $user->photo);
+            $photo = public_path('uploads/users' . $user->photo);
             if (File::exists($photo)) {
                 unlink($photo);
             }
@@ -234,7 +234,7 @@ class UserController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'photo' => $user->photo ? asset('uploads/' . $user->photo) : null,
+                    'photo' => $user->photo ? asset('uploads/users' . $user->photo) : null,
                     'phone' => $user->phone,
                     'address' => $user->address,
                     'is_admin' => $user->is_admin,

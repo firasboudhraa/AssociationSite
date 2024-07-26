@@ -31,7 +31,7 @@ class TeamController extends Controller
                     'id' => $team->id,
                     'name' => $team->name,
                     'email' => $team->email,
-                    'photo' => asset('uploads/' . $team->photo),
+                    'photo' => asset('uploads/teams' . $team->photo),
                     'function' => $team->function,
                     'created_at' => $team->created_at,
                 ];
@@ -67,7 +67,7 @@ class TeamController extends Controller
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
                 $fileName = time() . '_' . $photo->getClientOriginalName();
-                $photo->move(public_path('uploads'), $fileName);
+                $photo->move(public_path('uploads/teams'), $fileName);
                 $team->photo = $fileName;
             }
 
@@ -87,7 +87,7 @@ class TeamController extends Controller
                 "message" => "Member Not Found."
             ], 404);
         }
-        $member->photo = asset('uploads/' . $member->photo);
+        $member->photo = asset('uploads/teams' . $member->photo);
         return response()->json([
             "member" => $member
         ], 200);
@@ -103,7 +103,7 @@ class TeamController extends Controller
         }
         $member->delete();
         if (!is_null($member->photo)) {
-            $photo = public_path('uploads/' . $member->photo);
+            $photo = public_path('uploads/teams' . $member->photo);
             if (File::exists($photo)) {
                 unlink($photo);
             }
