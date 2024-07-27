@@ -26,9 +26,9 @@ const SignUpForm = ({ setIsSignIn }) => {
   return (
     <div className="bg-gray-100">
       <div className="bg-[var(--bgSoft)] rounded-2xl shadow-2xl flex w-full max-w-4xl justify-center">
-        <div className="w-2/5 bg-green-500 text-gray-700 rounded-tl-2xl rounded-bl-2xl py-36 px-12">
+        <div className="w-2/5 bg-green-500  rounded-tl-2xl rounded-bl-2xl py-36 px-12 text-white">
           <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
-          <div className="border-2 w-10 border-white inline-block mb-2"></div>
+          <div className="border-2 w-10 border-white inline-block mb-2 "></div>
           <p className="mb-10">
             To keep connected with us please login with your personal info.
           </p>

@@ -24,7 +24,7 @@ const AccountDetailsForm = () => {
           titleTypographyProps={{ className: "text-white" }}
         />
         <Divider />
-        <CardContent>
+        <CardContent className="bg-[var(--bgSoft)]">
           <Grid container spacing={3} alignItems="center">
             <Grid item xs={4}>
               <div className="flex justify-center">
@@ -115,7 +115,7 @@ const AccountDetailsForm = () => {
           </Grid>
         </CardContent>
         <Divider />
-        <CardActions  className="justify-center" sx={{ justifyContent: "flex-end" }}>
+        <CardActions  className="justify-center bg-[var(--bgSoft)]" sx={{ justifyContent: "flex-end" }}>
           <Button variant="contained">Save details</Button>
         </CardActions>
       </Card>
