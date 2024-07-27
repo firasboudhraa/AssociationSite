@@ -44,8 +44,8 @@ const menuItems = [
         icon: <MdStar />,
       },
       {
-        title: "Reports",
-        path: "/Dashboard/reports",
+        title: "Gallery",
+        path: "/Dashboard/gallery",
         icon: <MdAnalytics />,
       },
       {
