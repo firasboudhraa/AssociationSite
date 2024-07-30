@@ -1,15 +1,41 @@
-"use client";
-import React, { useState } from "react";
+'use client';
+import React, { useState, useEffect } from 'react';
 import MyBtn from '@/components/molecules/button/MyButton'; 
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Modal from 'react-bootstrap/Modal'; 
 
 const Review = () => {
   const [rating, setRating] = useState(0); 
   const [hoverRating, setHoverRating] = useState(0); 
   const [name, setName] = useState(""); 
   const [text, setText] = useState(""); 
-  const [image, setImage] = useState(null); 
+  const [userImage, setUserImage] = useState(null); 
+  const [showModal, setShowModal] = useState(false); 
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      setUserImage(user.photo); // Assuming user.photo contains the URL of the image
+    }
+  }, []);
+
+  // Function to extract filename after the underscore from URL
+  const getFilenameFromUrl = (url) => {
+    if (!url) return null;
+    const parts = url.split('/');
+    const filenameWithPrefix = parts[parts.length - 1];
+    const filenameParts = filenameWithPrefix.split('_');
+    return filenameParts.length > 1 ? filenameParts.slice(1).join('_') : filenameWithPrefix;
+  };
+
+  // Function to log FormData content (for debugging purposes)
+  const logFormData = (formData) => {
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+  };
 
   const handleRating = (value) => {
     setRating(value);
@@ -18,13 +44,25 @@ const Review = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const userToken = localStorage.getItem('token'); 
+    if (!userToken) {
+      setShowModal(true); 
+      return;
+    }
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('text', text);
     formData.append('review_rating', rating);
-    if (image) {
-      formData.append('image', image);
+    
+    // Extract the filename from the URL
+    const filename = getFilenameFromUrl(userImage);
+    if (filename) {
+      formData.append('image', filename); // Append the filename
     }
+
+    // Log the form data to the console for debugging
+    logFormData(formData);
 
     try {
       const response = await axios.post('http://localhost:8000/api/createReview', formData);
@@ -32,12 +70,14 @@ const Review = () => {
       setName('');
       setText('');
       setRating(0);
-      setImage(null);
+      setUserImage(null);
     } catch (error) {
       toast.error('Error submitting review. Please try again.');
       console.error('Error submitting review:', error);
     }
   };
+
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <div id="contact" className="flex flex-col items-center py-12 bg-gradient-to-r from-blue-50 via-white to-blue-50">
@@ -75,23 +115,20 @@ const Review = () => {
               rows={6}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="p-4 border  border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out text-black"
+              className="p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out text-black"
               placeholder="Describe your request and provide any additional details here."
               required
             />
             <p className="mt-2 text-xs italic text-gray-500">Brief message for your request*</p>
           </div>
 
-          <div className="mt-10 flex flex-col">
-            <label htmlFor="image" className="text-sm font-medium text-gray-700 mb-2">Upload an Image (Optional)</label>
-            <input
-              type="file"
-              id="image"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
-              className="p-2 border border-gray-300 rounded-lg shadow-sm text-black"
-            />
-          </div>
+          {/* User Image Display */}
+          {userImage && (
+            <div className="mt-4">
+              <img src={userImage} alt="User Profile" className="w-32 h-32 object-cover rounded-full" />
+              <p className="text-gray-500 text-sm">Current Profile Image</p>
+            </div>
+          )}
 
           <div className="mt-10 flex flex-col items-center">
             <label htmlFor="Rating" className="text-sm font-medium text-gray-700 mb-2">Your Rating</label>
@@ -124,6 +161,19 @@ const Review = () => {
           </div>
         </form>
       </div>
+
+      {/* Modal for authentication prompt */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="text-gray-800">Please Log In</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-gray-600">
+          <p>You need to be logged in to submit a review. Please log in to continue.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <MyBtn textContent="Log In" onClick={() => window.location.href = '/Connexion'} />
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

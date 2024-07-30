@@ -1,11 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaFacebookF, FaLinkedinIn, FaGoogle } from "react-icons/fa";
+import Image from "next/image";
 
 const DashboardUser = () => {
   const router = useRouter();
+  const [userData, setUserData] = useState({
+    name: "",
+    address: "",
+    phone: "",
+    email: "",
+    password: "",
+    photo: "",
+  });
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('user');
+    if (storedUserData) {
+      const user = JSON.parse(storedUserData);
+      setUserData({
+        name: user.name || "",
+        address: user.address || "",
+        phone: user.phone || "",
+        email: user.email || "",
+        password: user.password || "",
+        photo: user.photo || "",
+      });
+    }
+  }, []);
 
   const handleMesCoordonneesClick = () => {
     router.push("/User/mes-informations");
@@ -16,99 +40,92 @@ const DashboardUser = () => {
   };
 
   return (
-    <>
-      <div className="flex w-full flex-col">
-        <div className="card bg-[var(--bgSoft)] text-white rounded-box grid h-max place-items-center mb-2">
-          <h2 className="text-3xl font-bold mb-2">Notifications</h2>
-          <div className="border-2 w-20 border-green-500 mb-3"></div>
-          <p></p>
-          <button className="border-2 border-green-500 text-green-500 rounded-full px-12 py-3 inline-block font-semibold hover:bg-green-500 hover:text-white mt-4">
-            Modifier
-          </button>
+    <div className="flex flex-col lg:flex-row gap-6 p-6">
+      {/* User Profile Card */}
+      <div className="card bg-[var(--bgSoft)] text-white rounded-lg p-6 flex flex-col items-center shadow-lg">
+        <div className="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-green-500 mt-10">
+          <Image
+            src={userData.photo || "/noavatar.jpg"}
+            alt="Profile Photo"
+            width={96}
+            height={96}
+            className="object-cover w-full h-full"
+          />
         </div>
-        <div className="divider"></div>
-        <div className="card bg-[var(--bgSoft)] text-white rounded-box grid h-max place-items-center mb-2">
-          <h2 className="text-3xl font-bold mb-2">Mes Participations</h2>
-          <div className="border-2 w-20 border-green-500 mb-3"></div>
-          <p></p>
-        </div>
-        <div className="divider"></div>
+        <button
+          className="border-2 border-green-500 text-green-500 rounded-full px-4 py-2 font-semibold hover:bg-green-500 hover:text-white transition-all duration-150 ease-linear"
+          onClick={handleMesCoordonneesClick}
+        >
+          Modifier
+        </button>
       </div>
-      <div className="flex w-full flex-col lg:flex-row">
-        <div className="card bg-[var(--bgSoft)] text-white rounded-box grid h-max flex-grow place-items-center mr-2">
-          <h2 className="text-3xl font-bold">Mes Coordonnées</h2>
-          <div className="border-2 w-20 border-green-500 mb-3"></div>
-          <div className="text-left mb-2">
-            <div className="mb-2">
-              <span className="font-bold">Nom : </span>
-              <span>{}</span>
+
+      {/* Information Cards */}
+      <div className="flex flex-col gap-6 lg:flex-row lg:w-full lg:gap-6">
+        {/* Coordonnées */}
+        <div className="card bg-[var(--bgSoft)] text-white rounded-lg p-6 flex-1 shadow-lg">
+          <h2 className="text-3xl font-extrabold text-gradient mb-4">Mes Coordonnées</h2>
+          <div className="space-y-4">
+            <div className="flex">
+              <span className="font-semibold text-lg text-green-400 w-32">Nom : </span>
+              <span>{userData.name}</span>
             </div>
-            <div className="mb-2">
-              <span className="font-bold">Prénom : </span>
-              <span>{}</span>
+            <div className="flex">
+              <span className="font-semibold text-lg text-green-400 w-32">Adresse : </span>
+              <span>{userData.address}</span>
             </div>
-            <div className="mb-2">
-              <span className="font-bold">Adresse : </span>
-              <span>{}</span>
-            </div>
-            <div className="mb-2">
-              <span className="font-bold">Téléphone : </span>
-              <span>{}</span>
+            <div className="flex">
+              <span className="font-semibold text-lg text-green-400 w-32">Téléphone : </span>
+              <span>{userData.phone}</span>
             </div>
           </div>
           <button
-            className="border-2 border-green-500 text-green-500 rounded-full px-12 py-3 inline-block font-semibold hover:bg-green-500 hover:text-white mt-4"
+            className="border-2 border-green-500 text-green-500 rounded-full px-4 py-2 font-semibold hover:bg-green-500 hover:text-white transition-all duration-150 ease-linear mt-4"
             onClick={handleMesCoordonneesClick}
           >
             Modifier
           </button>
         </div>
-        <div className="divider lg:divider-horizontal"></div>
-        <div className="card bg-[var(--bgSoft)] text-white rounded-box grid h-max flex-grow place-items-center">
-          <h2 className="text-3xl font-bold ">Mes Informations</h2>
-          <div className="border-2 w-20 border-green-500 mb-3"></div>
-          <div className="text-left mb-2">
-            <div className="mb-2">
-              <span className="font-bold">Email : </span>
-              <span>{}</span>
+
+        {/* Informations */}
+        <div className="card bg-[var(--bgSoft)] text-white rounded-lg p-6 flex-1 shadow-lg">
+          <h2 className="text-3xl font-extrabold text-gradient mb-4">Mes Informations</h2>
+          <div className="space-y-4">
+            <div className="flex">
+              <span className="font-semibold text-lg text-green-400 w-32">Email : </span>
+              <span>{userData.email}</span>
             </div>
-            <div className="mb-2">
-              <span className="font-bold">Password : </span>
-              <span>{}</span>
+            <div className="flex">
+              <span className="font-semibold text-lg text-green-400 w-32">Mot de passe : </span>
+              <span className="ml-10">**************</span> 
             </div>
-            <div className="mb-2">
-              <span className="font-bold">Comptes associés : </span>
-              <div className="flex justify-center my-2">
+            <div className="flex">
+              <span className="font-semibold text-lg text-green-400 w-32">Comptes associés : </span>
+              <div className="flex gap-3 mt-2 ml-10">
                 <a
                   href="#"
-                  className="border-2 border-gray-300 rounded-full p-3 mx-1"
+                  className="border-2 border-gray-300 rounded-full p-3 hover:border-blue-600 transition-all duration-150 ease-linear"
                 >
-                  <FaFacebookF className="text-sm" />
+                  <FaFacebookF className="text-blue-600 text-xl" />
                 </a>
                 <a
                   href="#"
-                  className="border-2 border-gray-300 rounded-full p-3 mx-1"
+                  className="border-2 border-gray-300 rounded-full p-3 hover:border-red-500 transition-all duration-150 ease-linear"
                 >
-                  <FaLinkedinIn className="text-sm" />
-                </a>
-                <a
-                  href="#"
-                  className="border-2 border-gray-300 rounded-full p-3 mx-1"
-                >
-                  <FaGoogle className="text-sm" />
+                  <FaGoogle className="text-red-500 text-xl" />
                 </a>
               </div>
             </div>
           </div>
           <button
-            className="border-2 border-green-500 text-green-500 rounded-full px-12 py-3 inline-block font-semibold hover:bg-green-500 hover:text-white mt-4"
+            className="border-2 border-green-500 text-green-500 rounded-full px-4 py-2 font-semibold hover:bg-green-500 hover:text-white transition-all duration-150 ease-linear mt-4"
             onClick={handleMesInformationsClick}
           >
             Modifier
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

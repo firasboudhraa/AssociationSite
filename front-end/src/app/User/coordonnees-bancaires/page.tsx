@@ -45,7 +45,7 @@ export default function Cards() {
 
   return (
     <>
-      <h1 className="home-page-heading"></h1>
+      <h1 className="home-page-heading text-center text-4xl font-bold my-5 text-gradient">Credit Cards</h1>
       <Container>
         <Row className="justify-content-center">
           {cardsData.length === 0 && (

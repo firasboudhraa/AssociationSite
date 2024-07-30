@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useRef, useState } from 'react';
 import styles from '@/styles/changePassword.module.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -18,70 +18,70 @@ const DocumentsPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className="flex flex-col items-center justify-center h-max w-full py-10 px-5 bg-[var(--bgSoft)] rounded-2xl shadow-2xl max-w-6xl text-[var(--textSoft)]">
-        <h2 className="text-3xl font-bold mb-2">
+      <div className="flex flex-col items-center justify-center h-max w-full py-10 px-5 bg-[var(--bgSoft)] from-blue-100 via-purple-100 to-pink-100 rounded-2xl shadow-xl max-w-6xl text-gray-800">
+        <h2 className="text-4xl font-bold mb-4 text-center text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">
           MES DOCUMENTS
         </h2>
-        <div className="border-2 w-20 border-green-500 mb-3"></div>
-        <div className="w-full bg-[var(--bgSoft)] p-5 rounded-lg mb-5">
-          <h3 className="text-xl font-semibold mb-3">Documents d'identité</h3>
-          <div className="flex flex-col space-y-3">
-            <label className="flex items-center space-x-3">
+        <div className="border-2 w-24 border-green-600 mb-4"></div>
+        <div className="w-full bg-white p-6 rounded-lg shadow-md mb-6">
+          <h3 className="text-2xl font-semibold mb-4">Documents d'identité</h3>
+          <div className="flex flex-col space-y-4">
+            <label className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 rounded-lg p-2">
               <input
                 type="radio"
                 name="documentType"
-                className="form-radio text-green-500"
+                className="form-radio text-green-600"
                 value="CIN"
                 checked={documentType === 'CIN'}
                 onChange={() => setDocumentType('CIN')}
               />
-              <span>Cate d'identité tunisienne</span>
+              <span className="text-lg font-medium">Carte d'identité tunisienne</span>
             </label>
-            <label className="flex items-center space-x-3">
+            <label className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 rounded-lg p-2">
               <input
                 type="radio"
                 name="documentType"
-                className="form-radio text-green-500"
+                className="form-radio text-green-600"
                 value="passport"
                 checked={documentType === 'passport'}
                 onChange={() => setDocumentType('passport')}
               />
-              <span>Passeport</span>
+              <span className="text-lg font-medium">Passeport</span>
             </label>
           </div>
         </div>
-        <div className="flex flex-row space-x-5 mb-5">
+        <div className="flex flex-wrap justify-center gap-6 mb-6">
           {(documentType === 'CIN') && (
             <>
-              <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 p-5 rounded-lg w-60 h-40 bg-[var(--bgSoft)] cursor-pointer" onClick={handleRectoClick}>
-                <i className="fas fa-camera text-3xl text-gray-400 mb-3"></i>
-                <span className="text-[var(--textSoft)]">Télécharger le recto</span>
-                <span className="text-gray-400 text-sm">JPG, PNG ou PDF uniquement</span>
+              <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 p-6 rounded-lg w-64 h-48 bg-white shadow-md cursor-pointer hover:border-green-600 transition duration-300" onClick={handleRectoClick}>
+                <i className="fas fa-camera text-4xl text-gray-500 mb-3"></i>
+                <span className="text-lg font-medium text-gray-700">Télécharger le recto</span>
+                <span className="text-sm text-gray-500">JPG, PNG ou PDF uniquement</span>
                 <input type="file" ref={fileInputRectoRef} className="hidden" accept="image/jpeg,image/png,application/pdf" />
               </div>
-              <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 p-5 rounded-lg w-60 h-40 bg-[var(--bgSoft)] cursor-pointer" onClick={handleVersoClick}>
-                <i className="fas fa-camera text-3xl text-gray-400 mb-3"></i>
-                <span className="text-[var(--textSoft)]">Télécharger le verso</span>
-                <span className="text-gray-400 text-sm">JPG, PNG ou PDF uniquement</span>
+              <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 p-6 rounded-lg w-64 h-48 bg-white shadow-md cursor-pointer hover:border-green-600 transition duration-300" onClick={handleVersoClick}>
+                <i className="fas fa-camera text-4xl text-gray-500 mb-3"></i>
+                <span className="text-lg font-medium text-gray-700">Télécharger le verso</span>
+                <span className="text-sm text-gray-500">JPG, PNG ou PDF uniquement</span>
                 <input type="file" ref={fileInputVersoRef} className="hidden" accept="image/jpeg,image/png,application/pdf" />
               </div>
             </>
           )}
           {(documentType === 'passport') && (
-            <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 p-5 rounded-lg w-60 h-40 bg-[var(--bgSoft)] cursor-pointer" onClick={handleRectoClick}>
-              <i className="fas fa-camera text-3xl text-gray-400 mb-3"></i>
-              <span className="text-[var(--textSoft)]">Télécharger votre passeport</span>
-              <span className="text-gray-400 text-sm">JPG, PNG ou PDF uniquement</span>
+            <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 p-6 rounded-lg w-64 h-48 bg-white shadow-md cursor-pointer hover:border-green-600 transition duration-300" onClick={handleRectoClick}>
+              <i className="fas fa-camera text-4xl text-gray-500 mb-3"></i>
+              <span className="text-lg font-medium text-gray-700">Télécharger votre passeport</span>
+              <span className="text-sm text-gray-500">JPG, PNG ou PDF uniquement</span>
               <input type="file" ref={fileInputRectoRef} className="hidden" accept="image/jpeg,image/png,application/pdf" />
             </div>
           )}
         </div>
-        <button className="border-2 border-green-500 text-green-500 rounded-full px-8 py-3 inline-block font-semibold hover:bg-green-500 hover:text-white mt-4">
+        <button className="border-2 border-green-600 text-green-600 rounded-full px-8 py-3 font-semibold hover:bg-green-600 hover:text-white transition-all duration-300">
           Envoyer mes documents
         </button>
       </div>
     </div>
   );
-}
+};
 
 export default DocumentsPage;
