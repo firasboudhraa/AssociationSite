@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/Connexion/page.jsx", "src/components/molecules/user/cardForm/cardForm.tsx", "src/components/molecules/user/card/Card.tsx", "src/app/User/coordonnees-bancaires/add/page.tsx", "src/components/LoginForm.tsx", "src/app/Dashboard/events/add/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/Connexion/page.jsx", "src/components/molecules/user/cardForm/cardForm.tsx", "src/components/molecules/user/card/Card.tsx", "src/app/User/coordonnees-bancaires/add/page.tsx", "src/components/LoginForm.tsx", "src/app/Dashboard/events/add/page.jsx", "src/app/api/upload-image/route.js"],
   "exclude": ["node_modules"]
 }

@@ -120,6 +120,8 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
+
+            dd($request);
     
             if ($request->has('name')) {
                 $user->name = $request->input('name');
@@ -257,7 +259,14 @@ class UserController extends Controller
         $request->validate(['email' => 'required|email']);
         $user = User::where('email', $request->email)->first();
 
-        $token = Password::createToken($user);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $token= $user->createToken("password_reset_token")->plainTextToken;
+        $user->save();
+
+        $token = Password::createToken($user);    
         DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $request->email],
             ['token' => $token, 'created_at' => now()]

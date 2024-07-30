@@ -30,11 +30,9 @@ class MailService
             $this->mailer->SMTPSecure = getenv('MAIL_ENCRYPTION');
             $this->mailer->Port = getenv('MAIL_PORT');
 
-            // Recipients
             $this->mailer->setFrom(getenv('MAIL_FROM_ADDRESS'), getenv('MAIL_FROM_NAME'));
             $this->mailer->addAddress($toEmail, $toName);
 
-            // Content
             $this->mailer->isHTML(true);
             $this->mailer->Subject = $subject;
             $this->mailer->Body = $htmlBody;

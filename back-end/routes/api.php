@@ -26,6 +26,13 @@ Route::delete('/usersdelete/{id}', [UserController::class,'destroy']);
 Route::get('/users/count', [UserController::class, 'count']);
 Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
 
+Route::get('/env-test', function () {
+    return [
+        'MAIL_FROM_ADDRESS' => getenv('MAIL_FROM_ADDRESS'),
+        'MAIL_FROM_NAME' => getenv('MAIL_FROM_NAME'),
+    ];
+});
+
 
 // Authentication routes
 Route::post('/login', [UserController::class,'login']);

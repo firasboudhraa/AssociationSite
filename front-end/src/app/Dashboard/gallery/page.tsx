@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -10,6 +10,8 @@ const GalleryManager = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [uploading, setUploading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     useEffect(() => {
         fetchImages();
@@ -17,11 +19,13 @@ const GalleryManager = () => {
 
     const fetchImages = async () => {
         setLoading(true);
+        setError(null);
         try {
             const response = await axios.get('/api/get-gallery-images'); // Replace with your API or directory fetching logic
             setImages(response.data);
         } catch (error) {
             console.error('Error fetching images:', error);
+            setError('Error fetching images');
         } finally {
             setLoading(false);
         }
@@ -29,44 +33,57 @@ const GalleryManager = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setSelectedFile(e.target.files[0]);
+            const file = e.target.files[0];
+            // Example validation
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                setError('File size exceeds 5MB');
+                return;
+            }
+            setSelectedFile(file);
+            setError(null);
         }
     };
 
     const handleUpload = async () => {
         if (selectedFile) {
             setUploading(true);
-            const formData = new FormData();
-            formData.append('file', selectedFile); 
-    
+            setError(null);
             try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
                 await axios.post('/api/upload-image', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-                fetchImages(); 
+                setSuccessMessage('File uploaded successfully');
+                fetchImages();
             } catch (error) {
                 console.error('Error uploading image:', error);
+                setError('Error uploading image');
             } finally {
                 setUploading(false);
+                setSelectedFile(null);
             }
         }
     };
-    
-    
 
     const handleDelete = async (image: string) => {
+        setError(null);
         try {
             await axios.post('/api/delete-image', { image }); // Replace with your delete logic
-            fetchImages(); 
+            setSuccessMessage('Image deleted successfully');
+            fetchImages();
         } catch (error) {
             console.error('Error deleting image:', error);
+            setError('Error deleting image');
         }
     };
 
     return (
         <div className="p-4">
+            {error && <div className="mb-4 text-red-500">{error}</div>}
+            {successMessage && <div className="mb-4 text-green-500">{successMessage}</div>}
             <div className="mb-4">
                 <input
                     type="file"
