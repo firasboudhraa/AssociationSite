@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MdSupervisedUserCircle } from 'react-icons/md';
-import styles from '@/styles/card.module.css'; // Adjust this path as per your project structure
+import styles from '@/styles/card.module.css'; 
 
 const UsersThisWeekCard = () => {
   const [thisWeekUsers, setThisWeekUsers] = useState(0);
@@ -42,7 +42,7 @@ const UsersThisWeekCard = () => {
               %
             </span> than previous week
           </>
-        ) : 'Data not available'}
+        ) : ''}
       </span>
     </div>
   </div>

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -65,117 +65,153 @@ const AccountDetailsForm = () => {
     }
   };
 
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUser((prevUser) => ({
+          ...prevUser,
+          photo: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     localStorage.setItem('user', JSON.stringify(user));
+    alert('Details saved successfully!');
   };
 
   return (
-    <motion.form onSubmit={handleSubmit} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-      <Card className="bg-[var(--bgSoft)] rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105">
+    <motion.form 
+      onSubmit={handleSubmit}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="p-4 max-w-4xl mx-auto"
+    >
+      <Card className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-2xl p-6 transition-transform transform hover:scale-105">
         <CardHeader
           subheader="Edit your information below"
           title="Account Details"
-          subheaderTypographyProps={{ className: "text-white" }}
+          subheaderTypographyProps={{ className: "text-gray-200" }}
           titleTypographyProps={{ className: "text-white" }}
         />
         <Divider />
-        <CardContent className="bg-[var(--bgSoft)]">
+        <CardContent className="bg-gradient-to-r from-blue-600 to-purple-700">
           <Grid container spacing={3} alignItems="center">
             <Grid item xs={4}>
-              <div className="flex justify-center">
-                <div className="relative rounded-full overflow-hidden w-24 h-24 border-4 border-gray-300 shadow-lg">
+              <div 
+                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-md bg-gray-800"
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+              >
+                <div className="relative rounded-full overflow-hidden w-32 h-32 border-4 border-gray-300 shadow-2xl transition-transform transform hover:scale-110">
                   <Image
                     src={user.photo}
                     alt="User Avatar"
-                    width={100}
-                    height={100}
+                    width={128}
+                    height={128}
                     layout="responsive"
                     className="rounded-full object-cover"
                   />
                 </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="mt-3"
+                  onChange={handleFileChange}
+                  id="fileInput"
+                  hidden
+                />
+                <label htmlFor="fileInput" className="cursor-pointer text-blue-300 hover:underline">
+                  <Tooltip title="Choose or drag a new profile picture" arrow>
+                    <span>Change Photo</span>
+                  </Tooltip>
+                </label>
               </div>
-              <input
-                type="file"
-                accept="image/*"
-                className="mt-2"
-                onChange={handleFileChange}
-              />
-              <Tooltip title="Choose a new profile picture" arrow>
-                <span className="text-blue-500 cursor-pointer">Change Photo</span>
-              </Tooltip>
             </Grid>
             <Grid item xs={8}>
               <FormControl fullWidth required>
-                <InputLabel className="text-white">Full Name</InputLabel>
+                <InputLabel className="text-gray-200">Full Name</InputLabel>
                 <OutlinedInput
                   label="Full Name"
                   name="name"
                   value={user.name}
                   onChange={handleInputChange}
-                  className="bg-bg text-white p-4 rounded border border-bgSoft"
+                  className="bg-gray-800 text-gray-200 rounded-md border-2 border-gray-700 focus:border-blue-500"
                 />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth required>
-                <InputLabel className="text-white">Email address</InputLabel>
+                <InputLabel className="text-gray-200">Email address</InputLabel>
                 <OutlinedInput
                   label="Email address"
                   name="email"
                   value={user.email}
                   onChange={handleInputChange}
-                  className="bg-bg text-white p-4 rounded border border-bgSoft"
+                  className="bg-gray-800 text-gray-200 rounded-md border-2 border-gray-700 focus:border-blue-500"
                 />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth required>
-                <InputLabel className="text-white">Phone number</InputLabel>
+                <InputLabel className="text-gray-200">Phone number</InputLabel>
                 <OutlinedInput
                   label="Phone number"
                   name="phone"
                   type="tel"
                   value={user.phone}
                   onChange={handleInputChange}
-                  className="bg-bg text-white p-4 rounded border border-bgSoft"
+                  className="bg-gray-800 text-gray-200 rounded-md border-2 border-gray-700 focus:border-blue-500"
                 />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth required>
-                <InputLabel className="text-white">Password</InputLabel>
+                <InputLabel className="text-gray-200">Password</InputLabel>
                 <OutlinedInput
                   label="Password"
                   name="password"
                   type="password"
                   value={user.password}
                   onChange={handleInputChange}
-                  className="bg-bg text-white p-4 rounded border border-bgSoft"
+                  className="bg-gray-800 text-gray-200 rounded-md border-2 border-gray-700 focus:border-blue-500"
                 />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel className="text-white">Address</InputLabel>
+                <InputLabel className="text-gray-200">Address</InputLabel>
                 <OutlinedInput
                   label="Address"
                   name="address"
                   value={user.address}
                   onChange={handleInputChange}
-                  className="bg-bg text-white p-4 rounded border border-bgSoft"
+                  className="bg-gray-800 text-gray-200 rounded-md border-2 border-gray-700 focus:border-blue-500"
                 />
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel className="text-white">Function</InputLabel>
+                <InputLabel className="text-gray-200">Function</InputLabel>
                 <Select
                   label="Function"
                   name="function"
                   value={user.function}
                   onChange={handleInputChange}
-                  className="bg-bg text-white p-4 rounded border border-bgSoft"
+                  className="bg-gray-800 text-gray-200 rounded-md border-2 border-gray-700 focus:border-blue-500"
                 >
                   <MenuItem value="Designer">Designer</MenuItem>
                   <MenuItem value="Developer">Developer</MenuItem>
@@ -187,8 +223,15 @@ const AccountDetailsForm = () => {
           </Grid>
         </CardContent>
         <Divider />
-        <CardActions className="justify-center bg-[var(--bgSoft)]" sx={{ justifyContent: "flex-end" }}>
-          <Button variant="contained" color="primary" type="submit">Save Details</Button>
+        <CardActions className="justify-center bg-gradient-to-r from-blue-600 to-purple-700" sx={{ justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            className="shadow-lg transition-transform transform hover:scale-105 bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Save Details
+          </Button>
         </CardActions>
       </Card>
     </motion.form>

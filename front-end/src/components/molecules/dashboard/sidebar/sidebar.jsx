@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/sidebar.module.css';
 import Image from 'next/image';
@@ -21,17 +21,17 @@ const menuItems = [
       {
         title: "Dashboard",
         path: "/Dashboard",
-        icon: <MdDashboard />,
+        icon: <MdDashboard className={styles.menuLinkIcon} />,
       },
       {
         title: "Users",
         path: "/Dashboard/users",
-        icon: <MdSupervisedUserCircle />,
+        icon: <MdSupervisedUserCircle className={styles.menuLinkIcon} />,
       },
       {
         title: "Evenements",
         path: "/Dashboard/events",
-        icon: <MdShoppingBag />,
+        icon: <MdShoppingBag className={styles.menuLinkIcon} />,
       },
     ],
   },
@@ -41,17 +41,17 @@ const menuItems = [
       {
         title: "Reviews",
         path: "/Dashboard/reviews",
-        icon: <MdStar />,
+        icon: <MdStar className={styles.menuLinkIcon} />,
       },
       {
         title: "Gallery",
         path: "/Dashboard/gallery",
-        icon: <MdAnalytics />,
+        icon: <MdAnalytics className={styles.menuLinkIcon} />,
       },
       {
         title: "Teams",
         path: "/Dashboard/teams",
-        icon: <MdPeople />,
+        icon: <MdPeople className={styles.menuLinkIcon} />,
       },
     ],
   },
@@ -61,7 +61,7 @@ const menuItems = [
       {
         title: "Account",
         path: "/Dashboard/account",
-        icon: <MdAccountCircle />,
+        icon: <MdAccountCircle className={styles.menuLinkIcon} />,
       },
     ],
   },

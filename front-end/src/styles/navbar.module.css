@@ -6,14 +6,14 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {
   color: var(--textSoft);
   font-weight: 600;
   text-transform: capitalize;
-  font-size: 1.2rem;
+  font-size: 1.5rem; /* Slightly larger title for better visibility */
 }
 
 .menu {
@@ -29,7 +29,12 @@
   background-color: #2e374a;
   padding: 10px 15px;
   border-radius: 25px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.search:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
 .input {
@@ -56,13 +61,14 @@
   height: 24px;
   position: relative;
   cursor: pointer;
+  color: var(--text); /* Consistent color with other icons */
 }
 
 .bell::before {
   content: '';
   width: 12px;
   height: 12px;
-  border: 2px solid white;
+  border: 2px solid var(--text); /* Match icon color */
   border-radius: 50%;
   position: absolute;
   top: 3px;
@@ -75,7 +81,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: white;
+  background: var(--text); /* Match icon color */
   position: absolute;
   bottom: 0;
   left: 9px;
@@ -118,10 +124,10 @@
   position: absolute;
   top: 40px;
   right: 0;
-  background: white;
+  background: var(--bgSoft); 
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 320px;
   max-height: 400px;
   overflow-y: auto;
@@ -129,16 +135,34 @@
   padding: 10px;
 }
 
+.dropdownButton {
+  background-color: #007bff; 
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-left: 80px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.dropdownButton:hover {
+  background-color: #0056b3; 
+}
+
 .notificationItem {
   display: flex;
   align-items: center;
   padding: 10px 15px;
   border-bottom: 1px solid #eee;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .notificationItem:hover {
-  background-color: #f9f9f9;
+  background-color: var(--bgSoft);
+  transform: translateX(5px); 
 }
 
 .notificationIcon {
@@ -156,20 +180,20 @@
 .notificationTitle {
   font-weight: 600;
   margin: 0;
-  font-size: 0.95rem;
-  color: #333;
+  font-size: 1rem;
+  color: var(--textDark);
 }
 
 .notificationBody {
   margin: 0;
-  color: #666;
-  font-size: 0.85rem;
+  color: var(--textLight);
+  font-size: 0.9rem;
 }
 
 .notificationTime {
   margin-top: 5px;
-  font-size: 0.6rem;
-  color: #999;
+  font-size: 0.75rem;
+  color: var(--textMuted);
 }
 
 .tooltip {
@@ -208,5 +232,3 @@
   opacity: 1;
   visibility: visible;
 }
-
-

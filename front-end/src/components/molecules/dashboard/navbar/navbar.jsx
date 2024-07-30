@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { usePathname , useRouter} from "next/navigation";
-import styles from "@/styles/navbar.module.css";
+import { usePathname, useRouter } from "next/navigation";
 import { MdNotifications, MdOutlineChat, MdPublic, MdSearch } from "react-icons/md";
 import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
+import styles from "@/styles/navbar.module.css";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
@@ -13,14 +13,14 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get('http://localhost:8000/api/notifications');
-        setNotifications(response.data);
+        const sortedNotifications = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sort notifications with the newest first
+        setNotifications(sortedNotifications);
 
-        const unreadNotifications = response.data.filter(notification => !notification.is_read);
+        const unreadNotifications = sortedNotifications.filter(notification => !notification.is_read);
         setUnreadCount(unreadNotifications.length);
       } catch (error) {
         console.error('Error fetching notifications:', error);
@@ -76,11 +76,14 @@ const Navbar = () => {
       <div className={styles.title}>{pathname.split("/").pop()}</div>
       <div className={styles.menu}>
         <div className={styles.search}>
-          <MdSearch />
+          <MdSearch size={20} />
           <input type="text" placeholder="Search..." className={styles.input} />
         </div>
         <div className={styles.icons}>
-          <MdOutlineChat size={20} />
+          <div className={styles.iconWrapper}>
+            <MdOutlineChat size={24} className={styles.icon} />
+            <div className={styles.tooltip}>Messages</div>
+          </div>
           <div className={styles.notification} onClick={toggleDropdown}>
             <MdNotifications size={24} className={styles.bell} />
             {unreadCount > 0 && (
@@ -88,8 +91,9 @@ const Navbar = () => {
             )}
             {dropdownVisible && (
               <div className={styles.dropdown}>
+                <button className={styles.dropdownButton} onClick={markAllAsRead}>Mark all as read</button>
                 {notifications.map(notification => (
-                  <div key={notification.id} className={styles.notificationItem} nClick={() => handleNotificationClick(notification.id)} >
+                  <div key={notification.id} className={styles.notificationItem} onClick={() => handleNotificationClick(notification.id)}>
                     <img src={notification.image || '/noavatar.png'} alt="Notification Icon" className={styles.notificationIcon} />
                     <div className={styles.notificationText}>
                       <p className={styles.notificationBody}>{notification.message}</p>
@@ -103,9 +107,10 @@ const Navbar = () => {
             )}
           </div>
           <div className={styles.iconWrapper} onClick={navigateHome}>
-            <MdPublic size={20} style={{ cursor: 'pointer' }} />
+            <MdPublic size={24} className={styles.icon} />
             <div className={styles.tooltip}>Home</div>
-          </div>        </div>
+          </div>
+        </div>
       </div>
     </div>
   );

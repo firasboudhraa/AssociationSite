@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MdSupervisedUserCircle } from 'react-icons/md';
-import styles from '@/styles/card.module.css'; // Adjust this path as per your project structure
+import styles from '@/styles/card.module.css'; 
 
 const UsersThisMonthCard = () => {
   const [thisMonthUsers, setThisMonthUsers] = useState(0);
@@ -24,7 +24,7 @@ const UsersThisMonthCard = () => {
   };
 
   const calculatePercentageChange = (currentValue, previousValue) => {
-    if (previousValue === 0) return 'N/A'; // Handle division by zero
+    if (previousValue === 0) return 'N/A'; 
     return (((currentValue - previousValue) / previousValue) * 100).toFixed(2);
   };
 
@@ -42,7 +42,7 @@ const UsersThisMonthCard = () => {
                 %
               </span> than previous month
             </>
-          ) : 'Data not available'}
+          ) : ''}
         </span>
       </div>
     </div>

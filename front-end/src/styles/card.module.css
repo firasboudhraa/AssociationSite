@@ -1,37 +1,51 @@
+/* Enhanced card styles */
+
 .container {
-    background-color: var(--bgSoft);
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    gap: 20px;
-    cursor: pointer;
-    width: 100%;
-  }
-  
-  .container:hover{
-    background-color: #2e374a;
-  }
-  
-  .texts {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .number {
-    font-size: 24px;
-    font-weight: 500;
-  }
-  
-  .detail {
-    font-size: 14px;
-    font-weight: 300;
-  }
-  
-  .positive {
-    color: lime;
-  }
-  
-  .negative {
-    color: red;
-  }
+  background-color: #1a202c; /* Dark background for the card */
+  padding: 20px;
+  border-radius: 12px; /* Slightly rounded corners */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow effect */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth hover effects */
+}
+
+.container:hover {
+  background-color: #2d3748; /* Darker background on hover */
+  transform: translateY(-4px); /* Slight lift effect on hover */
+}
+
+.texts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #e2e8f0; /* Light color for the title */
+}
+
+.number {
+  font-size: 28px;
+  font-weight: 600;
+  color: #edf2f7; /* Light color for the number */
+}
+
+.detail {
+  font-size: 12px;
+  font-weight: 300;
+  color: #a0aec0; /* Soft text color */
+}
+
+.positive {
+  color: #38a169; /* Green for positive values */
+}
+
+.negative {
+  color: #e53e3e; /* Red for negative values */
+}
