@@ -1,9 +1,9 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import HomeIcon from "@mui/icons-material/Home";
-import BlogIcon from "@mui/icons-material/Article";
 import EventIcon from '@mui/icons-material/Event';
 import ContactIcon from "@mui/icons-material/ContactSupport";
 import PeopleIcon from '@mui/icons-material/People';
@@ -98,14 +98,6 @@ const Navbar = () => {
             <Link href="/Gallery" className="flex items-center px-3 py-2 text-white hover:text-yellow-400 relative">
               <PhotoLibraryIcon className="mr-2" />
               Gallery
-            </Link>
-            <div className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></div>
-          </div>
-
-          <div className="relative group">
-            <Link href="/blog" className="flex items-center px-3 py-2 text-white hover:text-yellow-400 relative">
-              <BlogIcon className="mr-2" />
-              Blog
             </Link>
             <div className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-in-out"></div>
           </div>
