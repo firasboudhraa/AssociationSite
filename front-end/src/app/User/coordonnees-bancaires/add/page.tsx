@@ -1,65 +1,76 @@
-"use client"
+"use client";
+
 import React, { Fragment, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Card from '@/components/molecules/user/card/Card';
 import CardForm from '@/components/molecules/user/cardForm/cardForm';
 
-// Define the CreditCard interface
 interface CreditCard {
   card_number: string;
   card_holder: string;
-  expiry_month: string;
-  expiry_year: string;
+  expiry_month: number;  
+  expiry_year: number; 
   cvv: string;
 }
 
-// Initial state for CreditCard interface
 const initialState: CreditCard = {
   card_number: '',
   card_holder: '',
-  expiry_month: '',
-  expiry_year: '',
+  expiry_month: 1,
+  expiry_year: 2024,
   cvv: '',
 };
 
-// Main AddCard component
 export default function AddCard() {
-  // State variables
   const [creditCard, setCreditCard] = useState<CreditCard>(initialState);
   const [isCardFlipped, setIsCardFlipped] = useState(false);
-  const [error, setError] = useState<string>(''); // State to handle errors
-  const router = useRouter(); // Next.js router instance
+  const [error, setError] = useState<string>(''); 
+  const [success, setSuccess] = useState<string>(''); 
+  const router = useRouter(); 
 
-  // Update credit card state function
   const updateCreditCard = useCallback(
     (name: keyof CreditCard, value: string) => {
       setCreditCard(prevCard => ({
         ...prevCard,
-        [name]: value,
+        [name]: name === 'expiry_month' || name === 'expiry_year' ? parseInt(value, 10) : value,
       }));
     },
     []
   );
 
-  // Handle form submission function
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/create', {
+      const userData = localStorage.getItem('user');
+      if (!userData) {
+        throw new Error('User data not found in local storage');
+      }
+  
+      const user = JSON.parse(userData);
+      const userId = user.id;
+  
+      if (!userId) {
+        throw new Error('User ID not found in user data');
+      }
+  
+      // Log payload to verify
+      const payload = {
         card_number: creditCard.card_number,
         card_holder: creditCard.card_holder,
         expiry_month: creditCard.expiry_month,
         expiry_year: creditCard.expiry_year,
         cvv: creditCard.cvv,
-      });
-
+        user_id: userId
+      };
+  
+      const response = await axios.post('http://localhost:8000/api/createCard', payload);
+  
       router.push('/User/coordonnees-bancaires');
     } catch (error) {
-      // Handle error in API call
       setError('Failed to add credit card. Please try again.');
       console.error('Error adding credit card:', error);
     }
-  };
+  };  
 
   return (
     <Fragment>
@@ -81,6 +92,7 @@ export default function AddCard() {
             handleSubmit={handleSubmit} 
           />
           {error && <p className="text-red-500">{error}</p>}
+          {success && <p className="text-green-500">{success}</p>}
         </div>
       </div>
     </Fragment>

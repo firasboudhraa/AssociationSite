@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import HomeIcon from "@mui/icons-material/Home";
 import BlogIcon from "@mui/icons-material/Article";
 import EventIcon from '@mui/icons-material/Event';
@@ -18,6 +19,7 @@ import PasswordIcon from '@mui/icons-material/Password';
 import LogoutIcon from '@mui/icons-material/Logout'
 
 const Navbar = () => {
+  const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -42,6 +44,7 @@ const Navbar = () => {
     setUser(null);
     setAuthenticated(false);
     setDropdownOpen(false);
+    router.push('/');
   };
 
   const toggleDropdown = () => {
@@ -147,23 +150,23 @@ const Navbar = () => {
                           <DashboardIcon className="mr-2" />
                           Tableau de bord
                         </Link>
-                        <Link href="/MesInformations" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
+                        <Link href="/User/mes-informations" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
                           <InfoIcon className="mr-2" />
                           Mes informations
                         </Link>
-                        <Link href="/MesDocuments" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
+                        <Link href="/User/mes-documents" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
                           <DocumentIcon className="mr-2" />
                           Mes documents
                         </Link>
-                        <Link href="/CoordonneesBancaires" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
+                        <Link href="/User/coordonnees-bancaires" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
                           <CreditCardIcon className="mr-2" />
                           Coordonnées bancaires
                         </Link>
-                        <Link href="/MesParticipations" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
+                        <Link href="/User/mes-participations" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
                           <EventNoteIcon className="mr-2" />
                           Mes participations
                         </Link>
-                        <Link href="/MotDePasse" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
+                        <Link href="/User/mot-de-passe" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-150 ease-in-out" role="menuitem">
                           <PasswordIcon className="mr-2" />
                           Mot de passe
                         </Link>

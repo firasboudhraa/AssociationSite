@@ -11,8 +11,8 @@ interface CreditCard {
   id: number;
   card_number: string;
   card_holder: string;
-  expiry_month: string;
-  expiry_year: string;
+  expiry_month: number;  
+  expiry_year: number; 
   cvv: string;
 }
 
@@ -43,8 +43,24 @@ const EditCard = () => {
 
   async function updateCard(updatedCard: CreditCard) {
     try {
-      await axios.put(`http://localhost:8000/api/cards/${updatedCard.id}`, updatedCard);
-      router.push('/User/coordonnees-bancaires'); // Redirect to cards list after updating
+      const userData = localStorage.getItem('user');
+      if (!userData) {
+        throw new Error('User data not found in local storage');
+      }
+
+      const user = JSON.parse(userData);
+      const userId = user.id;
+
+      if (!userId) {
+        throw new Error('User ID not found in user data');
+      }
+
+      await axios.put(`http://localhost:8000/api/cards/${updatedCard.id}`, {
+        ...updatedCard,
+        user_id: userId // Include the user ID
+      });
+
+      router.push('/User/coordonnees-bancaires'); 
     } catch (error) {
       console.error('Error updating card:', error);
     }
@@ -52,7 +68,7 @@ const EditCard = () => {
 
   function handleUpdateCreditCard(name: keyof CreditCard, value: string) {
     if (cardData) {
-      setCardData({ ...cardData, [name]: value });
+      setCardData({ ...cardData, [name]: name === 'expiry_month' || name === 'expiry_year' ? parseInt(value, 10) : value });
     }
   }
 
