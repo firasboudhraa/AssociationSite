@@ -9,6 +9,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\DocumentController;
 use App\Models\User;
 
 Route::get('/user', function (Request $request) {
@@ -69,12 +70,14 @@ Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAs
 Route::patch('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
 
 // Event routes
-
 Route::get('events', [EventController::class, 'index']);
 Route::post('createEvent', [EventController::class, 'store']);
 Route::get('events/{id}', [EventController::class, 'show']);
 Route::put('updateEvent/{id}', [EventController::class, 'update']);
 Route::delete('deleteEvent/{id}', [EventController::class, 'destroy']);
+
+// Document routes
+Route::post('upload-documents', [DocumentController::class, 'upload']);
 
 
 Route::post('/auth/{provider}', function (Request $request, $provider) {
