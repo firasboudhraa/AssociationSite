@@ -232,3 +232,132 @@
   opacity: 1;
   visibility: visible;
 }
+
+/* Ensure text color is visible against the background */
+.messagesDropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: var(--bgSoft);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 10px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  color: var(--text); /* Ensure text color is set */
+}
+
+.messagesDropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.messagesDropdown.hide {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Message item styling */
+.messageItem {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s, transform 0.2s;
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  color: black; /* Ensure text color is set */
+}
+
+/* Message sender name styling */
+.messageSender {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--textDark);
+  margin-bottom: 5px;
+}
+
+/* Message content styling */
+.messageContent {
+  color: var(--textLight);
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+/* Message timestamp styling */
+.messageTime {
+  font-size: 0.75rem;
+  color: var(--textMuted);
+  text-align: right;
+}
+
+
+/* Tooltip styling */
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  font-size: 12px;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.newMessagesBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #ff3b30;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.deleteButton {
+  background-color: #ff3b30; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  transition: background-color 0.3s;
+  display: inline-block; 
+}
+
+.deleteButton:hover {
+  background-color: #cc0000; 
+}
+
