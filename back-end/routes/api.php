@@ -26,14 +26,7 @@ Route::put('/usersupdate/{id}', [UserController::class,'update']);
 Route::delete('/usersdelete/{id}', [UserController::class,'destroy']);
 Route::get('/users/count', [UserController::class, 'count']);
 Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
-
-Route::get('/env-test', function () {
-    return [
-        'MAIL_FROM_ADDRESS' => getenv('MAIL_FROM_ADDRESS'),
-        'MAIL_FROM_NAME' => getenv('MAIL_FROM_NAME'),
-    ];
-});
-
+Route::get('/users/last-month-count', [UserController::class, 'lastMonthCount']);
 
 // Authentication routes
 Route::post('/login', [UserController::class,'login']);
@@ -78,6 +71,7 @@ Route::delete('deleteEvent/{id}', [EventController::class, 'destroy']);
 
 // Document routes
 Route::post('upload-documents', [DocumentController::class, 'upload']);
+Route::get('user-documents/{userId}', [DocumentController::class, 'getUserDocuments']);
 
 
 Route::post('/auth/{provider}', function (Request $request, $provider) {
@@ -110,20 +104,19 @@ Route::post('/auth/{provider}', function (Request $request, $provider) {
         }
     }
 
-    // Create or update user
     $user = User::where('email', $email)->first();
     if ($user) {
         $user->update([
             'name' => $name,
             'photo' => $photoPath,
-            'password' => bcrypt($providerId), // Consider a more secure method for password
+            'password' => bcrypt($providerId), 
         ]);
     } else {
         $user = User::create([
             'email' => $email,
             'name' => $name,
             'photo' => $photoPath,
-            'password' => bcrypt($providerId), // Consider a more secure method for password
+            'password' => bcrypt($providerId),
         ]);
     }
 

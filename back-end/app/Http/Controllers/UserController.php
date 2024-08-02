@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Http\Requests\UserStoreRequest;
 use App\Services\MailService;
@@ -82,7 +83,7 @@ class UserController extends Controller
             $user->password = bcrypt($request->input('password'));
             $user->phone = $request->input('phone');
             $user->address = $request->input('address');
-            $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
+            $user->is_admin = $request->input('is_admin');
 
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
@@ -115,56 +116,127 @@ class UserController extends Controller
             "user" => $user
         ], 200);
     }
+   /* public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users,email,' . $id,
+            'phone' => 'nullable|string|max:15',
+            'address' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
+            'photo' => 'nullable|file|mimes:jpeg,png|max:2048',
+            'is_admin' => 'nullable|boolean',
+        ]);
     
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->address = $request->input('address');
+        
+        // Check if is_admin is provided, if not, set a default value
+        if ($request->has('is_admin')) {
+            $user->is_admin = $request->input('is_admin') ? 1 : 0;
+        }
+    
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
+    
+        if ($request->hasFile('photo')) {
+            if ($user->photo) {
+                File::delete(public_path('uploads/users/' . $user->photo));
+            }
+            $photo = $request->file('photo');
+            $fileName = time() . '_' . $photo->getClientOriginalName();
+            $photo->move(public_path('uploads/users/'), $fileName);
+            $user->photo = $fileName;
+        }
+    
+        $user->save();
+    
+        return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+    }*/
+
     public function update(Request $request, $id)
     {
-        try {
-            $user = User::findOrFail($id);
+        // Validate request data
+    // Define validation rules
+    $rules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+        'phone' => 'nullable|string|max:15',
+        'address' => 'nullable|string|max:255',
+        'password' => 'nullable|string|min:8|confirmed',
+        'photo' => 'nullable|file|mimes:jpeg,png,jpg|max:2048',
+        'is_admin' => 'nullable|boolean', // Adjust validation rules as needed
+    ];
 
-            dd($request);
-    
-            if ($request->has('name')) {
-                $user->name = $request->input('name');
-            }
-    
-            if ($request->has('email')) {
-                $user->email = $request->input('email');
-            }
-    
-            if ($request->has('phone')) {
-                $user->phone = $request->input('phone');
-            }
-    
-            if ($request->has('address')) {
-                $user->address = $request->input('address');
-            }
-    
-            if ($request->has('is_admin')) {
-                $user->is_admin = filter_var($request->input('is_admin'), FILTER_VALIDATE_BOOLEAN);
-            }
-    
-    
-            if ($request->hasFile('photo')) {
-                $photo = $request->file('photo');
-                $fileName = time() . '_' . $photo->getClientOriginalName();
-                $photo->move(public_path('uploads/users/'), $fileName);
-    
-                if ($user->photo && File::exists(public_path('uploads/users/' . $user->photo))) {
-                    File::delete(public_path('uploads/users' . $user->photo));
-                }
-    
-                $user->photo = $fileName;
-            }
-    
-            $user->save();
-    
-            return response()->json(['message' => 'User updated successfully', 'user' => $user], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error updating user: ' . $e->getMessage()], 500);
-        }
+    // Perform validation
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => 'error',
+            'errors' => $validator->errors()
+        ], 422);
     }
     
-
+        // Find the user by ID
+        $user = User::findOrFail($id);
+    
+        // Update user fields
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->address = $request->input('address');
+        $user->is_admin = $request->input('is_admin') ? 1 : 0; // Ensure boolean is stored as integer
+    
+        // Handle password update
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
+    
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Define the path for the new photo
+            $filePath = public_path('uploads');
+            $file = $request->file('photo');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            
+            // Move the file to the specified path
+            $file->move($filePath, $fileName);
+            
+            // Delete the old photo if it exists
+            if ($user->photo) {
+                $oldPhotoPath = $filePath . '/' . $user->photo;
+                if (File::exists($oldPhotoPath)) {
+                    unlink($oldPhotoPath);
+                }
+            }
+    
+            // Update the photo field
+            $user->photo = $fileName;
+        }
+    
+        // Save the updated user
+        $user->save();
+    
+        // Return the updated user
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user
+        ], 200);
+    }
+    
     
     public function destroy($id)
     {
