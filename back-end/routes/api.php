@@ -10,6 +10,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ContactController;
 use App\Models\User;
 
 Route::get('/user', function (Request $request) {
@@ -72,6 +73,14 @@ Route::delete('deleteEvent/{id}', [EventController::class, 'destroy']);
 // Document routes
 Route::post('upload-documents', [DocumentController::class, 'upload']);
 Route::get('user-documents/{userId}', [DocumentController::class, 'getUserDocuments']);
+
+// Contact routes
+Route::post('createContact', [ContactController::class, 'store']);
+Route::get('contacts', [ContactController::class, 'index']);
+Route::delete('deleteContact/{id}', [ContactController::class, 'destroy']);
+Route::get('contacts/{id}', [ContactController::class, 'show']);
+
+
 
 
 Route::post('/auth/{provider}', function (Request $request, $provider) {

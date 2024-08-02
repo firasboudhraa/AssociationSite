@@ -26,11 +26,13 @@ const ContactPage = () => {
             <p>contact@Association.tn</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <ContactForm />
-          <div>
+        <div className="flex gap-8">
+          <div className="flex-1">
+            <ContactForm />
+          </div>
+          <div className="flex-1">
             <iframe
-              className="w-full h-full"
+              className="w-full h-full border rounded"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3238.9311074612075!2d10.19420801502221!3d36.86617388008269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd35a282feb6c7%3A0xa1a4e8b3d1944d34!2s8%20Rue%20Habib%20Chrita%2C%20Ariana!5e0!3m2!1sen!2stn!4v1689005097045!5m2!1sen!2stn"
               allowFullScreen=""
               loading="lazy"
