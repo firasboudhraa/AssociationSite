@@ -23,7 +23,8 @@ Route::get('/user', function (Request $request) {
 Route::get('/users', [UserController::class,'index']);
 Route::get('/users/counts', [UserController::class, 'counts']);
 Route::get('/users/{id}', [UserController::class,'show']);
-Route::put('/usersupdate/{id}', [UserController::class,'update']);
+Route::put('/usersupdate/{id}/update-fields', [UserController::class, 'update']);
+Route::put('/usersupdate/{id}/update-photo', [UserController::class, 'updatePhoto']);
 Route::delete('/usersdelete/{id}', [UserController::class,'destroy']);
 Route::get('/users/count', [UserController::class, 'count']);
 Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);

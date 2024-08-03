@@ -33,9 +33,9 @@ const SingleUserPage = () => {
         username: user.name,
         email: user.email,
         password: "", // Avoid pre-filling passwords
-        phone: user.phone || "", // Adjust according to your user data structure
-        address: user.address || "", // Adjust according to your user data structure
-        isAdmin: user.isAdmin,
+        phone: user.phone || "",
+        address: user.address || "",
+        isAdmin: user.is_admin,
         photo: user.photo,
       });
     } catch (err) {
@@ -59,28 +59,57 @@ const SingleUserPage = () => {
     }
   };
 
-  const onSubmitChange = async (e) => {
-    e.preventDefault();
+  const updateUserFields = async () => {
+    const { username, email, password, phone, address, isAdmin } = userField;
+    
+    // Construct the JSON payload
+    const payload = {
+      name: username,
+      email: email,
+      phone: phone,
+      address: address,
+      is_admin: isAdmin,
+      password: password || undefined, 
+    };
 
+    // Log the payload for debugging
+    console.log("Updating user fields with data:", payload);
+
+    try {
+      await axios.put(`http://localhost:8000/api/usersupdate/${id}/update-fields`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (err) {
+      console.log("Error updating user fields:", err.response ? err.response.data : err.message);
+    }
+  };
+
+  const updateUserPhoto = async () => {
     const formData = new FormData();
-    formData.append('name', userField.username);
-    formData.append('email', userField.email);
-    formData.append('password', userField.password);
-    formData.append('phone', userField.phone);
-    formData.append('address', userField.address);
-    formData.append('is_admin', userField.isAdmin);
     if (selectedPhoto) {
       formData.append('photo', selectedPhoto);
     }
 
+    console.log("Updating user photo with data:", formData);
+
     try {
-      await axios.put(`http://localhost:8000/api/usersupdate/${id}`, formData, {
+      await axios.put(`http://localhost:8000/api/usersupdate/${id}/update-photo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
     } catch (err) {
-      console.log("Something went wrong", err);
+      console.log("Error updating user photo:", err.response ? err.response.data : err.message);
+    }
+  };
+
+  const onSubmitChange = async (e) => {
+    e.preventDefault();
+    await updateUserFields();
+    if (selectedPhoto) {
+      await updateUserPhoto();
     }
   };
 
@@ -88,7 +117,7 @@ const SingleUserPage = () => {
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image src={userField.photo} alt="" fill />
+          <Image src={userField.photo} alt="User Photo" fill />
         </div>
       </div>
       <div className={styles.formContainer}>
