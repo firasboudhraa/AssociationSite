@@ -23,6 +23,7 @@ const EditCard = () => {
   const [cardData, setCardData] = useState<CreditCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [isCardFlipped, setIsCardFlipped] = useState(false); // State to control card flip
+  const [error, setError] = useState<string>(''); // State to handle error messages
 
   useEffect(() => {
     if (id) {
@@ -40,6 +41,31 @@ const EditCard = () => {
       setLoading(false);
     }
   }
+
+  const validateCardNumber = (cardNumber: string): boolean => {
+    const reversedDigits = cardNumber.replace(/\D/g, '').split('').reverse().map(digit => parseInt(digit, 10));
+    const sum = reversedDigits.reduce((acc, digit, idx) => {
+      if (idx % 2 !== 0) {
+        const doubled = digit * 2;
+        return acc + (doubled > 9 ? doubled - 9 : doubled);
+      } else {
+        return acc + digit;
+      }
+    }, 0);
+
+    return sum % 10 === 0;
+  };
+
+  const validateCvv = (cvv: string, cardNumber: string): boolean => {
+    const cardType = cardNumber.startsWith('3') ? 'amex' : 'other';
+    const cvvLength = cardType === 'amex' ? 4 : 3;
+    return cvv.length === cvvLength;
+  };
+
+  const validateCardHolder = (cardHolder: string): boolean => {
+    const namePattern = /^[a-zA-Z\s]+$/;
+    return namePattern.test(cardHolder) && cardHolder.trim().length > 0;
+  };
 
   async function updateCard(updatedCard: CreditCard) {
     try {
@@ -63,6 +89,7 @@ const EditCard = () => {
       router.push('/User/coordonnees-bancaires'); 
     } catch (error) {
       console.error('Error updating card:', error);
+      setError('Failed to update credit card. Please try again.');
     }
   }
 
@@ -74,6 +101,18 @@ const EditCard = () => {
 
   function handleFormSubmit() {
     if (cardData) {
+      if (!validateCardNumber(cardData.card_number)) {
+        setError('Invalid credit card number');
+        return;
+      }
+      if (!validateCvv(cardData.cvv, cardData.card_number)) {
+        setError('Invalid CVV');
+        return;
+      }
+      if (!validateCardHolder(cardData.card_holder)) {
+        setError('Invalid card holder name');
+        return;
+      }
       updateCard(cardData);
     }
   }
@@ -108,6 +147,7 @@ const EditCard = () => {
             setIsCardFlipped={setIsCardFlipped}
             handleSubmit={handleFormSubmit}
           />
+          {error && <p className="text-red-500">{error}</p>}
         </Col>
       </Row>
     </Container>

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { Fragment, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -39,6 +39,31 @@ export default function AddCard() {
     []
   );
 
+  const validateCardNumber = (cardNumber: string): boolean => {
+    const reversedDigits = cardNumber.replace(/\D/g, '').split('').reverse().map(digit => parseInt(digit, 10));
+    const sum = reversedDigits.reduce((acc, digit, idx) => {
+      if (idx % 2 !== 0) {
+        const doubled = digit * 2;
+        return acc + (doubled > 9 ? doubled - 9 : doubled);
+      } else {
+        return acc + digit;
+      }
+    }, 0);
+
+    return sum % 10 === 0;
+  };
+
+  const validateCvv = (cvv: string, cardNumber: string): boolean => {
+    const cardType = cardNumber.startsWith('3') ? 'amex' : 'other';
+    const cvvLength = cardType === 'amex' ? 4 : 3;
+    return cvv.length === cvvLength;
+  };
+
+  const validateCardHolder = (cardHolder: string): boolean => {
+    const namePattern = /^[a-zA-Z\s]+$/;
+    return namePattern.test(cardHolder) && cardHolder.trim().length > 0;
+  };
+
   const handleSubmit = async () => {
     try {
       const userData = localStorage.getItem('user');
@@ -53,7 +78,18 @@ export default function AddCard() {
         throw new Error('User ID not found in user data');
       }
   
-      // Log payload to verify
+      if (!validateCardNumber(creditCard.card_number)) {
+        throw new Error('Invalid credit card number');
+      }
+
+      if (!validateCvv(creditCard.cvv, creditCard.card_number)) {
+        throw new Error('Invalid CVV');
+      }
+
+      if (!validateCardHolder(creditCard.card_holder)) {
+        throw new Error('Invalid card holder name');
+      }
+
       const payload = {
         card_number: creditCard.card_number,
         card_holder: creditCard.card_holder,
@@ -67,7 +103,11 @@ export default function AddCard() {
   
       router.push('/User/coordonnees-bancaires');
     } catch (error) {
-      setError('Failed to add credit card. Please try again.');
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
       console.error('Error adding credit card:', error);
     }
   };  

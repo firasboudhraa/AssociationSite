@@ -119,74 +119,67 @@ class UserController extends Controller
     }
     
     public function update(Request $request, $id)
-    {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $id,
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'password' => 'sometimes|required|string|min:8',
-            'is_admin' => 'sometimes|boolean',
-        ];
+{
+    $rules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $id,
+        'phone' => 'nullable|string|max:20',
+        'address' => 'nullable|string|max:255',
+        'password' => 'sometimes|required|string|min:8',
+        'is_admin' => 'sometimes|boolean',
+    ];
 
-        $validator = Validator::make($request->all(), $rules);
+    $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-
-        // Update user fields
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->address = $request->input('address');
-        $user->is_admin = $request->input('is_admin', $user->is_admin);
-
-        // Update password if provided
-        if ($request->filled('password')) {
-            $user->password = bcrypt($request->input('password'));
-        }
-
-        $user->save();
-
-        return response()->json(['message' => 'User fields updated successfully', 'user' => $user], 200);
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
-    // Function to handle photo upload
-    public function updatePhoto(Request $request, $id)
-    {    
-        // Find the user
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+    $user = User::find($id);
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    $user->name = $request->input('name');
+    $user->email = $request->input('email');
+    $user->phone = $request->input('phone');
+    $user->address = $request->input('address');
+    $user->is_admin = $request->input('is_admin', $user->is_admin);
+
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->input('password'));
+    }
+
+    $user->save();
+
+    return response()->json(['message' => 'User fields updated successfully', 'user' => $user], 200);
+}
+public function updatePhoto(Request $request, $id)
+{
+    $user = User::find($id);
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    if ($request->hasFile('photo')) {
+        $photo = $request->file('photo');
+        $fileName = time() . '_' . $photo->getClientOriginalName();
+        $photo->move(public_path('uploads/users/'), $fileName);
+
+        // Delete old photo if it exists
+        if ($user->photo && File::exists(public_path('uploads/users/' . $user->photo))) {
+            File::delete(public_path('uploads/users/' . $user->photo));
         }
-    
-        // Handle file upload for 'photo'
-        if ($request->hasFile('photo')) {
-            // Delete old photo if exists
-            if ($user->photo && File::exists(public_path('uploads/users/' . $user->photo))) {
-                File::delete(public_path('uploads/users/' . $user->photo));
-            }
-    
-            // Store new photo
-            $photo = $request->file('photo');
-            $fileName = time() . '_' . $photo->getClientOriginalName();
-            $photo->move(public_path('uploads/users/'), $fileName);
-            $user->photo = $fileName;
-        } else {
-            return response()->json(['error' => 'No photo file uploaded'], 400);
-        }
-    
+
+        $user->photo = $fileName;
         $user->save();
-    
+
         return response()->json(['message' => 'User photo updated successfully', 'user' => $user], 200);
+    } else {
+        return response()->json(['error' => 'No photo file uploaded'], 400);
     }
-    
+}
+
     
     
     public function destroy($id)

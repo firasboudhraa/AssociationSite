@@ -1,240 +1,201 @@
 "use client";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import {
-  MdNotifications,
-  MdOutlineChat,
-  MdPublic,
-  MdSearch,
-} from "react-icons/md";
-import axios from "axios";
-import { formatDistanceToNow } from "date-fns";
-import styles from "@/styles/navbar.module.css";
+import React, { useState } from 'react';
+import axios from 'axios';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Navbar = () => {
-  const [notifications, setNotifications] = useState([]);
-  const [contactMessages, setContactMessages] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [newMessagesCount, setNewMessagesCount] = useState(0); // New state for new messages count
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [messagesDropdownVisible, setMessagesDropdownVisible] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter();
+const ContactForm = () => {
+  const [fullname, setFullname] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/notifications");
-        const sortedNotifications = response.data.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-        setNotifications(sortedNotifications);
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseConfirmModal = () => setShowConfirmModal(false);
+  const handleShowConfirmModal = () => setShowConfirmModal(true);
 
-        const unreadNotifications = sortedNotifications.filter(
-          (notification) => !notification.is_read
-        );
-        setUnreadCount(unreadNotifications.length);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const userToken = localStorage.getItem('token');
+    if (!userToken) {
+      handleShowModal();
+      return;
+    }
+
+    setFormData({ fullname, email, phone, subject, message });
+    handleShowConfirmModal();
+  };
+
+  const handleConfirmSubmit = async () => {
+    const userToken = localStorage.getItem('token');
+
+    try {
+      const userData = localStorage.getItem('user');
+      if (!userData) {
+        throw new Error('User data not found in local storage');
       }
-    };
 
-    const fetchContactMessages = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/api/contacts");
-        const sortedMessages = response.data.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-        setContactMessages(sortedMessages);
+      const user = JSON.parse(userData);
+      const userId = user.id;
 
-        // Set the count of new messages
-        const newMessages = sortedMessages.filter((message) => !message.is_read);
-        setNewMessagesCount(newMessages.length);
-      } catch (error) {
-        console.error("Error fetching contact messages:", error);
+      if (!userId) {
+        throw new Error('User ID not found in user data');
       }
-    };
 
-    fetchNotifications();
-    fetchContactMessages();
-  }, []);
+      await axios.post('http://localhost:8000/api/createContact', {
+        fullname,
+        email,
+        phone,
+        subject,
+        message,
+        user_id: userId
+      });
 
-  const handleNotificationClick = async (id) => {
-    try {
-      await axios.patch(`http://localhost:8000/api/notifications/${id}/read`);
-
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) =>
-          notification.id === id
-            ? { ...notification, is_read: true }
-            : notification
-        )
-      );
-
-      setUnreadCount((prevCount) => prevCount - 1);
+      toast.success('Your message has been sent successfully!');
+      setFullname('');
+      setEmail('');
+      setPhone('');
+      setSubject('');
+      setMessage('');
+      handleCloseConfirmModal();
     } catch (error) {
-      console.error("Error marking notification as read:", error);
+      console.error('Error sending message:', error);
+      toast.error('Failed to send message.');
     }
-  };
-
-  const handleContactMessageClick = async (id) => {
-    // Handle contact message click if needed
-  };
-
-  const deleteContactMessage = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8000/api/contacts/${id}`);
-
-      // Remove the deleted message from state
-      setContactMessages((prevMessages) =>
-        prevMessages.filter((message) => message.id !== id)
-      );
-
-      // Update the count of new messages
-      const updatedMessages = contactMessages.filter((message) => message.id !== id);
-      const newMessages = updatedMessages.filter((message) => !message.is_read);
-      setNewMessagesCount(newMessages.length);
-    } catch (error) {
-      console.error("Error deleting contact message:", error);
-    }
-  };
-
-  const markAllNotificationsAsRead = async () => {
-    try {
-      await axios.patch("http://localhost:8000/api/notifications/mark-all-as-read");
-
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) => ({
-          ...notification,
-          is_read: true,
-        }))
-      );
-
-      setUnreadCount(0);
-    } catch (error) {
-      console.error("Error marking all notifications as read:", error);
-    }
-  };
-
-  const toggleDropdown = () => {
-    if (!dropdownVisible) {
-      markAllNotificationsAsRead();
-    }
-    setDropdownVisible(!dropdownVisible);
-  };
-
-  const toggleMessagesDropdown = () => {
-    setMessagesDropdownVisible(!messagesDropdownVisible);
-  };
-
-  const navigateHome = () => {
-    router.push("/");
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>{pathname.split("/").pop()}</div>
-      <div className={styles.menu}>
-        <div className={styles.search}>
-          <MdSearch size={20} />
-          <input type="text" placeholder="Search..." className={styles.input} />
+    <>
+      <form className="py-4 mt-4 border-t flex flex-col gap-5" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="fullname">Votre Prénom et Nom</label>
+          <input
+            type="text"
+            id="fullname"
+            placeholder="John Doe"
+            className="w-full p-2 border rounded text-black"
+            value={fullname}
+            onChange={(e) => setFullname(e.target.value)}
+          />
         </div>
-        <div className={styles.icons}>
-          <div className={styles.iconWrapper} onClick={toggleMessagesDropdown}>
-            <MdOutlineChat size={24} className={styles.icon} />
-            <div className={styles.tooltip}>Messages</div>
-            {newMessagesCount > 0 && (
-              <span className={styles.newMessagesBadge}>{newMessagesCount}</span>
-            )}
-            {messagesDropdownVisible && (
-              <div
-                className={`${styles.messagesDropdown} ${
-                  messagesDropdownVisible ? styles.show : ""
-                }`}
-              >
-                {contactMessages.length > 0 ? (
-                  contactMessages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={styles.messageItem}
-                    >
-                      <div className={styles.messageSender}>
-                        {message.fullname}
-                      </div>
-                      <div className={styles.messageContent}>
-                        {message.message}
-                      </div>
-                      <div className={styles.messageTime}>
-                        {formatDistanceToNow(new Date(message.created_at), {
-                          addSuffix: true,
-                        })}
-                      </div>
-                      <button
-                        className={styles.deleteButton}
-                        onClick={() => deleteContactMessage(message.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ))
-                ) : (
-                  <p className={styles.messageContent}>No messages</p>
-                )}
-              </div>
-            )}
-          </div>
-          <div className={styles.notification} onClick={toggleDropdown}>
-            <MdNotifications size={24} className={styles.bell} />
-            {unreadCount > 0 && (
-              <span className={styles.notificationBadge}>{unreadCount}</span>
-            )}
-            {dropdownVisible && (
-              <div
-                className={`${styles.dropdown} ${
-                  dropdownVisible ? styles.show : ""
-                }`}
-              >
-                <button
-                  className={styles.dropdownButton}
-                  onClick={markAllNotificationsAsRead}
-                >
-                  Mark all as read
-                </button>
-                {notifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className={styles.notificationItem}
-                    onClick={() => handleNotificationClick(notification.id)}
-                  >
-                    <img
-                      src={notification.image || "/noavatar.png"}
-                      alt="Notification Icon"
-                      className={styles.notificationIcon}
-                    />
-                    <div className={styles.notificationText}>
-                      <p className={styles.notificationBody}>
-                        {notification.message}
-                      </p>
-                      <p className={styles.notificationTime}>
-                        {formatDistanceToNow(
-                          new Date(notification.created_at),
-                          { addSuffix: true }
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className={styles.iconWrapper} onClick={navigateHome}>
-            <MdPublic size={24} className={styles.icon} />
-            <div className={styles.tooltip}>Home</div>
-          </div>
+
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="john@gmail.com"
+            className="w-full p-2 border rounded text-black"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
-      </div>
-    </div>
+
+        <div>
+          <label htmlFor="phone">Votre Téléphone</label>
+          <input
+            type="text"
+            id="phone"
+            placeholder="Votre Téléphone"
+            className="w-full p-2 border rounded text-black"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="subject">Sélectionnez l'objet de votre demande</label>
+          <select
+            id="subject"
+            className="w-full p-2 border rounded text-black"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+          >
+            <option value="">Select...</option>
+            <option value="Demande d'informations">Demande d'informations</option>
+            <option value="Demande de partenariat">Demande de partenariat</option>
+            <option value="Réclamation">Réclamation</option>
+            <option value="Demande de Déblocage">Demande de Déblocage</option>
+            <option value="Autre sujet">Autre sujet</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="message">Message</label>
+          <textarea
+            className="h-32 w-full p-2 border rounded text-black"
+            id="message"
+            placeholder="Type your message here..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          ></textarea>
+        </div>
+
+        <button className="bg-yellow-500 p-3 text-white font-bold rounded hover:bg-yellow-600 transition-colors duration-300" type="submit">
+          Envoyer
+        </button>
+      </form>
+
+      {/* Modal for authentication prompt */}
+      <Modal show={showModal} onHide={handleCloseModal} centered className="modal-custom">
+        <Modal.Header closeButton className="bg-yellow-500 text-white">
+          <Modal.Title className="text-lg font-bold">Please Log In</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-gray-800">
+          <p>You need to be logged in to submit a message. Please log in to continue.</p>
+        </Modal.Body>
+        <Modal.Footer className="bg-gray-100">
+          <Button variant="primary" onClick={() => window.location.href = '/Connexion'} className="bg-yellow-500 hover:bg-yellow-600 text-white">
+            Log In
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Confirmation Modal */}
+      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered className="modal-custom">
+        <Modal.Header className="bg-gray-200">
+          <Modal.Title className="text-lg font-bold">Confirm Your Message</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-gray-800">
+          <p><strong>Full Name:</strong> {formData.fullname}</p>
+          <p><strong>Email:</strong> {formData.email}</p>
+          <p><strong>Phone:</strong> {formData.phone}</p>
+          <p><strong>Subject:</strong> {formData.subject}</p>
+          <p><strong>Message:</strong> {formData.message}</p>
+          <p>Are you sure you want to send this message?</p>
+        </Modal.Body>
+        <Modal.Footer className="bg-gray-100">
+          <Button variant="secondary" onClick={handleCloseConfirmModal} className="bg-gray-500 hover:bg-gray-600 text-white">
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleConfirmSubmit} className="bg-yellow-500 hover:bg-yellow-600 text-white">
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 };
 
-export default Navbar;
+export default ContactForm;

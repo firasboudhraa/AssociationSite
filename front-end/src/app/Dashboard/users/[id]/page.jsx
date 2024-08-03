@@ -44,12 +44,17 @@ const SingleUserPage = () => {
   };
 
   const changeUserFieldHandler = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files, type, checked } = e.target;
     if (name === 'photo' && files.length > 0) {
       setSelectedPhoto(files[0]);
       setUserField({
         ...userField,
         [name]: URL.createObjectURL(files[0]),
+      });
+    } else if (type === 'checkbox') {
+      setUserField({
+        ...userField,
+        [name]: checked,
       });
     } else {
       setUserField({
@@ -164,11 +169,11 @@ const SingleUserPage = () => {
           <label>Is Admin?</label>
           <select
             name="isAdmin"
-            value={userField.isAdmin}
+            value={userField.isAdmin ? "true" : "false"}
             onChange={changeUserFieldHandler}
           >
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
           </select>
           <label>Photo</label>
           <input
