@@ -34,7 +34,6 @@ const GalleryManager = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
-            // Example validation
             if (file.size > 5 * 1024 * 1024) { // 5MB limit
                 setError('File size exceeds 5MB');
                 return;
@@ -71,7 +70,7 @@ const GalleryManager = () => {
     const handleDelete = async (image: string) => {
         setError(null);
         try {
-            await axios.post('/api/delete-image', { image }); // Replace with your delete logic
+            await axios.post('/api/delete-image', { image });
             setSuccessMessage('Image deleted successfully');
             fetchImages();
         } catch (error) {

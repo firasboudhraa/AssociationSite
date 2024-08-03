@@ -7,8 +7,8 @@ const Hero = () => {
       <div className="overlay absolute inset-0 bg-black opacity-50"></div>
       <div className="container relative text-center text-white z-10">
         <div className="content">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Change the way you build websites With our Association</h1>
-          <p className="text-lg md:text-2xl mb-8">Build a Beautiful, Clean & Modern Design website.</p>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to Our Association</h1>
+          <p className="text-lg md:text-2xl mb-8">Empowering communities through education, support, and resources. Join us in making a difference.</p>
           <div className="buttons flex justify-center space-x-4">
             <button className="learn-more bg-blue-600 text-white py-2 px-6 rounded-md hover:bg-blue-700 transition-all duration-150 ease-in-out">
               Learn More

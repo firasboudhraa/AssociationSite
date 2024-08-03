@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/Connexion/page.jsx", "src/components/molecules/user/cardForm/cardForm.tsx", "src/components/molecules/user/card/Card.tsx", "src/app/User/coordonnees-bancaires/add/page.jsx", "src/components/LoginForm.tsx", "src/app/Dashboard/events/add/page.jsx", "src/app/api/upload-image/route.js", "src/app/Event/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/Connexion/page.jsx", "src/components/molecules/user/cardForm/cardForm.tsx", "src/components/molecules/user/card/Card.tsx", "src/app/User/coordonnees-bancaires/add/page.jsx", "src/components/LoginForm.tsx", "src/app/Dashboard/events/add/page.jsx", "src/app/api/upload-image/route.js", "src/app/Event/page.jsx", "src/lib/multer.js", "src/app/api/upload-image/multer-config.js"],
   "exclude": ["node_modules"]
 }
