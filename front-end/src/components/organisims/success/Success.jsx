@@ -6,14 +6,14 @@ import { motion } from 'framer-motion';
 
 const SuccessSection = () => {
   return (
-    <section className="success-section py-16 bg-gradient-to-r from-cyan-300 to-blue-800">
+    <section className="success-section py-16 bg-gradient-to-r from-purple-200 to-indigo-700">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-5xl font-bold mb-8 text-yellow-400">Our Achievements</h2>
-        <p className="text-lg mb-12 text-gray-300">See the remarkable progress we’ve made and the positive impact we’ve had on the community.</p>
+        <h2 className="text-5xl font-bold mb-8 text-white">Our Milestones</h2>
+        <p className="text-lg mb-12 text-gray-200">See how our efforts have grown and the milestones we've reached.</p>
         
         <div className="metrics grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           <motion.div
-            className="metric bg-gradient-to-r from-teal-400 to-blue-500 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
+            className="metric bg-gradient-to-r from-indigo-400 to-purple-600 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -24,7 +24,7 @@ const SuccessSection = () => {
             </p>
           </motion.div>
           <motion.div
-            className="metric bg-gradient-to-r from-yellow-400 to-red-500 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
+            className="metric bg-gradient-to-r from-blue-400 to-teal-500 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -35,7 +35,7 @@ const SuccessSection = () => {
             </p>
           </motion.div>
           <motion.div
-            className="metric bg-gradient-to-r from-purple-400 to-pink-500 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
+            className="metric bg-gradient-to-r from-teal-400 to-blue-600 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -46,7 +46,7 @@ const SuccessSection = () => {
             </p>
           </motion.div>
           <motion.div
-            className="metric bg-gradient-to-r from-indigo-500 to-blue-600 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
+            className="metric bg-gradient-to-r from-purple-500 to-indigo-600 p-8 rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -63,5 +63,3 @@ const SuccessSection = () => {
 };
 
 export default SuccessSection;
-
-
