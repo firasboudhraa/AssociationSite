@@ -22,6 +22,15 @@ class CardController extends Controller
         return response()->json($card);
     }
 
+    public function showByUserId($user_id)
+{
+    $card = Card::where('user_id', $user_id)->first();
+    if (!$card) {
+        return response()->json(['error' => 'Card not found'], 404);
+    }
+    return response()->json($card);
+}
+
     public function store(Request $request)
     {
         // Validate the request data

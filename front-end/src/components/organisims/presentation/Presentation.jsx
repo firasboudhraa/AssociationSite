@@ -110,10 +110,10 @@ const Presentation = () => {
                   <FaHandHoldingHeart className="mr-2" />
                   Volunteer
               </Link>
-              <button className="flex items-center bg-green-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-600 transition">
+              <Link href="/Donation"  className="flex items-center bg-green-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-600 transition">
                 <FaDonate className="text-2xl mr-2" />
                 Donate
-              </button>
+              </Link>
             </div>
           </div>
         </div>

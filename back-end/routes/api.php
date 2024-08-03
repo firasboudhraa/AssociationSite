@@ -44,6 +44,8 @@ Route::post('/createCard', [CardController::class, 'store']);
 Route::get('/cards/{id}', [CardController::class, 'show']);
 Route::put('/cards/{id}', [CardController::class, 'update']);
 Route::delete('/cards/{id}', [CardController::class, 'destroy']);
+Route::get('/userCards/{user_id}', [CardController::class, 'showByUserId']);
+
 
 // team routes
 Route::get('/teams',[TeamController::class,'index']);
