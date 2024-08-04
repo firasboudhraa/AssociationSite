@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MyBtn from '@/components/molecules/button/MyButton'; 
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -10,24 +10,14 @@ const Review = () => {
   const [hoverRating, setHoverRating] = useState(0); 
   const [name, setName] = useState(""); 
   const [text, setText] = useState(""); 
-  const [userImage, setUserImage] = useState(null); 
+  const [image, setImage] = useState(null); 
   const [showModal, setShowModal] = useState(false); 
 
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      const user = JSON.parse(userData);
-      setUserImage(user.photo); // Assuming user.photo contains the URL of the image
-    }
-  }, []);
-
-  // Function to extract filename after the underscore from URL
+  // Function to extract filename from URL (if needed)
   const getFilenameFromUrl = (url) => {
     if (!url) return null;
     const parts = url.split('/');
-    const filenameWithPrefix = parts[parts.length - 1];
-    const filenameParts = filenameWithPrefix.split('_');
-    return filenameParts.length > 1 ? filenameParts.slice(1).join('_') : filenameWithPrefix;
+    return parts[parts.length - 1];
   };
 
   // Function to log FormData content (for debugging purposes)
@@ -39,6 +29,11 @@ const Review = () => {
 
   const handleRating = (value) => {
     setRating(value);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    setImage(file);
   };
 
   const handleSubmit = async (event) => {
@@ -55,13 +50,10 @@ const Review = () => {
     formData.append('text', text);
     formData.append('review_rating', rating);
     
-    // Extract the filename from the URL
-    const filename = getFilenameFromUrl(userImage);
-    if (filename) {
-      formData.append('image', filename); // Append the filename
+    if (image) {
+      formData.append('image', image); // Append the selected image file
     }
 
-    // Log the form data to the console for debugging
     logFormData(formData);
 
     try {
@@ -70,7 +62,7 @@ const Review = () => {
       setName('');
       setText('');
       setRating(0);
-      setUserImage(null);
+      setImage(null);
     } catch (error) {
       toast.error('Error submitting review. Please try again.');
       console.error('Error submitting review:', error);
@@ -122,13 +114,23 @@ const Review = () => {
             <p className="mt-2 text-xs italic text-gray-500">Brief message for your request*</p>
           </div>
 
-          {/* User Image Display */}
-          {userImage && (
-            <div className="mt-4">
-              <img src={userImage} alt="User Profile" className="w-32 h-32 object-cover rounded-full" />
-              <p className="text-gray-500 text-sm">Current Profile Image</p>
-            </div>
-          )}
+          {/* Image Upload */}
+          <div className="mt-4">
+            <label htmlFor="image" className="text-sm font-medium text-gray-700 mb-2">Upload an Image (optional)</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="border border-gray-300 rounded-lg p-2"
+            />
+            {image && (
+              <div className="mt-2">
+                <img src={URL.createObjectURL(image)} alt="Selected" className="w-32 h-32 object-cover rounded" />
+              </div>
+            )}
+          </div>
 
           <div className="mt-10 flex flex-col items-center">
             <label htmlFor="Rating" className="text-sm font-medium text-gray-700 mb-2">Your Rating</label>

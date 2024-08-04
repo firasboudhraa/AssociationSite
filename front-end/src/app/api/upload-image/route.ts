@@ -15,7 +15,5 @@ export async function POST(request: NextRequest) {
 
   const path = `public/gallery/${file.name}`
   await writeFile(path, buffer)
-  console.log(`open ${path} to see the uploaded file`)
-
   return NextResponse.json({ success: true })
 }
