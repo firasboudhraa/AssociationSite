@@ -5,9 +5,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid';
+import { CheckIcon } from '@heroicons/react/20/solid';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 interface Event {
   title: string;
@@ -21,14 +22,15 @@ export default function EventPage() {
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [eventToJoin, setEventToJoin] = useState<Event | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
+    // Fetch events from the API
     axios.get('http://localhost:8000/api/events')
-      .then(response => {
-        setAllEvents(response.data);
-      })
+      .then(response => setAllEvents(response.data))
       .catch(error => {
         console.error('Error fetching events:', error);
+        toast.error('Failed to fetch events.');
       });
 
     // Retrieve user ID or session information if needed
@@ -41,9 +43,13 @@ export default function EventPage() {
     setShowJoinModal(true);
   }
 
+  function handleDateClick(dateInfo: { dateStr: string }) {
+    router.push(`/Dashboard/events/add?date=${encodeURIComponent(dateInfo.dateStr)}`);
+  }
+
   function handleJoin() {
     if (eventToJoin && userId !== null) {
-      axios.post(`http://localhost:8000/api/joinEvent`, {
+      axios.post('http://localhost:8000/api/joinEvent', {
         eventId: eventToJoin.id,
         userId: userId
       })
@@ -72,22 +78,19 @@ export default function EventPage() {
         <div className="grid grid-cols-10 gap-8 w-full">
           <div className="col-span-8">
             <FullCalendar
-              plugins={[
-                dayGridPlugin,
-                interactionPlugin,
-                timeGridPlugin
-              ]}
+              plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
               }}
-              events={allEvents as Event[]}
+              events={allEvents}
               nowIndicator={true}
               editable={false}
               droppable={false}
               selectable={true}
-              eventClick={(data) => handleEventClick(data)}
+              eventClick={handleEventClick}
+              dateClick={handleDateClick} // Add this line to handle date clicks
               themeSystem="bootstrap"
               eventClassNames="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-md p-3 shadow-lg"
               height="auto"
@@ -144,10 +147,18 @@ export default function EventPage() {
                       </div>
                     </div>
                     <div className="bg-gray-50 px-6 py-4 sm:flex sm:flex-row-reverse sm:px-8">
-                      <button type="button" className="inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-teal-500 sm:ml-3 sm:w-auto" onClick={handleJoin}>
+                      <button
+                        type="button"
+                        className="inline-flex w-full justify-center rounded-md bg-teal-600 px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-teal-500 sm:ml-3 sm:w-auto"
+                        onClick={handleJoin}
+                      >
                         Join
                       </button>
-                      <button type="button" className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-3 text-base font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:ring-gray-400 sm:ml-3 sm:w-auto" onClick={handleCloseModal}>
+                      <button
+                        type="button"
+                        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-3 text-base font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:ring-gray-400 sm:ml-3 sm:w-auto"
+                        onClick={handleCloseModal}
+                      >
                         Cancel
                       </button>
                     </div>
