@@ -51,7 +51,7 @@ const Review = () => {
     formData.append('review_rating', rating);
     
     if (image) {
-      formData.append('image', image); // Append the selected image file
+      formData.append('image', image); 
     }
 
     logFormData(formData);

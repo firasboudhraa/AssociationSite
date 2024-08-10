@@ -68,7 +68,7 @@ export default function EventPage() {
       <nav className="flex justify-between mb-12 border-b border-violet-100 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
         <h1 className="font-bold text-2xl text-white">Event Calendar</h1>
       </nav>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-gradient-to-r from-gray-200 via-white to-gray-200">
+      <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-[var(--bgSoft)]">
         <div className="grid grid-cols-10 gap-8 w-full">
           <div className="col-span-8">
             <FullCalendar
