@@ -54,4 +54,16 @@ class EventRegistrationController extends Controller
 
         return response()->json(['registered' => $exists]);
     }
+public function getUserParticipations(Request $request)
+{
+    $userId = $request->input('user_id');
+
+    $events = EventRegistration::where('user_id', $userId)
+        ->with('event')  // Assuming EventRegistration has a relationship with Event
+        ->get()
+        ->pluck('event');  // Extract the events
+
+    return response()->json($events);
+}
+
 }

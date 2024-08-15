@@ -29,7 +29,7 @@ const menuItems = [
         icon: <MdSupervisedUserCircle className={styles.menuLinkIcon} />,
       },
       {
-        title: "Evenements",
+        title: "Events",
         path: "/Dashboard/events",
         icon: <MdShoppingBag className={styles.menuLinkIcon} />,
       },

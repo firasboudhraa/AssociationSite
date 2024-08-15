@@ -9,7 +9,7 @@ const Connexion = () => {
   return (
     <div>
       <Navb/>
-      <br /><br /><br /><br /><br /><br /><br />
+      <br /><br /><br /><br />
       <Auth/>
     </div>
   );

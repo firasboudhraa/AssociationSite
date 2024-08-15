@@ -20,4 +20,9 @@ class Event extends Model
         'start' => 'datetime',
         'allDay' => 'boolean',
     ];
+
+    public function registrations()
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
 }
