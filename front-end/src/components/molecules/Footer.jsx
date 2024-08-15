@@ -76,7 +76,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="mt-8 text-center text-gray-400">
-          <p>&copy; 2024 GrowUp Agency. All rights reserved.</p>
+          <p>&copy; 2024 AssociaConnect. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -8,7 +8,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import Navbar from "@/components/molecules/nav";
 import axios from "axios";
-import { Modal } from "react-bootstrap"; // Import Bootstrap Modal
+import Footer from "@/components/molecules/Footer";
+import { Modal } from "react-bootstrap"; 
 
 interface Event {
   title: string;
@@ -35,9 +36,6 @@ export default function Home() {
       .catch((error) => {
         console.error("Error fetching events:", error);
       });
-
-    // Retrieve user ID or session information if needed
-    // setUserId(...);
   }, []);
 
   function handleEventClick(eventInfo: { event: { id: string } }) {
@@ -49,7 +47,7 @@ export default function Home() {
   function handleJoin() {
     const userToken = localStorage.getItem("token");
     if (!userToken) {
-      setShowModal(true); // Show the authentication prompt modal
+      setShowModal(true); 
       return;
     }
 
@@ -73,7 +71,7 @@ export default function Home() {
   function handleCloseModal() {
     setShowJoinModal(false);
     setEventToJoin(null);
-    setShowModal(false); // Close the authentication prompt modal
+    setShowModal(false); 
   }
 
   function formatPrice(price: number | undefined): string {
@@ -244,6 +242,7 @@ export default function Home() {
           </Modal.Footer>
         </Modal>
       </main>
+      <Footer />
     </>
   );
 }
