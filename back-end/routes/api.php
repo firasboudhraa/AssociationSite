@@ -87,6 +87,8 @@ Route::get('contacts/{id}', [ContactController::class, 'show']);
 // Event Registration routes
 Route::post('event-registrations', [EventRegistrationController::class, 'store']);
 Route::delete('event-registrations/{id}', [EventRegistrationController::class, 'destroy']);
+Route::post('check-registration', [EventRegistrationController::class, 'checkRegistration']);
+
 
 
 Route::post('/auth/{provider}', function (Request $request, $provider) {

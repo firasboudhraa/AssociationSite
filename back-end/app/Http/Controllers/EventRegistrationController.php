@@ -14,6 +14,14 @@ class EventRegistrationController extends Controller
             'event_id' => 'required|exists:events,id',
         ]);
 
+        $exists = EventRegistration::where('user_id', $request->user_id)
+            ->where('event_id', $request->event_id)
+            ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'Already registered for this event.'], 400);
+        }
+
         $registration = EventRegistration::create([
             'user_id' => $request->user_id,
             'event_id' => $request->event_id,
@@ -29,5 +37,21 @@ class EventRegistrationController extends Controller
 
         return response()->json(null, 204);
     }
-}
 
+    public function checkRegistration(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'event_id' => 'required|exists:events,id',
+        ]);
+
+        $userId = $request->input('user_id');
+        $eventId = $request->input('event_id');
+
+        $exists = EventRegistration::where('user_id', $userId)
+            ->where('event_id', $eventId)
+            ->exists();
+
+        return response()->json(['registered' => $exists]);
+    }
+}

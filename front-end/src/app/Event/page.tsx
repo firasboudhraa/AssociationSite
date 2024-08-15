@@ -26,6 +26,7 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false); 
   const [eventToJoin, setEventToJoin] = useState<Event | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
 
   useEffect(() => {
     axios
@@ -46,8 +47,25 @@ export default function Home() {
 
   function handleEventClick(eventInfo: { event: { id: string } }) {
     const id = Number(eventInfo.event.id);
-    setEventToJoin(allEvents.find((event) => event.id === id) || null);
-    setShowJoinModal(true);
+    const selectedEvent = allEvents.find((event) => event.id === id) || null;
+    setEventToJoin(selectedEvent);
+
+    if (userId !== null && selectedEvent) {
+      axios
+        .post('http://localhost:8000/api/check-registration', {
+          user_id: userId,
+          event_id: selectedEvent.id
+        })
+        .then((response) => {
+          setAlreadyRegistered(response.data.registered);
+          setShowJoinModal(true);
+        })
+        .catch((error) => {
+          console.error("Error checking registration status:", error);
+        });
+    } else {
+      setShowJoinModal(true);
+    }
   }
 
   function handleJoin() {
@@ -57,14 +75,14 @@ export default function Home() {
       return;
     }
 
-    if (eventToJoin && userId !== null) {
+    if (eventToJoin && userId !== null && !alreadyRegistered) {
       axios
         .post(
           `http://localhost:8000/api/event-registrations`,
           {
             event_id: eventToJoin.id,
             user_id: userId,
-          },
+          }
         )
         .then(() => {
           alert("Successfully joined the event!");
@@ -74,6 +92,8 @@ export default function Home() {
           console.error("Error joining event:", error);
           alert("Failed to join the event. Please try again.");
         });
+    } else if (alreadyRegistered) {
+      alert("You are already registered for this event.");
     }
   }
 
