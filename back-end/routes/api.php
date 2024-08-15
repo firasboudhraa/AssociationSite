@@ -11,6 +11,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\EventRegistrationController;
 use App\Models\User;
 
 Route::get('/user', function (Request $request) {
@@ -83,7 +84,9 @@ Route::get('contacts', [ContactController::class, 'index']);
 Route::delete('deleteContact/{id}', [ContactController::class, 'destroy']);
 Route::get('contacts/{id}', [ContactController::class, 'show']);
 
-
+// Event Registration routes
+Route::post('event-registrations', [EventRegistrationController::class, 'store']);
+Route::delete('event-registrations/{id}', [EventRegistrationController::class, 'destroy']);
 
 
 Route::post('/auth/{provider}', function (Request $request, $provider) {

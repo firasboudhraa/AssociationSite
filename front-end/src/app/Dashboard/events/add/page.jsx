@@ -1,8 +1,8 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify'; 
-import { useRouter } from 'next/navigation'; 
+import { useRouter, useSearchParams } from 'next/navigation'; 
 import styles from '../../../../styles/addEvent.module.css';
 
 const AddEventpage = () => {
@@ -15,6 +15,18 @@ const AddEventpage = () => {
   });
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialStartDate = searchParams.get('date') || ''; 
+
+  useEffect(() => {
+    if (initialStartDate) {
+      setFormData((prevData) => ({
+        ...prevData,
+        start: initialStartDate, 
+      }));
+    }
+  }, [initialStartDate]);
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -32,7 +44,6 @@ const AddEventpage = () => {
       console.log('Event added:', response.data);
       toast.success('Event added successfully!');
 
-      // Redirect to Dashboard/events
       router.push('/Dashboard/events');
     } catch (error) {
       console.error('Error adding event:', error);

@@ -63,8 +63,10 @@ export default function Home() {
   }, [])
 
   function handleDateClick(arg: { date: Date, allDay: boolean }) {
-    router.push(`/Dashboard/events/add?date=${arg.date.toISOString()}`);
+    const formattedDate = arg.date.toISOString().slice(0, 16);
+    router.push(`/Dashboard/events/add?date=${encodeURIComponent(formattedDate)}`);
   }
+  
 
   function addEvent(data: DropArg) {
     const event = {

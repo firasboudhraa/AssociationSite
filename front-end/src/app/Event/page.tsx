@@ -16,14 +16,14 @@ interface Event {
   start: Date | string;
   allDay: boolean;
   id: number;
-  price: number; // Ensure price is always a number
+  price: number; 
   description?: string;
 }
 
 export default function Home() {
   const [allEvents, setAllEvents] = useState<Event[]>([]);
   const [showJoinModal, setShowJoinModal] = useState(false);
-  const [showModal, setShowModal] = useState(false); // Authentication prompt modal state
+  const [showModal, setShowModal] = useState(false); 
   const [eventToJoin, setEventToJoin] = useState<Event | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
 
@@ -36,6 +36,12 @@ export default function Home() {
       .catch((error) => {
         console.error("Error fetching events:", error);
       });
+
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        setUserId(user.id); 
+      }
   }, []);
 
   function handleEventClick(eventInfo: { event: { id: string } }) {
@@ -53,10 +59,13 @@ export default function Home() {
 
     if (eventToJoin && userId !== null) {
       axios
-        .post(`http://localhost:8000/api/joinEvent`, {
-          eventId: eventToJoin.id,
-          userId: userId,
-        })
+        .post(
+          `http://localhost:8000/api/event-registrations`,
+          {
+            event_id: eventToJoin.id,
+            user_id: userId,
+          },
+        )
         .then(() => {
           alert("Successfully joined the event!");
           setShowJoinModal(false);
@@ -214,30 +223,20 @@ export default function Home() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="2"
-                    d="M12 8v4.5m0 0v4.5m0-4.5H9m3 0h3m-1.5-8a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5z"
-                  ></path>
+                    d="M12 8v4.5m0 0v4.5m0-4.5H9m3 0h3m-1.5-7.5A6.5 6.5 0 015.5 9.25a6.5 6.5 0 1113 0A6.5 6.5 0 0112 4.5z"
+                  />
                 </svg>
               </div>
-              <p className="text-lg font-semibold">
-                You need to be logged in to join an event.
-              </p>
-              <p className="mt-2 text-sm text-gray-600">
-                Please log in to access this feature.
-              </p>
+              <p className="text-lg font-semibold">You need to log in to join this event.</p>
             </div>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className="bg-gradient-to-r from-teal-500 via-blue-500 to-purple-500">
             <button
-              className="btn btn-primary"
-              onClick={() => (window.location.href = "/Connexion")}
-            >
-              Log In
-            </button>
-            <button
-              className="btn btn-secondary"
+              type="button"
+              className="inline-flex justify-center rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-500"
               onClick={() => setShowModal(false)}
             >
-              Cancel
+              Close
             </button>
           </Modal.Footer>
         </Modal>
