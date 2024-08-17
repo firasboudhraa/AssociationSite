@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "../../../styles/user.module.css";
+import axios from "axios";
 
 const UserPage = () => {
   const [user, setUser] = useState({
+    id: '', // Ensure to include user ID
     username: '',
     email: '',
     phone: '',
@@ -13,12 +15,14 @@ const UserPage = () => {
     isAdmin: '',
     photo: '/noavatar.png'
   });
+  const [photoFile, setPhotoFile] = useState(null);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setUser({
+        id: parsedUser.id || '', // Include the ID
         username: parsedUser.name || '',
         email: parsedUser.email || '',
         phone: parsedUser.phone || '',
@@ -40,6 +44,7 @@ const UserPage = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setPhotoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setUser((prevUser) => ({
@@ -51,10 +56,35 @@ const UserPage = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    localStorage.setItem('user', JSON.stringify(user));
-    // Add additional form submission logic here if necessary
+    try {
+      // Update user details
+      await axios.put(`http://localhost:8000/api/usersupdate/${user.id}/update-fields`, user);
+
+      // Update user photo if a new photo was selected
+      if (photoFile) {
+        const formData = new FormData();
+        formData.append('photo', photoFile);
+
+        await axios.put(`http://localhost:8000/api/usersupdate/${user.id}/update-photo`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      }
+      const updatedUser = {
+        ...user,
+        photo: photoFile ? URL.createObjectURL(photoFile) : user.photo // This line ensures that the photo URL is updated
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+  
+      alert('User information updated successfully!');
+    } catch (error) {
+      console.error('Failed to update user information:', error);
+      alert('Failed to update information.');
+    }
+  
   };
 
   return (
@@ -79,7 +109,7 @@ const UserPage = () => {
       </div>
       <div className={styles.formContainer}>
         <form className={styles.form} onSubmit={handleSubmit}>
-          <input type="hidden" name="id" value={""} />
+          <input type="hidden" name="id" value={user.id} />
           <label>Username</label>
           <input
             type="text"

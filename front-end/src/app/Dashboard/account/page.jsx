@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -18,6 +19,7 @@ import { motion } from "framer-motion";
 
 const AccountDetailsForm = () => {
   const [user, setUser] = useState({
+    id: '', 
     name: '',
     email: '',
     phone: '',
@@ -26,12 +28,14 @@ const AccountDetailsForm = () => {
     function: '',
     photo: '/noavatar.png'
   });
+  const [photoFile, setPhotoFile] = useState(null);
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setUser({
+        id: parsedUser.id || '', 
         name: parsedUser.name || '',
         email: parsedUser.email || '',
         phone: parsedUser.phone || '',
@@ -54,6 +58,7 @@ const AccountDetailsForm = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setPhotoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setUser((prevUser) => ({
@@ -75,6 +80,7 @@ const AccountDetailsForm = () => {
     event.stopPropagation();
     const file = event.dataTransfer.files[0];
     if (file) {
+      setPhotoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setUser((prevUser) => ({
@@ -86,10 +92,33 @@ const AccountDetailsForm = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    localStorage.setItem('user', JSON.stringify(user));
-    alert('Details saved successfully!');
+    try {
+      await axios.put(`http://localhost:8000/api/usersupdate/${user.id}/update-fields`, user);
+      
+      if (photoFile) {
+        const formData = new FormData();
+        formData.append('photo', photoFile);
+
+        await axios.put(`http://localhost:8000/api/usersupdate/${user.id}/update-photo`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      }
+      
+      const updatedUser = {
+        ...user,
+        photo: photoFile ? URL.createObjectURL(photoFile) : user.photo // This line ensures that the photo URL is updated
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+  
+      alert('User information updated successfully!');
+    } catch (error) {
+      console.error('Failed to update user information:', error);
+      alert('Failed to update information.');
+    }
   };
 
   return (
