@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from '@/styles/sidebar.module.css';
 import Image from 'next/image';
 import MenuLink from '@/components/molecules/dashboard/sidebar/menuLink/menuLink';
@@ -79,6 +80,13 @@ const menuItems = [
 
 const Sidebar = () => {
   const [user, setUser] = useState({ name: '', role: '', photo: '/noavatar.png' });
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    router.push('/');
+  };
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -110,7 +118,7 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
-      <button className={styles.logout}>
+      <button className={styles.logout} onClick={handleLogout}>
         <MdLogout />
         Logout
       </button>
