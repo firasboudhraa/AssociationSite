@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from "next/image";
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import styles from '../../../../styles/singleUser.module.css';
 
 const SingleUserPage = () => {
   const { id } = useParams();
+  const router = useRouter(); // Initialize useRouter
   const [userField, setUserField] = useState({
     username: "",
     email: "",
@@ -32,7 +33,7 @@ const SingleUserPage = () => {
       setUserField({
         username: user.name,
         email: user.email,
-        password: "", // Avoid pre-filling passwords
+        password: "", 
         phone: user.phone || "",
         address: user.address || "",
         isAdmin: user.is_admin,
@@ -67,18 +68,14 @@ const SingleUserPage = () => {
   const updateUserFields = async () => {
     const { username, email, password, phone, address, isAdmin } = userField;
     
-    // Construct the JSON payload
     const payload = {
       name: username,
       email: email,
       phone: phone,
       address: address,
       is_admin: isAdmin,
-      password: password || undefined, 
+      password: password || undefined,
     };
-
-    // Log the payload for debugging
-    console.log("Updating user fields with data:", payload);
 
     try {
       await axios.put(`http://localhost:8000/api/usersupdate/${id}/update-fields`, payload, {
@@ -86,8 +83,10 @@ const SingleUserPage = () => {
           'Content-Type': 'application/json',
         },
       });
+      return true;
     } catch (err) {
       console.log("Error updating user fields:", err.response ? err.response.data : err.message);
+      return false;
     }
   };
 
@@ -97,24 +96,29 @@ const SingleUserPage = () => {
       formData.append('photo', selectedPhoto);
     }
 
-    console.log("Updating user photo with data:", formData);
-
     try {
       await axios.put(`http://localhost:8000/api/usersupdate/${id}/update-photo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      return true;
     } catch (err) {
       console.log("Error updating user photo:", err.response ? err.response.data : err.message);
+      return false;
     }
   };
 
   const onSubmitChange = async (e) => {
     e.preventDefault();
-    await updateUserFields();
-    if (selectedPhoto) {
-      await updateUserPhoto();
+    const fieldsUpdated = await updateUserFields();
+    const photoUpdated = selectedPhoto ? await updateUserPhoto() : true;
+
+    if (fieldsUpdated || photoUpdated) {
+      alert("User updated successfully!");
+      router.push('/Dashboard/users'); // Redirect to Dashboard/users
+    } else {
+      alert("Failed to update user.");
     }
   };
 
@@ -123,6 +127,13 @@ const SingleUserPage = () => {
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
           <Image src={userField.photo} alt="User Photo" fill />
+          <input
+            type="file"
+            name="photo"
+            accept="image/*"
+            onChange={changeUserFieldHandler}
+            className={styles.fileInput}
+          />
         </div>
       </div>
       <div className={styles.formContainer}>
@@ -132,7 +143,6 @@ const SingleUserPage = () => {
           <input
             type="text"
             name="username"
-            placeholder=""
             value={userField.username}
             onChange={changeUserFieldHandler}
           />
@@ -140,7 +150,6 @@ const SingleUserPage = () => {
           <input
             type="email"
             name="email"
-            placeholder=""
             value={userField.email}
             onChange={changeUserFieldHandler}
           />
@@ -155,14 +164,12 @@ const SingleUserPage = () => {
           <input
             type="text"
             name="phone"
-            placeholder=""
             value={userField.phone}
             onChange={changeUserFieldHandler}
           />
           <label>Address</label>
           <textarea
             name="address"
-            placeholder=""
             value={userField.address}
             onChange={changeUserFieldHandler}
           />
