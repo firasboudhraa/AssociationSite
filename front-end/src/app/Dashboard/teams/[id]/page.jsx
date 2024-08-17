@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from "next/image";
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import styles from '../../../../styles/singleMember.module.css';
 
 const SingleMemberPage = () => {
   const { id } = useParams();
+  const router = useRouter(); // Initialize useRouter
 
   const [memberField, setMemberField] = useState({
     username: "",
@@ -62,29 +63,58 @@ const SingleMemberPage = () => {
     }
   };
 
-  const onSubmitChange = async (e) => {
-    e.preventDefault();
+  const updateMemberFields = async () => {
+    const payload = {
+      name: memberField.username,
+      email: memberField.email,
+      phone: memberField.phone,
+      address: memberField.address,
+      function: memberField.function,
+      password: memberField.password || undefined,
+    };
 
+    try {
+      await axios.put(`http://localhost:8000/api/teamssupdate/${id}/update-fields`, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return true;
+    } catch (err) {
+      console.error("Error updating member fields:", err.response ? err.response.data : err.message);
+      return false;
+    }
+  };
+
+  const updateMemberPhoto = async () => {
     const formData = new FormData();
-    formData.append('name', memberField.username);
-    formData.append('email', memberField.email);
-    formData.append('password', memberField.password);
-    formData.append('phone', memberField.phone);
-    formData.append('address', memberField.address);
-    formData.append('function', memberField.function);
     if (selectedPhoto) {
       formData.append('photo', selectedPhoto);
     }
 
     try {
-      await axios.put(`http://localhost:8000/api/teams/${id}`, formData, {
+      await axios.put(`http://localhost:8000/api/teamsupdate/${id}/update-photo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      router.push(`/Dashboard/teams/${id}`);
+      return true;
     } catch (err) {
-      console.error("Something went wrong", err);
+      console.error("Error updating member photo:", err.response ? err.response.data : err.message);
+      return false;
+    }
+  };
+
+  const onSubmitChange = async (e) => {
+    e.preventDefault();
+    const fieldsUpdated = await updateMemberFields();
+    const photoUpdated = selectedPhoto ? await updateMemberPhoto() : true;
+
+    if (fieldsUpdated || photoUpdated) {
+      alert("Member updated successfully!");
+      router.push('/Dashboard/teams'); // Redirect to Dashboard/teams
+    } else {
+      alert("Failed to update member.");
     }
   };
 

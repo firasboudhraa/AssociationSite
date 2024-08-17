@@ -54,6 +54,8 @@ Route::get('/teams',[TeamController::class,'index']);
 Route::post('/createTeam', [TeamController::class,'store']);
 Route::delete('/teamsdelete/{id}', [TeamController::class,'destroy']);
 Route::get('/teams/{id}', [TeamController::class,'show']);
+Route::put('/teamssupdate/{id}/update-fields', [TeamController::class, 'update']);
+Route::put('/teamsupdate/{id}/update-photo', [TeamController::class, 'updatePhoto']);
 
 // Review routes
 Route::get('/reviews', [ReviewController::class, 'index']);
