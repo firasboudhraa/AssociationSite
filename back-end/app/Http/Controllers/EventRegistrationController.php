@@ -59,11 +59,20 @@ public function getUserParticipations(Request $request)
     $userId = $request->input('user_id');
 
     $events = EventRegistration::where('user_id', $userId)
-        ->with('event')  // Assuming EventRegistration has a relationship with Event
+        ->with('event')  
         ->get()
-        ->pluck('event');  // Extract the events
+        ->pluck('event');  
 
     return response()->json($events);
+}
+public function getEventParticipants($eventId)
+{
+    $participants = EventRegistration::where('event_id', $eventId)
+        ->with('user') 
+        ->get()
+        ->pluck('user'); 
+
+    return response()->json($participants);
 }
 
 }

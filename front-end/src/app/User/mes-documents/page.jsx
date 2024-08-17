@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import styles from '@/styles/changePassword.module.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
-import { motion } from 'framer-motion'; // For animations
+import { motion } from 'framer-motion'; 
 
 const DocumentsPage = () => {
     const fileInputRectoRef = useRef(null);

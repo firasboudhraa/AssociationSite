@@ -65,6 +65,16 @@ const menuItems = [
       },
     ],
   },
+  {
+    title: "Event Management",
+    list: [
+      {
+        title: "Participants",
+        path: "/Dashboard/participants",
+        icon: <MdPeople className={styles.menuLinkIcon} />,
+      },
+    ],
+  },
 ];
 
 const Sidebar = () => {

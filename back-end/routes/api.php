@@ -89,6 +89,8 @@ Route::post('event-registrations', [EventRegistrationController::class, 'store']
 Route::delete('event-registrations/{id}', [EventRegistrationController::class, 'destroy']);
 Route::post('check-registration', [EventRegistrationController::class, 'checkRegistration']);
 Route::get('user-participations', [EventRegistrationController::class, 'getUserParticipations']);
+Route::get('events/{eventId}/participants', [EventRegistrationController::class, 'getEventParticipants']);
+
 
 
 
