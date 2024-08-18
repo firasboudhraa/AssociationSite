@@ -150,27 +150,34 @@ class TeamController extends Controller
 
     public function updatePhoto(Request $request, $id)
 {
-    $member = Team::find($id);
-    if (!$member) {
-        return response()->json(['error' => 'User not found'], 404);
+    $validator = Validator::make($request->all(), [
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['error' => $validator->errors()], 400);
     }
+
+    $member = Team::findOrFail($id);
 
     if ($request->hasFile('photo')) {
-        $photo = $request->file('photo');
-        $fileName = time() . '_' . $photo->getClientOriginalName();
-        $photo->move(public_path('uploads/teams/'), $fileName);
-
-        // Delete old photo if it exists
-        if ($member->photo && File::exists(public_path('uploads/teams/' . $member->photo))) {
-            File::delete(public_path('uploads/members/' . $member->photo));
+        if ($member->photo) {
+            $oldPhotoPath = public_path('uploads/teams/' . $member->photo);
+            if (file_exists($oldPhotoPath)) {
+                unlink($oldPhotoPath);
+            }
         }
 
-        $member->photo = $fileName;
+        $file = $request->file('photo');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/teams'), $filename);
+
+        $member->photo = $filename;
         $member->save();
 
-        return response()->json(['message' => 'User photo updated successfully', 'member' => $member], 200);
-    } else {
-        return response()->json(['error' => 'No photo file uploaded'], 400);
+        return response()->json(['success' => 'Photo mise à jour avec succès!', 'photo' => $filename], 200);
     }
+
+    return response()->json(['error' => 'Aucune photo téléchargée'], 400);
 }
 }

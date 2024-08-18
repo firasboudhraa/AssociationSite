@@ -97,7 +97,7 @@ const SingleUserPage = () => {
     }
 
     try {
-      await axios.put(`http://localhost:8000/api/usersupdate/${id}/update-photo`, formData, {
+      await axios.post(`http://localhost:8000/api/usersupdate/${id}/update-photo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -116,7 +116,7 @@ const SingleUserPage = () => {
 
     if (fieldsUpdated || photoUpdated) {
       alert("User updated successfully!");
-      router.push('/Dashboard/users'); // Redirect to Dashboard/users
+      router.push('/Dashboard/users'); 
     } else {
       alert("Failed to update user.");
     }

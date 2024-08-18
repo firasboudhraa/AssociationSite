@@ -25,7 +25,7 @@ Route::get('/users', [UserController::class,'index']);
 Route::get('/users/counts', [UserController::class, 'counts']);
 Route::get('/users/{id}', [UserController::class,'show']);
 Route::put('/usersupdate/{id}/update-fields', [UserController::class, 'update']);
-Route::put('/usersupdate/{id}/update-photo', [UserController::class, 'updatePhoto']);
+Route::post('/usersupdate/{id}/update-photo', [UserController::class, 'updatePhoto']);
 Route::delete('/usersdelete/{id}', [UserController::class,'destroy']);
 Route::get('/users/count', [UserController::class, 'count']);
 Route::get('/users/last-week-count', [UserController::class, 'lastWeekCount']);
@@ -55,7 +55,7 @@ Route::post('/createTeam', [TeamController::class,'store']);
 Route::delete('/teamsdelete/{id}', [TeamController::class,'destroy']);
 Route::get('/teams/{id}', [TeamController::class,'show']);
 Route::put('/teamssupdate/{id}/update-fields', [TeamController::class, 'update']);
-Route::put('/teamsupdate/{id}/update-photo', [TeamController::class, 'updatePhoto']);
+Route::post('/teamsupdate/{id}/update-photo', [TeamController::class, 'updatePhoto']);
 
 // Review routes
 Route::get('/reviews', [ReviewController::class, 'index']);

@@ -7,10 +7,11 @@ import axios from "axios";
 
 const UserPage = () => {
   const [user, setUser] = useState({
-    id: '', // Ensure to include user ID
+    id: '', 
     username: '',
     email: '',
     phone: '',
+    password: '',
     address: '',
     isAdmin: '',
     photo: '/noavatar.png'
@@ -22,12 +23,13 @@ const UserPage = () => {
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setUser({
-        id: parsedUser.id || '', // Include the ID
+        id: parsedUser.id || '', 
         username: parsedUser.name || '',
         email: parsedUser.email || '',
         phone: parsedUser.phone || '',
+        password: parsedUser.password || '',
         address: parsedUser.address || '',
-        isAdmin: parsedUser.isAdmin || 'No', // assuming boolean values are represented as 'Yes' or 'No'
+        isAdmin: parsedUser.isAdmin || 'No',
         photo: parsedUser.photo || '/noavatar.png'
       });
     }
@@ -59,15 +61,13 @@ const UserPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // Update user details
       await axios.put(`http://localhost:8000/api/usersupdate/${user.id}/update-fields`, user);
 
-      // Update user photo if a new photo was selected
       if (photoFile) {
         const formData = new FormData();
         formData.append('photo', photoFile);
 
-        await axios.put(`http://localhost:8000/api/usersupdate/${user.id}/update-photo`, formData, {
+        await axios.post(`http://localhost:8000/api/usersupdate/${user.id}/update-photo`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -75,7 +75,7 @@ const UserPage = () => {
       }
       const updatedUser = {
         ...user,
-        photo: photoFile ? URL.createObjectURL(photoFile) : user.photo // This line ensures that the photo URL is updated
+        photo: photoFile ? URL.createObjectURL(photoFile) : user.photo 
       };
       localStorage.setItem('user', JSON.stringify(updatedUser));
   
@@ -125,6 +125,14 @@ const UserPage = () => {
             value={user.email}
             onChange={handleInputChange}
             placeholder="Enter email"
+          />
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={user.password}
+            onChange={handleInputChange}
+            placeholder="Enter password"
           />
           <label>Phone</label>
           <input

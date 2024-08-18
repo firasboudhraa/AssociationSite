@@ -101,7 +101,7 @@ const AccountDetailsForm = () => {
         const formData = new FormData();
         formData.append('photo', photoFile);
 
-        await axios.put(`http://localhost:8000/api/usersupdate/${user.id}/update-photo`, formData, {
+        await axios.post(`http://localhost:8000/api/usersupdate/${user.id}/update-photo`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -110,7 +110,7 @@ const AccountDetailsForm = () => {
       
       const updatedUser = {
         ...user,
-        photo: photoFile ? URL.createObjectURL(photoFile) : user.photo // This line ensures that the photo URL is updated
+        photo: photoFile ? URL.createObjectURL(photoFile) : user.photo 
       };
       localStorage.setItem('user', JSON.stringify(updatedUser));
   

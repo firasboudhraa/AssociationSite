@@ -156,28 +156,35 @@ class UserController extends Controller
 }
 public function updatePhoto(Request $request, $id)
 {
-    $user = User::find($id);
-    if (!$user) {
-        return response()->json(['error' => 'User not found'], 404);
+    $validator = Validator::make($request->all(), [
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['error' => $validator->errors()], 400);
     }
+
+    $user = User::findOrFail($id);
 
     if ($request->hasFile('photo')) {
-        $photo = $request->file('photo');
-        $fileName = time() . '_' . $photo->getClientOriginalName();
-        $photo->move(public_path('uploads/users/'), $fileName);
-
-        // Delete old photo if it exists
-        if ($user->photo && File::exists(public_path('uploads/users/' . $user->photo))) {
-            File::delete(public_path('uploads/users/' . $user->photo));
+        if ($user->photo) {
+            $oldPhotoPath = public_path('uploads/users/' . $user->photo);
+            if (file_exists($oldPhotoPath)) {
+                unlink($oldPhotoPath);
+            }
         }
 
-        $user->photo = $fileName;
+        $file = $request->file('photo');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/users'), $filename);
+
+        $user->photo = $filename;
         $user->save();
 
-        return response()->json(['message' => 'User photo updated successfully', 'user' => $user], 200);
-    } else {
-        return response()->json(['error' => 'No photo file uploaded'], 400);
+        return response()->json(['success' => 'Photo mise à jour avec succès!', 'photo' => $filename], 200);
     }
+
+    return response()->json(['error' => 'Aucune photo téléchargée'], 400);
 }
 
     

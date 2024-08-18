@@ -93,7 +93,7 @@ const SingleMemberPage = () => {
     }
 
     try {
-      await axios.put(`http://localhost:8000/api/teamsupdate/${id}/update-photo`, formData, {
+      await axios.post(`http://localhost:8000/api/teamsupdate/${id}/update-photo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -112,7 +112,7 @@ const SingleMemberPage = () => {
 
     if (fieldsUpdated || photoUpdated) {
       alert("Member updated successfully!");
-      router.push('/Dashboard/teams'); // Redirect to Dashboard/teams
+      router.push('/Dashboard/teams'); 
     } else {
       alert("Failed to update member.");
     }
